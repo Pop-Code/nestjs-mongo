@@ -3,12 +3,14 @@
  */
 export * from './classes/history';
 export * from './classes/history.action';
+export * from './classes/paginated.response';
 export * from './constants';
 export * from './decorators';
 export * from './entity';
 export * from './entity.service';
 export * from './filter';
 export * from './helpers';
+export * from './interfaces/exception';
 export * from './interfaces/async.options';
 export * from './interfaces/entity';
 export * from './interfaces/execution.options';

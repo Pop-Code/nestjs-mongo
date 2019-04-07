@@ -5,3 +5,4 @@ src/
 tsconfig.json
 typedoc.js
 yarn.lock
+jest.config.js

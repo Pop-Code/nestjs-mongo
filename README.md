@@ -7,7 +7,7 @@
 ```bash
 npm install nestjs-mongo
 # or unig yarn
-yarn install nestjs-mongo
+yarn add nestjs-mongo
 ```
 
 ### Usage

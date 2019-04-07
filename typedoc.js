@@ -3,7 +3,7 @@ module.exports = {
     out: 'docs',
     exclude: ['**/test/**/*'],
     theme: 'default',
-    name: 'NestJS Console',
+    name: 'NestJS Mongo',
     ignoreCompilerErrors: false,
     excludePrivate: false,
     excludeNotExported: false,

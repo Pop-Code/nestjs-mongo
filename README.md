@@ -33,8 +33,6 @@ import { MongoModule } from 'nestjs-mongo';
 export class MyModule {}
 ```
 
-TODO, write doc.
-
 ### Documentation
 
 A typedoc is generated and available on github [https://pop-code.github.io/nestjs-mongo][doc-link]
@@ -43,7 +41,7 @@ A typedoc is generated and available on github [https://pop-code.github.io/nestj
 
 #### TODO
 
--   [ ] write docs
+-   [ ] write wiki
 -   [ ] add more tests
 -   [ ] add examples
 

@@ -1,6 +1,7 @@
 /**
  * @module nestjs-mongo
  */
+
 export * from './classes/history';
 export * from './classes/history.action';
 export * from './classes/paginated.response';
@@ -25,4 +26,6 @@ export * from './repository';
 export * from './validation/pipes/relationship';
 export * from './validation/pipes/required.relationship';
 export * from './validation/relationship/decorator';
+export * from './validation/relationship/constraint';
 export * from './validation/unique/decorator';
+export * from './validation/unique/constraint';

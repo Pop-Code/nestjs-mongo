@@ -1,0 +1,7 @@
+docs/
+src/
+.prettierrc
+.gitignore
+tsconfig.json
+typedoc.js
+yarn.lock

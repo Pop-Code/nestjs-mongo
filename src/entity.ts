@@ -10,7 +10,7 @@ import {
     plainToClass,
     ClassTransformOptions,
     classToClassFromExist,
-    serialize
+    classToPlain
 } from 'class-transformer';
 import { ObjectId } from './helpers';
 import { HistoryActions } from './classes/history';
@@ -64,14 +64,14 @@ export abstract class Entity implements EntityInterface {
 
     static fromPlain<K, T>(
         cls: any,
-        data: K,
+        data: T,
         options?: ClassTransformOptions & { service?: any }
-    ): T {
-        return plainToClass(cls, data, options);
+    ): K {
+        return plainToClass<K, T>(cls, data, options);
     }
 
     toJSON() {
-        return JSON.parse(serialize(this));
+        return classToPlain<this>(this);
     }
 
     merge<T>(data: any, options?: ClassTransformOptions): T {

@@ -11,12 +11,13 @@ import {
 import { MongoManager } from '../../manager';
 import { Validator } from 'class-validator';
 import { ObjectId } from '../../helpers';
+import { InjectManager } from '../../decorators';
 
 // Validation methods
 @Injectable()
 export class RelationshipPipe implements PipeTransform {
-    private validator: Validator;
-    constructor(private readonly em: MongoManager) {
+    protected validator: Validator;
+    constructor(@InjectManager() protected readonly em: MongoManager) {
         this.validator = new Validator();
     }
 

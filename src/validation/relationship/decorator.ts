@@ -23,7 +23,7 @@ export function IsValidRelationship(
     }
 
     return (object: any, propertyName: string) => {
-        registerDecorator({
+        return registerDecorator({
             target: object.constructor,
             propertyName,
             options: validationOptions,

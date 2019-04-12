@@ -23,6 +23,8 @@ import {
     getManagerToken,
     getConfigToken
 } from './helpers';
+import { getFromContainer } from 'class-validator';
+import { IsValidRelationshipConstraint } from './validation/relationship/constraint';
 
 @Global()
 @Module({})
@@ -78,7 +80,10 @@ export class MongoCoreModule implements OnModuleDestroy {
                 client: MongoClient,
                 config: MongoModuleOptions
             ): MongoManager => {
-                return new MongoManager(client, config.exceptionFactory);
+                const em = new MongoManager(client, config.exceptionFactory);
+                const c = getFromContainer(IsValidRelationshipConstraint);
+                c.setEm(em);
+                return em;
             },
             inject: [mongoConnectionToken, configToken]
         };
@@ -140,7 +145,7 @@ export class MongoCoreModule implements OnModuleDestroy {
                 inject: [getManagerToken(connectionName)],
                 useFactory: (em: MongoManager): MongoRepository<any> => {
                     const repo = new RepoClass(em, model);
-                    em.repositories.set(token, repo);
+                    em.addRepository(token, repo);
                     return repo;
                 }
             };

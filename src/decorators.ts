@@ -3,14 +3,24 @@
  */
 
 import { Inject } from '@nestjs/common';
-import { DEFAULT_CONNECTION_NAME } from './constants';
-import { getConnectionToken, getRepositoryToken, ObjectId } from './helpers';
 import { TransformationType } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
+import { DEFAULT_CONNECTION_NAME, DEBUG } from './constants';
+import {
+    getConnectionToken,
+    getManagerToken,
+    getRepositoryToken,
+    ObjectId
+} from './helpers';
+import Debug from 'debug';
 
 export const InjectMongoClient = (
     connectionName: string = DEFAULT_CONNECTION_NAME
 ) => Inject(getConnectionToken(connectionName));
+
+export const InjectManager = (
+    connectionName: string = DEFAULT_CONNECTION_NAME
+) => Inject(getManagerToken(connectionName));
 
 export const InjectRepository = (
     entity: ClassType<any>,
@@ -18,23 +28,34 @@ export const InjectRepository = (
 ) => Inject(getRepositoryToken(entity.name, connectionName));
 
 export function ObjectIdTransformer(
-    v: ObjectId,
-    obj: any,
+    value: any,
+    object: any,
     type: TransformationType
 ) {
-    if (!v) {
-        return v;
+    const debug = Debug(DEBUG + ':ObjectIdTransformer');
+    let newValue: any;
+    if (!value) {
+        debug('No value to transform, skipping');
+        return;
+    }
+    if (type === TransformationType.CLASS_TO_CLASS) {
+        newValue = value;
+    } else if (type === TransformationType.PLAIN_TO_CLASS) {
+        newValue = ObjectId.isValid(value) ? new ObjectId(value) : undefined;
+    } else if (type === TransformationType.CLASS_TO_PLAIN) {
+        newValue = value instanceof ObjectId ? value.toHexString() : undefined;
     }
 
-    switch (type) {
-        case TransformationType.CLASS_TO_CLASS:
-        case TransformationType.PLAIN_TO_CLASS:
-            return ObjectId.isValid(v) ? new ObjectId(v) : v;
-        case TransformationType.CLASS_TO_PLAIN:
-            return v ? v.toHexString() : v;
-        default:
-            return v;
-    }
+    debug(
+        'After Transform (%s)%s => (%s)%s for %s',
+        typeof value,
+        value,
+        typeof newValue,
+        newValue,
+        type
+    );
+
+    return newValue;
 }
 
 export const Collection = (name: string) => (target: any) => {

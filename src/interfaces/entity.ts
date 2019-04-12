@@ -11,6 +11,5 @@ export interface EntityInterface {
     createdAt: Date;
     updatedAt?: Date;
     toJSON(): {};
-    merge<T>(data: any, options?: any): T;
     history?: HistoryActions;
 }

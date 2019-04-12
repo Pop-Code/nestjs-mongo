@@ -2,14 +2,9 @@
  * @module nestjs-mongo
  */
 
-import {
-    Injectable,
-    ArgumentMetadata,
-    NotFoundException
-} from '@nestjs/common';
+import { ArgumentMetadata, NotFoundException } from '@nestjs/common';
 import { RelationshipPipe } from './relationship';
 
-@Injectable()
 export class RequiredRelationshipPipe extends RelationshipPipe {
     async transform(value: any, metadata: ArgumentMetadata) {
         const val = await super.transform(value, metadata);

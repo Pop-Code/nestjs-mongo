@@ -4,7 +4,7 @@
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoModule, DEFAULT_CONNECTION_NAME } from '..';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import { MongoDbModuleTest } from './module';
 import { MongoRepository } from '../repository';
 import { MongoCoreModule } from '../module.core';
@@ -12,6 +12,7 @@ import { getConnectionToken, getManagerToken } from '../helpers';
 import { MongoManager } from '../manager';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
+import { EntityChildTest } from './module/child';
 
 export const DBTEST = 'mongodb://localhost/test';
 
@@ -123,6 +124,25 @@ describe('MongoModule', () => {
             expect(mongoModuleTest).toBeDefined();
             expect(mongoModuleTest.repo).toBeDefined();
             expect(mongoModuleTest.repo).toBeInstanceOf(MongoRepository);
+        });
+
+        it('should save an new entity and set a relation ship with a new child ', async () => {
+            const manager = mod.get<MongoManager>(getManagerToken());
+
+            const entity = new EntityTest();
+            entity.foo = 'bar';
+            entity.bar = 'foo';
+            await manager.save<EntityTest>(entity);
+
+            const child = new EntityChildTest();
+            child.foo = 'child';
+            child.parentId = entity._id;
+            const response = await manager.save<EntityChildTest>(child);
+            expect(response).toBeInstanceOf(EntityChildTest);
+            expect(response.id).toEqual(child._id.toHexString());
+            expect(response.foo).toEqual(child.foo);
+            expect(response.parentId).toBeInstanceOf(ObjectId);
+            expect(response.parentId.toHexString()).toEqual(entity.id);
         });
 
         afterAll(async () => {

@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { DEFAULT_CONNECTION_NAME } from './constants';
 
 export { ObjectId } from 'mongodb';

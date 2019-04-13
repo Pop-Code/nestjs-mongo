@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 export * from './classes/history';
 export * from './classes/history.action';
 export * from './classes/paginated.response';

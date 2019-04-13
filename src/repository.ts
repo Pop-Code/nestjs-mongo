@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { MongoManager } from './manager';
 import { Cursor } from 'mongodb';
 import { ObjectId } from './helpers';

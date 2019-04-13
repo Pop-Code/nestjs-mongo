@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoModule, DEFAULT_CONNECTION_NAME } from '..';
 import { MongoClient, ObjectId } from 'mongodb';
@@ -14,7 +10,7 @@ import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 
-export const DBTEST = 'mongodb://localhost/test';
+export const DBTEST = 'mongodb://localhost:27017/test';
 
 describe('MongoModule', () => {
     describe('forRootAsync', () => {

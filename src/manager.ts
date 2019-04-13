@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'bson';
 import {

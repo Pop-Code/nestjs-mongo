@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { Module } from '@nestjs/common';
 import { MongoRepository } from '../../repository';
 import { EntityTest } from './entity';

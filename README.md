@@ -33,6 +33,8 @@ import { MongoModule } from 'nestjs-mongo';
 export class MyModule {}
 ```
 
+....More coming soon.
+
 ### Documentation
 
 A typedoc is generated and available on github [https://pop-code.github.io/nestjs-mongo][doc-link]

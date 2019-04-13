@@ -1,6 +1,4 @@
-/**
- * @module nestjs-mongo
- */
+
 
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { IsUniqueConstraint } from './constraint';

@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { HistoryAction } from './history.action';
 import { IsArray } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';

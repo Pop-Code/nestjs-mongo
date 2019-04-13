@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsString } from 'class-validator';
 import {

@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import {
     PipeTransform,
     Injectable,

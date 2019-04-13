@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 import { serialize } from 'class-transformer';

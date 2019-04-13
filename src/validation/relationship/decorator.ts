@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { IsValidRelationshipConstraint } from './constraint';
 import { MongoManager } from '../../manager';

@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { Inject } from '@nestjs/common';
 import { TransformationType } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';

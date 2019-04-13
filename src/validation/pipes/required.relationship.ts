@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { ArgumentMetadata, NotFoundException } from '@nestjs/common';
 import { RelationshipPipe } from './relationship';
 

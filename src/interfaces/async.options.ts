@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { MongoModuleOptions } from './module.options';
 

@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { Injectable } from '@nestjs/common';
 import { MongoRepository } from '.';
 import { EntityInterface } from './interfaces/entity';

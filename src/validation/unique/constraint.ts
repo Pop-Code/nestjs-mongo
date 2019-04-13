@@ -1,6 +1,4 @@
-/**
- * @module nestjs-mongo
- */
+
 
 import {
     ValidatorConstraint,

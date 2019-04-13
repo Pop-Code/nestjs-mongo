@@ -74,6 +74,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_decorators_.html#collection" class="tsd-kind-icon">Collection</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_decorators_.html#injectmanager" class="tsd-kind-icon">Inject<wbr>Manager</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_decorators_.html#injectmongoclient" class="tsd-kind-icon">Inject<wbr>Mongo<wbr>Client</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_decorators_.html#injectrepository" class="tsd-kind-icon">Inject<wbr>Repository</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_decorators_.html#objectidtransformer" class="tsd-kind-icon">Object<wbr>IdTransformer</a></li>
@@ -96,7 +97,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/29b1498/src/decorators.ts#L40">decorators.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L57">decorators.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -110,6 +111,53 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="injectmanager" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Inject<wbr>Manager</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">Inject<wbr>Manager<span class="tsd-signature-symbol">(</span>connectionName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L17">decorators.ts:17</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> connectionName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;DEFAULT_CONNECTION_NAME</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, index<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>target: <span class="tsd-signature-type">Object</span></h5>
+												</li>
+												<li>
+													<h5>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></h5>
+												</li>
+												<li>
+													<h5><span class="tsd-flag ts-flagOptional">Optional</span> index: <span class="tsd-signature-type">number</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
 					<a name="injectmongoclient" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Inject<wbr>Mongo<wbr>Client</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
@@ -119,7 +167,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/29b1498/src/decorators.ts#L11">decorators.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L13">decorators.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -166,7 +214,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/29b1498/src/decorators.ts#L15">decorators.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L21">decorators.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -210,31 +258,28 @@
 					<a name="objectidtransformer" class="tsd-anchor"></a>
 					<h3>Object<wbr>IdTransformer</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">Object<wbr>IdTransformer<span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span>, obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformationType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ObjectId</span></li>
+						<li class="tsd-signature tsd-kind-icon">Object<wbr>IdTransformer<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformationType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/29b1498/src/decorators.ts#L20">decorators.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L26">decorators.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>v: <span class="tsd-signature-type">ObjectId</span></h5>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>obj: <span class="tsd-signature-type">any</span></h5>
+									<h5>object: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
 									<h5>type: <span class="tsd-signature-type">TransformationType</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">ObjectId</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -248,7 +293,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/29b1498/src/decorators.ts#L44">decorators.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L61">decorators.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -271,7 +316,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/29b1498/src/decorators.ts#L53">decorators.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/90039a2/src/decorators.ts#L70">decorators.ts:70</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
@@ -295,6 +340,9 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_decorators_.html#collection" class="tsd-kind-icon">Collection</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_decorators_.html#injectmanager" class="tsd-kind-icon">Inject<wbr>Manager</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_decorators_.html#injectmongoclient" class="tsd-kind-icon">Inject<wbr>Mongo<wbr>Client</a>

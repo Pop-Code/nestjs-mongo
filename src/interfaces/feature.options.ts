@@ -1,7 +1,3 @@
-/**
- * @module mongo
- */
-
 export interface MongoFeatureOptions {
     connectionName?: string;
     models: any[];

@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { ClassTransformOptions } from 'class-transformer';
 
 export interface MongoExecutionOptions {

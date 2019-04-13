@@ -1,7 +1,3 @@
-/**
- * @module nestjs-mongo
- */
-
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsString, IsDate } from 'class-validator';
 

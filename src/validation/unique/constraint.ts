@@ -1,11 +1,10 @@
-
-
 import {
     ValidatorConstraint,
     ValidatorConstraintInterface,
     ValidationArguments
 } from 'class-validator';
 import { MongoManager } from '../../manager';
+import { Entity } from '../../entity';
 
 @ValidatorConstraint({ name: 'IsUnique', async: true })
 export class IsUniqueConstraint implements ValidatorConstraintInterface {
@@ -17,23 +16,25 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
     }
 
     async validate(value: any, args: ValidationArguments) {
-        const id = (args.object as any)._id;
+        const object = args.object as Entity;
+        const id = object._id;
         const query: any = {
             [args.property]: value
         };
-        if (args.constraints.length) {
-            for (const p of args.constraints) {
-                const v = (args.object as any)[p];
+        const options = args.constraints[0];
+        if (options.keys.length) {
+            for (const prop of options.keys) {
+                const v = object[prop];
                 if (!v) {
                     continue;
                 }
-                query[p] = (args.object as any)[p];
+                query[prop] = v;
             }
         }
         if (id) {
             query._id = { $ne: id };
         }
-        const count = await this.em.count(args.object, query);
+        const count = await this.em.count(object, query);
         if (count > 0) {
             this.message = `A ${
                 args.object.constructor.name

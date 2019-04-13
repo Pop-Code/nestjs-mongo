@@ -6,3 +6,5 @@ tsconfig.json
 typedoc.js
 yarn.lock
 jest.config.js
+renovate.json
+lib/test

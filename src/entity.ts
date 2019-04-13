@@ -9,7 +9,6 @@ import {
     classToPlain
 } from 'class-transformer';
 import { ObjectId } from './helpers';
-import { HistoryActions } from './classes/history';
 import { ObjectIdTransformer } from './decorators';
 import { EntityInterface } from './interfaces/entity';
 import { ApiModelProperty } from '@nestjs/swagger';
@@ -73,13 +72,4 @@ export abstract class Entity implements EntityInterface {
     merge<T>(data: any, options?: ClassTransformOptions): T {
         return classToClassFromExist(data, this, options);
     }
-
-    @ApiModelProperty({
-        description: 'The history of the entity',
-        type: HistoryActions,
-        required: false
-    })
-    @IsOptional()
-    @Type(() => HistoryActions)
-    history?: HistoryActions;
 }

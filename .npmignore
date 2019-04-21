@@ -8,3 +8,4 @@ yarn.lock
 jest.config.js
 renovate.json
 lib/test
+renovate.json

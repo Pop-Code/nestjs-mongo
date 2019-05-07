@@ -12,11 +12,12 @@ import { ObjectId } from './helpers';
 import { ObjectIdTransformer } from './decorators';
 import { EntityInterface } from './interfaces/entity';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { IsDate, IsOptional } from 'class-validator';
+import { IsDate, IsOptional, Allow } from 'class-validator';
 
 export abstract class Entity implements EntityInterface {
     @Type(() => String)
     @Exclude({ toPlainOnly: true })
+    @Allow()
     @Transform(ObjectIdTransformer)
     _id: ObjectId;
 

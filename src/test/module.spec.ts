@@ -10,26 +10,25 @@ import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 
-export const DBTEST = 'mongodb://localhost:27017/test';
+export const DBTEST = 'mongodb://192.168.1.46:27017/nestjs-mongo-test';
+let mod: TestingModule;
+
+beforeAll(async () => {
+    mod = await Test.createTestingModule({
+        imports: [
+            MongoModule.forRootAsync({
+                useFactory: () => ({
+                    uri: DBTEST,
+                    exceptionFactory: errors => new BadRequestException(errors)
+                })
+            }),
+            MongoDbModuleTest
+        ]
+    }).compile();
+});
 
 describe('MongoModule', () => {
     describe('forRootAsync', () => {
-        let mod: TestingModule;
-
-        beforeAll(async () => {
-            mod = await Test.createTestingModule({
-                imports: [
-                    MongoModule.forRootAsync({
-                        useFactory: () => ({
-                            uri: DBTEST,
-                            exceptionFactory: errors =>
-                                new BadRequestException(errors)
-                        })
-                    })
-                ]
-            }).compile();
-        });
-
         it('should get the default connection', () => {
             const mongoModule = mod.get<MongoModule>(MongoModule);
             expect(mongoModule).toBeDefined();
@@ -43,34 +42,9 @@ describe('MongoModule', () => {
             expect(client).toBeDefined();
             expect(client).toBeInstanceOf(MongoClient);
         });
-
-        afterAll(async () => {
-            const client = mod.get<MongoClient>(
-                getConnectionToken(DEFAULT_CONNECTION_NAME)
-            );
-
-            await client.close(true);
-        });
     });
 
     describe('forFeature', () => {
-        let mod: TestingModule;
-
-        beforeAll(async () => {
-            mod = await Test.createTestingModule({
-                imports: [
-                    MongoModule.forRootAsync({
-                        useFactory: () => ({
-                            uri: DBTEST,
-                            exceptionFactory: errors =>
-                                new BadRequestException(errors)
-                        })
-                    }),
-                    MongoDbModuleTest
-                ]
-            }).compile();
-        });
-
         it('should get the entity manager', () => {
             const manager = mod.get<MongoManager>(getManagerToken());
             expect(manager).toBeDefined();
@@ -103,7 +77,7 @@ describe('MongoModule', () => {
             entity.bar = 'foo';
 
             const response = await manager.save<EntityTest>(entity);
-            entity.foo = 'UPDATED_VALUE';
+            response.foo = 'UPDATED_VALUE';
 
             const updated = await manager.save<EntityTest>(entity);
             expect(updated).toBeInstanceOf(EntityTest);
@@ -140,11 +114,16 @@ describe('MongoModule', () => {
             expect(response.parentId).toBeInstanceOf(ObjectId);
             expect(response.parentId.toHexString()).toEqual(entity.id);
         });
-
-        afterAll(async () => {
-            const em = mod.get<MongoManager>(getManagerToken());
-            await em.getCollection(EntityTest).drop();
-            await em.getClient().close(true);
-        });
     });
+});
+
+afterAll(async () => {
+    try {
+        const em = mod.get<MongoManager>(getManagerToken());
+        await em.getCollection(EntityTest).drop();
+        await em.getClient().close();
+        await mod.close();
+    } catch (e) {
+        console.log(e);
+    }
 });

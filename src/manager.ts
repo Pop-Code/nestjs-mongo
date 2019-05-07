@@ -97,9 +97,6 @@ export class MongoManager {
         const plain = JSON.parse(JSON.stringify(data));
         const classO = plainToClass<K, T>(classType, plain, options);
         this.log('Transform data to class from plain %O => %O', plain, classO);
-        if (classO.constructor.name === 'Customer') {
-            console.log((classO as any).devices);
-        }
         return classO;
     }
 
@@ -115,6 +112,8 @@ export class MongoManager {
     ): Promise<T> {
         this.log('save %s %s', entity.constructor.name);
         const errors = await validate(entity, {
+            whitelist: true,
+            forbidNonWhitelisted: true,
             validationError: { target: true, value: true }
         });
         if (errors.length) {

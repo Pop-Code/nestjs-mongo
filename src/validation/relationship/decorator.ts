@@ -23,7 +23,7 @@ export function IsValidRelationship(
             target: object.constructor,
             propertyName,
             options: validationOptions,
-            constraints: [],
+            constraints,
             validator: IsValidRelationshipConstraint
         });
     };

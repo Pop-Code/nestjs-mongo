@@ -60,7 +60,7 @@ export abstract class Entity implements EntityInterface {
     static fromPlain<K, T>(
         cls: any,
         data: T,
-        options?: ClassTransformOptions & { service?: any }
+        options?: ClassTransformOptions
     ): K {
         return plainToClass<K, T>(cls, data, options);
     }

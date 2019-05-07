@@ -11,8 +11,7 @@ export function IsUnique(
                 ? validationOptions.keys
                 : [];
         const options = {
-            keys,
-            entity: validationOptions.entity
+            keys
         };
         return registerDecorator({
             target: object.constructor,

@@ -8,10 +8,10 @@ import {
     Matches,
     Max
 } from 'class-validator';
-import { WithJSONSerialize } from './decorators';
-import { JSONSerialize } from './interfaces/jsonserialize';
+import { WithJSONSerialize } from '../decorators';
+import { WithJSONSerializeInterface } from '../interfaces/jsonserialize';
 
-export interface Filter extends JSONSerialize {}
+export interface Filter extends WithJSONSerializeInterface {}
 
 @WithJSONSerialize()
 export class Filter {

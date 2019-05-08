@@ -1,3 +1,3 @@
-export interface JSONSerialize {
+export interface WithJSONSerializeInterface {
     toJSON(): Object;
 }

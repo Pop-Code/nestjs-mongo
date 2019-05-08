@@ -1,7 +1,11 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
-import { serialize } from 'class-transformer';
+import { WithJSONSerialize } from '../decorators';
+import { WithJSONSerializeInterface } from '../interfaces/jsonserialize';
 
+export interface PaginatedResponse extends WithJSONSerializeInterface {}
+
+@WithJSONSerialize()
 export class PaginatedResponse {
     @ApiModelProperty({
         description: 'The total count of data',
@@ -10,8 +14,4 @@ export class PaginatedResponse {
     @IsNumber()
     count: number;
     data: any;
-
-    toJSON() {
-        return JSON.parse(serialize(this));
-    }
 }

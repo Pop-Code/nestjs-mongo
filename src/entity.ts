@@ -10,9 +10,9 @@ import { IsDate, IsOptional } from 'class-validator';
 import { TypeObjectId, WithJSONSerialize } from './decorators';
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
-import { JSONSerialize } from './interfaces/jsonserialize';
+import { WithJSONSerializeInterface } from './interfaces/jsonserialize';
 
-export interface Entity extends JSONSerialize {}
+export interface Entity extends WithJSONSerializeInterface {}
 
 @WithJSONSerialize()
 export abstract class Entity implements EntityInterface {

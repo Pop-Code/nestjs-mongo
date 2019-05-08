@@ -1,14 +1,19 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Type, Transform, serialize } from 'class-transformer';
+import { classToPlain, Transform, Type } from 'class-transformer';
 import {
-    IsPositive,
+    IsArray,
     IsInt,
     IsOptional,
-    Max,
+    IsPositive,
     Matches,
-    IsArray
+    Max
 } from 'class-validator';
+import { WithJSONSerialize } from './decorators';
+import { JSONSerialize } from './interfaces/jsonserialize';
 
+export interface Filter extends JSONSerialize {}
+
+@WithJSONSerialize()
 export class Filter {
     @ApiModelProperty({
         description: 'The number of items to skip',
@@ -57,9 +62,5 @@ export class Filter {
     toQuery() {
         const query: any = {};
         return query;
-    }
-
-    toJSON() {
-        return JSON.parse(serialize(this));
     }
 }

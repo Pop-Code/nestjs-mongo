@@ -14,8 +14,7 @@ import {
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences,
-    ObjectId
+    MongoCountPreferences
 } from 'mongodb';
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';

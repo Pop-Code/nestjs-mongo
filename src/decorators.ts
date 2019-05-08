@@ -1,5 +1,10 @@
 import { Inject } from '@nestjs/common';
-import { TransformationType, Type, Transform } from 'class-transformer';
+import {
+    TransformationType,
+    Type,
+    Transform,
+    classToPlain
+} from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { DEFAULT_CONNECTION_NAME, DEBUG } from './constants';
 import {
@@ -92,6 +97,16 @@ export const WithRelationship = () => (target: any) => {
             return this;
         }
         target.prototype.setCachedRelationship = setCachedRelationship;
+    }
+    return target;
+};
+
+export const WithJSONSerialize = () => (target: any) => {
+    if (!target.prototype.toJSON) {
+        function toJSON() {
+            return classToPlain(this);
+        }
+        target.prototype.toJSON = toJSON;
     }
     return target;
 };

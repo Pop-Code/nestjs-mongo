@@ -109,7 +109,6 @@ export class MongoManager {
         this.log('save %s %s', entity.constructor.name);
         const errors = await validate(entity, {
             whitelist: true,
-            forbidNonWhitelisted: true,
             validationError: { target: true, value: true }
         });
         if (errors.length) {

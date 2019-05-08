@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ObjectId } from 'bson';
 import {
     classToPlain,
     ClassTransformOptions,
@@ -15,7 +14,8 @@ import {
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences
+    MongoCountPreferences,
+    ObjectId
 } from 'mongodb';
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';
@@ -88,15 +88,12 @@ export class MongoManager {
     }
 
     protected toClass<K, T>(
-        classType: any,
+        classType: ClassType<K>,
         data: T,
         options?: ClassTransformOptions
     ): K {
-        //Data are comming from db and already are plain object, but objectIds are not working with class-transformer
-        //The model definition will re transform the objectIds
-        const plain = JSON.parse(JSON.stringify(data));
-        const classO = plainToClass<K, T>(classType, plain, options);
-        this.log('Transform data to class from plain %O => %O', plain, classO);
+        const classO: K = plainToClass<K, T>(classType, data, options);
+        this.log('Transform data to class from plain %O => %O', data, classO);
         return classO;
     }
 
@@ -122,7 +119,7 @@ export class MongoManager {
         const proxyClass = _.cloneDeep(entity);
 
         // force class to avoid id and keep _id
-        delete (proxyClass as any).id;
+        // delete (proxyClass as any).id;
 
         const opts = {
             collection: this.getCollectionName(entity),
@@ -152,11 +149,10 @@ export class MongoManager {
                 sets.$unset = $unset;
             }
 
-            operation = collection.updateOne(
-                { _id: (proxyClass as any)._id },
-                sets,
-                { upsert: false, ...opts.mongoOperationOptions }
-            );
+            operation = collection.updateOne({ _id: proxyClass._id }, sets, {
+                upsert: false,
+                ...opts.mongoOperationOptions
+            });
         } else {
             const pureObject = _.assign({}, proxyClass);
             operation = collection.insertOne(
@@ -176,7 +172,7 @@ export class MongoManager {
 
         // new id
         if (insertedId) {
-            (entity as any)._id = insertedId;
+            entity._id = insertedId;
         }
 
         return entity;
@@ -196,9 +192,6 @@ export class MongoManager {
         options?: FindOneOptions
     ): Promise<T> {
         this.log('findOne %s %o', classType.name, query);
-        /*if (typeof query._id === 'string') {
-            query._id = new ObjectId(query._id);
-        }*/
         const entity = await this.getCollection(classType).findOne<Object>(
             query,
             options
@@ -238,18 +231,19 @@ export class MongoManager {
 
     async getRelationship<T>(object: any, property: string): Promise<T> {
         this.log('getRelationship %s on %s', property, object.constructor.name);
+
         const relationMetadata = Reflect.getMetadata(
             'mongo:relationship',
             object,
             property
         );
+
         if (!relationMetadata) {
             throw new Error(
                 `The ${property} metadata (@Relationship(type)) must be set to call getRelationship`
             );
         }
 
-        // get the repository for this entity ?
         const repository = this.getRepository(relationMetadata.type);
         const data = await repository.findOne({
             _id: object[property]
@@ -257,6 +251,7 @@ export class MongoManager {
         const entity: any = data
             ? this.toClass<T, any>(relationMetadata.type, data)
             : null;
+
         if (
             entity &&
             typeof object.setCachedRelationship === 'function' &&

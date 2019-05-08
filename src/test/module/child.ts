@@ -3,7 +3,8 @@ import { IsString } from 'class-validator';
 import {
     Collection,
     ObjectIdTransformer,
-    Relationship
+    Relationship,
+    TypeObjectId
 } from '../../decorators';
 import { Entity } from '../../entity';
 import { ObjectId } from '../../helpers';
@@ -17,10 +18,8 @@ export class EntityChildTest extends Entity {
     @IsString()
     foo: string;
 
+    @TypeObjectId()
     @Relationship(EntityTest)
     @IsValidRelationship()
-    @Transform(ObjectIdTransformer)
-    @Type(() => String)
-    @Expose()
     parentId: ObjectId;
 }

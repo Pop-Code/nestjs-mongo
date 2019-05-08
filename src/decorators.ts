@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { TransformationType } from 'class-transformer';
+import { TransformationType, Type, Transform } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { DEFAULT_CONNECTION_NAME, DEBUG } from './constants';
 import {
@@ -9,6 +9,7 @@ import {
     ObjectId
 } from './helpers';
 import Debug from 'debug';
+import { Allow } from 'class-validator';
 
 export const InjectMongoClient = (
     connectionName: string = DEFAULT_CONNECTION_NAME
@@ -53,6 +54,17 @@ export function ObjectIdTransformer(
 
     return newValue;
 }
+
+export const TypeObjectId = () => {
+    const typefn = Type(() => ObjectId);
+    const trfn = Transform(ObjectIdTransformer);
+    const allowFw = Allow();
+    return (target: any, property: any) => {
+        typefn(target, property);
+        trfn(target, property);
+        allowFw(target, property);
+    };
+};
 
 export const Collection = (name: string) => (target: any) => {
     Reflect.defineMetadata('mongo:collectionName', name, target);

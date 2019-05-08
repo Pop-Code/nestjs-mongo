@@ -9,34 +9,19 @@ import {
     classToPlain
 } from 'class-transformer';
 import { ObjectId } from './helpers';
-import { ObjectIdTransformer } from './decorators';
+import { ObjectIdTransformer, TypeObjectId } from './decorators';
 import { EntityInterface } from './interfaces/entity';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsDate, IsOptional, Allow } from 'class-validator';
+import { ClassType } from 'class-transformer/ClassTransformer';
 
 export abstract class Entity implements EntityInterface {
-    @Type(() => String)
-    @Exclude({ toPlainOnly: true })
-    @Allow()
-    @Transform(ObjectIdTransformer)
-    _id: ObjectId;
-
     @ApiModelProperty({
-        description: 'The identifier',
+        description: 'The entity identifier',
         type: 'string'
     })
-    @Type(() => String)
-    @Expose()
-    get id() {
-        return this._id && this._id.toHexString();
-    }
-
-    set id(value) {
-        if (!value) {
-            return;
-        }
-        this._id = new ObjectId(value);
-    }
+    @TypeObjectId()
+    _id: ObjectId;
 
     @ApiModelProperty({
         description: 'The creation date',
@@ -59,7 +44,7 @@ export abstract class Entity implements EntityInterface {
     updatedAt?: Date;
 
     static fromPlain<K, T>(
-        cls: any,
+        cls: ClassType<K>,
         data: T,
         options?: ClassTransformOptions
     ): K {
@@ -67,7 +52,7 @@ export abstract class Entity implements EntityInterface {
     }
 
     toJSON() {
-        return classToPlain<this>(this);
+        return classToPlain<Entity>(this);
     }
 
     merge<T>(data: any, options?: ClassTransformOptions): T {

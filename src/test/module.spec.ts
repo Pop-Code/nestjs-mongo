@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoModule, DEFAULT_CONNECTION_NAME } from '..';
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import { MongoDbModuleTest } from './module';
 import { MongoRepository } from '../repository';
 import { MongoCoreModule } from '../module.core';
-import { getConnectionToken, getManagerToken } from '../helpers';
+import { getConnectionToken, getManagerToken, ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
@@ -64,10 +64,9 @@ describe('MongoModule', () => {
             entity.bar = 'foo';
             const response = await manager.save<EntityTest>(entity);
             expect(response).toBeInstanceOf(EntityTest);
-            expect(response.id).toEqual(response._id.toHexString());
+            expect(response._id).toBeInstanceOf(ObjectId);
             expect(response.foo).toEqual(entity.foo);
             expect(response.bar).toEqual(entity.bar);
-            expect(response.id).toEqual(response._id.toHexString());
         });
 
         it('should save and update an existing entity', async () => {
@@ -79,12 +78,16 @@ describe('MongoModule', () => {
             const response = await manager.save<EntityTest>(entity);
             response.foo = 'UPDATED_VALUE';
 
-            const updated = await manager.save<EntityTest>(entity);
-            expect(updated).toBeInstanceOf(EntityTest);
-            expect(updated.id).toEqual(response._id.toHexString());
-            expect(updated.foo).toEqual(entity.foo);
-            expect(updated.bar).toEqual(entity.bar);
-            expect(updated.id).toEqual(response._id.toHexString());
+            try {
+                const updated = await manager.save<EntityTest>(entity);
+                expect(updated).toBeInstanceOf(EntityTest);
+                expect(updated._id).toBeInstanceOf(ObjectId);
+                expect(updated.foo).toEqual(entity.foo);
+                expect(updated.bar).toEqual(entity.bar);
+                expect(updated._id).toEqual(response._id);
+            } catch (e) {
+                console.log(e.response.message);
+            }
         });
 
         it('should get a repository', () => {
@@ -96,7 +99,7 @@ describe('MongoModule', () => {
             expect(mongoModuleTest.repo).toBeInstanceOf(MongoRepository);
         });
 
-        it('should save an new entity and set a relation ship with a new child ', async () => {
+        it('should save an new entity and set a relation ship with a new child', async () => {
             const manager = mod.get<MongoManager>(getManagerToken());
 
             const entity = new EntityTest();
@@ -109,10 +112,36 @@ describe('MongoModule', () => {
             child.parentId = entity._id;
             const response = await manager.save<EntityChildTest>(child);
             expect(response).toBeInstanceOf(EntityChildTest);
-            expect(response.id).toEqual(child._id.toHexString());
+            expect(response._id).toBeInstanceOf(ObjectId);
             expect(response.foo).toEqual(child.foo);
             expect(response.parentId).toBeInstanceOf(ObjectId);
-            expect(response.parentId.toHexString()).toEqual(entity.id);
+            expect(response.parentId).toEqual(entity._id);
+        });
+
+        it('should serialize entity identifiers', async () => {
+            const manager = mod.get<MongoManager>(getManagerToken());
+            const entity = await manager.findOne<EntityTest>(EntityTest, {});
+            expect(entity._id).toBeInstanceOf(ObjectId);
+
+            const obj: any = entity.toJSON();
+            expect(obj._id).toBeDefined();
+            expect(typeof obj._id).toEqual('string');
+
+            const reEntity = EntityTest.fromPlain(EntityTest, obj);
+            expect(reEntity._id).toBeInstanceOf(ObjectId);
+            expect(reEntity._id).toEqual(entity._id);
+
+            const child = new EntityChildTest();
+            child.parentId = entity._id;
+            const objChild: any = child.toJSON();
+            expect(objChild.parentId).toEqual(entity._id.toHexString());
+
+            const reChild = EntityChildTest.fromPlain(
+                EntityChildTest,
+                objChild
+            );
+            expect(reChild.parentId).toBeInstanceOf(ObjectId);
+            expect(reChild.parentId).toEqual(entity._id);
         });
     });
 });
@@ -121,6 +150,7 @@ afterAll(async () => {
     try {
         const em = mod.get<MongoManager>(getManagerToken());
         await em.getCollection(EntityTest).drop();
+        await em.getCollection(EntityChildTest).drop();
         await em.getClient().close();
         await mod.close();
     } catch (e) {

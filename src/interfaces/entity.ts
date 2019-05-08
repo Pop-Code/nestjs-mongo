@@ -4,7 +4,6 @@ import { ClassTransformOptions } from 'class-transformer';
 
 export interface EntityInterface {
     _id: ObjectId;
-    readonly id: string;
     createdAt: Date;
     updatedAt?: Date;
     toJSON(): {};

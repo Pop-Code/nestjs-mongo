@@ -16,6 +16,7 @@ export * from './interfaces/module.options';
 export * from './interfaces/module.options.factory';
 export * from './interfaces/relationship';
 export * from './interfaces/subscriber';
+export * from './interfaces/jsonserialize';
 export * from './manager';
 export * from './module';
 export * from './repository';

@@ -3,7 +3,8 @@ import {
     TransformationType,
     Type,
     Transform,
-    classToPlain
+    classToPlain,
+    Exclude
 } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { DEFAULT_CONNECTION_NAME, DEBUG } from './constants';
@@ -84,21 +85,23 @@ export const Relationship = (type?: any) => (target: any, property: string) => {
     );
 };
 
-export const WithRelationship = () => (target: any) => {
-    if (!target.prototype.getCachedRelationship) {
-        target.prototype.cachedRelationships = new Map();
-        function getCachedRelationship(prop: string) {
-            return this.cachedRelationships.get(prop);
+function getCachedRelationship(prop: string) {
+    return this.cachedRelationships.get(prop);
+}
+function setCachedRelationship(prop: string, value: any) {
+    this.cachedRelationships.set(prop, value);
+    return this;
+}
+export const WithRelationship = () => {
+    const exclude = Exclude();
+    return (target: any) => {
+        if (!target.prototype.getCachedRelationship) {
+            target.prototype.cachedRelationships = new Map();
+            exclude(target, 'cachedRelationships');
+            target.prototype.getCachedRelationship = getCachedRelationship;
+            target.prototype.setCachedRelationship = setCachedRelationship;
         }
-        target.prototype.getCachedRelationship = getCachedRelationship;
-
-        function setCachedRelationship(prop: string, value: any) {
-            this.cachedRelationships.set(prop, value);
-            return this;
-        }
-        target.prototype.setCachedRelationship = setCachedRelationship;
-    }
-    return target;
+    };
 };
 
 export const WithJSONSerialize = () => (target: any) => {

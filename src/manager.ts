@@ -137,7 +137,6 @@ export class MongoManager {
                 }
             }
 
-            //const proxy = _.cloneDeep(entity);
             const sets: any = { $set: entity };
 
             if (Object.keys($unset).length) {
@@ -149,8 +148,6 @@ export class MongoManager {
                 ...opts.mongoOperationOptions
             });
         } else {
-            //transforming entity class to class will clean extraneous values
-            //const proxy = _.cloneDeep(entity);
             operation = collection.insertOne(
                 entity,
                 opts.mongoOperationOptions

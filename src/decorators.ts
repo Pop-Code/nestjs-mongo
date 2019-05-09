@@ -3,8 +3,7 @@ import {
     TransformationType,
     Type,
     Transform,
-    classToPlain,
-    Exclude
+    classToPlain
 } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { DEFAULT_CONNECTION_NAME, DEBUG } from './constants';
@@ -64,11 +63,11 @@ export function ObjectIdTransformer(
 export const TypeObjectId = () => {
     const typefn = Type(() => ObjectId);
     const trfn = Transform(ObjectIdTransformer);
-    const allowFw = Allow();
+    const allowfn = Allow();
     return (target: any, property: any) => {
         typefn(target, property);
         trfn(target, property);
-        allowFw(target, property);
+        allowfn(target, property);
     };
 };
 
@@ -76,38 +75,35 @@ export const Collection = (name: string) => (target: any) => {
     Reflect.defineMetadata('mongo:collectionName', name, target);
 };
 
-export const Relationship = (type?: any) => (target: any, property: string) => {
-    Reflect.defineMetadata(
-        'mongo:relationship',
-        { type: type ? type : target.constructor },
-        target,
-        property
-    );
-};
-
-function getCachedRelationship(prop: string) {
-    return this.cachedRelationships.get(prop);
-}
-function setCachedRelationship(prop: string, value: any) {
-    this.cachedRelationships.set(prop, value);
-    return this;
-}
-export const WithRelationship = () => {
-    const exclude = Exclude();
-    return (target: any) => {
-        target.prototype.cachedRelationships = new Map();
-        target.prototype.getCachedRelationship = getCachedRelationship;
-        target.prototype.setCachedRelationship = setCachedRelationship;
-        exclude(target, 'cachedRelationships');
+export const Relationship = (type?: any) => {
+    return (target: any, property: string) => {
+        Reflect.defineMetadata(
+            'mongo:relationship',
+            { type: type ? type : target.constructor },
+            target,
+            property
+        );
     };
 };
 
+function getCachedRelationship(prop: string) {
+    return this._cachedRelationships.get(prop);
+}
+function setCachedRelationship(prop: string, value: any) {
+    this._cachedRelationships.set(prop, value);
+    return this;
+}
+export const WithRelationship = () => {
+    return (target: any) => {
+        target.prototype._cachedRelationships = new Map();
+        target.prototype.getCachedRelationship = getCachedRelationship;
+        target.prototype.setCachedRelationship = setCachedRelationship;
+    };
+};
+
+function toJSON() {
+    return classToPlain(this);
+}
 export const WithJSONSerialize = () => (target: any) => {
-    if (!target.prototype.toJSON) {
-        function toJSON() {
-            return classToPlain(this);
-        }
-        target.prototype.toJSON = toJSON;
-    }
-    return target;
+    target.prototype.toJSON = toJSON;
 };

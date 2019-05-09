@@ -114,10 +114,8 @@ export class MongoManager {
         if (errors.length) {
             throw this.exceptionFactory(errors);
         }
-        const proxyClass = _.cloneDeep(entity);
 
-        // force class to avoid id and keep _id
-        // delete (proxyClass as any).id;
+        // const proxyClass = _.cloneDeep(entity);
 
         const opts = {
             collection: this.getCollectionName(entity),
@@ -127,32 +125,40 @@ export class MongoManager {
 
         let operation: any;
         if (entity._id) {
-            proxyClass.updatedAt = new Date();
-
-            const pureObject = _.assign({}, proxyClass);
-            const sets: any = { $set: pureObject };
+            entity.updatedAt = new Date();
 
             const $unset: any = {};
-            for (const p in proxyClass) {
-                if (proxyClass.hasOwnProperty(p)) {
-                    const v: any = proxyClass[p];
+            for (const p in entity) {
+                if (entity.hasOwnProperty(p)) {
+                    const v: any = entity[p];
                     if (v === undefined) {
                         $unset[p] = 1;
-                        delete proxyClass[p];
+                        delete entity[p];
                     }
                 }
             }
+
+            const pureObject = _.assign(
+                {},
+                entity
+                // this.getOverridedProperties()
+            );
+            const sets: any = { $set: pureObject };
 
             if (Object.keys($unset).length) {
                 sets.$unset = $unset;
             }
 
-            operation = collection.updateOne({ _id: proxyClass._id }, sets, {
+            operation = collection.updateOne({ _id: entity._id }, sets, {
                 upsert: false,
                 ...opts.mongoOperationOptions
             });
         } else {
-            const pureObject = _.assign({}, proxyClass);
+            const pureObject = _.assign(
+                {},
+                entity
+                //this.getOverridedProperties()
+            );
             operation = collection.insertOne(
                 pureObject,
                 opts.mongoOperationOptions
@@ -163,17 +169,18 @@ export class MongoManager {
             throw new Error('Unknow Error during entity save');
         }
 
-        // updated at
-        if (proxyClass.updatedAt) {
-            entity.updatedAt = proxyClass.updatedAt;
-        }
-
         // new id
         if (insertedId) {
             entity._id = insertedId;
         }
 
         return entity;
+    }
+
+    private getOverridedProperties() {
+        return {
+            _cachedRelationships: undefined
+        };
     }
 
     async find<K>(classType: ClassType<K>, query: any): Promise<Cursor<K>> {

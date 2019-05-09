@@ -118,6 +118,38 @@ describe('MongoModule', () => {
             expect(response.parentId).toEqual(entity._id);
         });
 
+        it('should get a relationship', async () => {
+            const manager = mod.get<MongoManager>(getManagerToken());
+
+            const entity = new EntityTest();
+            entity.foo = 'bar';
+            entity.bar = 'foo';
+            await manager.save<EntityTest>(entity);
+
+            const child = new EntityChildTest();
+            child.foo = 'child';
+            child.parentId = entity._id;
+            await manager.save<EntityChildTest>(child);
+
+            const parent = await manager.getRelationship<EntityTest>(
+                child,
+                'parentId'
+            );
+            expect(parent).toBeInstanceOf(EntityTest);
+            expect(parent._id).toBeInstanceOf(ObjectId);
+            expect(parent._id).toEqual(entity._id);
+
+            const parentCached = child.getCachedRelationship('parentId');
+            expect(parentCached._id).toEqual(parent._id);
+
+            // find the item as it is in db and test that cache is not present
+            const childOBj = await manager
+                .getCollection(EntityChildTest)
+                .findOne({ _id: child._id });
+
+            expect(childOBj).not.toHaveProperty('_cachedRelationships');
+        });
+
         it('should serialize entity identifiers', async () => {
             const manager = mod.get<MongoManager>(getManagerToken());
             const entity = await manager.findOne<EntityTest>(EntityTest, {});

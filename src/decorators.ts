@@ -95,12 +95,10 @@ function setCachedRelationship(prop: string, value: any) {
 export const WithRelationship = () => {
     const exclude = Exclude();
     return (target: any) => {
-        if (!target.prototype.getCachedRelationship) {
-            target.prototype.cachedRelationships = new Map();
-            exclude(target, 'cachedRelationships');
-            target.prototype.getCachedRelationship = getCachedRelationship;
-            target.prototype.setCachedRelationship = setCachedRelationship;
-        }
+        target.prototype.cachedRelationships = new Map();
+        target.prototype.getCachedRelationship = getCachedRelationship;
+        target.prototype.setCachedRelationship = setCachedRelationship;
+        exclude(target, 'cachedRelationships');
     };
 };
 

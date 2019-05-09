@@ -9,6 +9,7 @@ import { MongoManager } from '../manager';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
+import { EntityNestedTest } from './module/entity.nested';
 
 export const DBTEST = 'mongodb://192.168.1.46:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -142,15 +143,24 @@ describe('MongoModule', () => {
             const parentCached = child.getCachedRelationship('parentId');
             expect(parentCached._id).toEqual(parent._id);
 
+            // set the parent as a nestedEntity on the child
+            const nested = new EntityNestedTest();
+            nested.parentId = parent._id;
+
+            child.nestedEntity = nested;
+            await manager.save(child);
+
             // find the item as it is in db and test that cache is not present
             const childOBj = await manager
                 .getCollection(EntityChildTest)
                 .findOne({ _id: child._id });
 
-            expect(childOBj).not.toHaveProperty('_cachedRelationships');
+            expect(childOBj.nestedEntity).not.toHaveProperty(
+                '__cachedRelationships'
+            );
         });
 
-        it('should serialize entity identifiers', async () => {
+        it('should serialize entity', async () => {
             const manager = mod.get<MongoManager>(getManagerToken());
             const entity = await manager.findOne<EntityTest>(EntityTest, {});
             expect(entity._id).toBeInstanceOf(ObjectId);

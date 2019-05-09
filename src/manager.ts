@@ -14,7 +14,8 @@ import {
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences
+    MongoCountPreferences,
+    ObjectId
 } from 'mongodb';
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';
@@ -115,8 +116,6 @@ export class MongoManager {
             throw this.exceptionFactory(errors);
         }
 
-        // const proxyClass = _.cloneDeep(entity);
-
         const opts = {
             collection: this.getCollectionName(entity),
             ...options
@@ -138,12 +137,8 @@ export class MongoManager {
                 }
             }
 
-            const pureObject = _.assign(
-                {},
-                entity
-                // this.getOverridedProperties()
-            );
-            const sets: any = { $set: pureObject };
+            //const proxy = _.cloneDeep(entity);
+            const sets: any = { $set: entity };
 
             if (Object.keys($unset).length) {
                 sets.$unset = $unset;
@@ -154,13 +149,10 @@ export class MongoManager {
                 ...opts.mongoOperationOptions
             });
         } else {
-            const pureObject = _.assign(
-                {},
-                entity
-                //this.getOverridedProperties()
-            );
+            //transforming entity class to class will clean extraneous values
+            //const proxy = _.cloneDeep(entity);
             operation = collection.insertOne(
-                pureObject,
+                entity,
                 opts.mongoOperationOptions
             );
         }
@@ -175,12 +167,6 @@ export class MongoManager {
         }
 
         return entity;
-    }
-
-    private getOverridedProperties() {
-        return {
-            _cachedRelationships: undefined
-        };
     }
 
     async find<K>(classType: ClassType<K>, query: any): Promise<Cursor<K>> {

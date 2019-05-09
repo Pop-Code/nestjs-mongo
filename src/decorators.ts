@@ -87,15 +87,25 @@ export const Relationship = (type?: any) => {
 };
 
 function getCachedRelationship(prop: string) {
-    return this._cachedRelationships.get(prop);
+    if (!this.__cachedRelationships) {
+        return;
+    }
+    return this.__cachedRelationships.get(prop);
 }
 function setCachedRelationship(prop: string, value: any) {
-    this._cachedRelationships.set(prop, value);
+    if (!this.__cachedRelationships) {
+        Object.defineProperty(this, '__cachedRelationships', {
+            writable: true,
+            value: new Map(),
+            enumerable: false,
+            configurable: false
+        });
+    }
+    this.__cachedRelationships.set(prop, value);
     return this;
 }
 export const WithRelationship = () => {
     return (target: any) => {
-        target.prototype._cachedRelationships = new Map();
         target.prototype.getCachedRelationship = getCachedRelationship;
         target.prototype.setCachedRelationship = setCachedRelationship;
     };

@@ -16,6 +16,8 @@ export interface Entity extends WithJSONSerializeInterface {}
 
 @WithJSONSerialize()
 export abstract class Entity implements EntityInterface {
+    constructor() {}
+
     @ApiModelProperty({
         description: 'The entity identifier',
         type: 'string'
@@ -48,10 +50,16 @@ export abstract class Entity implements EntityInterface {
         data: T,
         options?: ClassTransformOptions
     ): K {
-        return plainToClass<K, T>(cls, data, options);
+        return plainToClass<K, T>(cls, data, {
+            ...options,
+            excludePrefixes: ['__']
+        });
     }
 
     merge<T>(data: any, options?: ClassTransformOptions): T {
-        return classToClassFromExist(data, this, options);
+        return classToClassFromExist(data, this, {
+            ...options,
+            excludePrefixes: ['__']
+        });
     }
 }

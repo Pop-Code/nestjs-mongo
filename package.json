@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@nestjs/swagger": "3.0.2",
-        "class-transformer": "0.2.2",
+        "class-transformer": "0.2.3",
         "class-validator": "0.9.1",
         "debug": "4.1.1",
         "global": "4.3.2",

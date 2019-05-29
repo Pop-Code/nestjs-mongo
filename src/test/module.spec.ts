@@ -11,7 +11,7 @@ import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 import { EntityNestedTest } from './module/entity.nested';
 
-export const DBTEST = 'mongodb://192.168.1.46:27017/nestjs-mongo-test';
+export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
 
 beforeAll(async () => {

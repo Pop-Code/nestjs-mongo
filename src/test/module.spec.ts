@@ -10,6 +10,7 @@ import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 import { EntityNestedTest } from './module/entity.nested';
+import { EntityInterfaceStatic } from '../interfaces/entity';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -162,14 +163,16 @@ describe('MongoModule', () => {
 
         it('should serialize entity', async () => {
             const manager = mod.get<MongoManager>(getManagerToken());
+
             const entity = await manager.findOne<EntityTest>(EntityTest, {});
+
             expect(entity._id).toBeInstanceOf(ObjectId);
 
             const obj: any = entity.toJSON();
             expect(obj._id).toBeDefined();
             expect(typeof obj._id).toEqual('string');
 
-            const reEntity = EntityTest.fromPlain(EntityTest, obj);
+            const reEntity = EntityTest.fromPlain<EntityTest>(obj);
             expect(reEntity._id).toBeInstanceOf(ObjectId);
             expect(reEntity._id).toEqual(entity._id);
 
@@ -178,8 +181,7 @@ describe('MongoModule', () => {
             const objChild: any = child.toJSON();
             expect(objChild.parentId).toEqual(entity._id.toHexString());
 
-            const reChild = EntityChildTest.fromPlain(
-                EntityChildTest,
+            const reChild = EntityChildTest.fromPlain<EntityChildTest>(
                 objChild
             );
             expect(reChild.parentId).toBeInstanceOf(ObjectId);

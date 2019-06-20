@@ -34,7 +34,8 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
         if (id) {
             query._id = { $ne: id };
         }
-        const count = await this.em.count(object, query);
+        const type: any = object.constructor;
+        const count = await this.em.count(type, query);
         if (count > 0) {
             this.message = `A ${
                 args.object.constructor.name

@@ -1,26 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import {
-    classToPlain,
-    ClassTransformOptions,
-    plainToClass
-} from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
 import { validate } from 'class-validator';
 import Debug from 'debug';
-import _ from 'lodash';
 import {
     ChangeStream,
     CommonOptions,
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences,
-    ObjectId
+    MongoCountPreferences
 } from 'mongodb';
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';
-import { Entity } from './entity';
 import { getRepositoryToken } from './helpers';
+import { EntityInterfaceStatic, EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
 import { MongoRepository } from './repository';
@@ -45,10 +37,6 @@ export class MongoManager {
 
     getRepository<T extends MongoRepository<any>>(entity: Function): T {
         return this.repositories.get(getRepositoryToken(entity.name));
-    }
-
-    getEntityCollection(entity: Function): string {
-        return entity.constructor.name.toLowerCase();
     }
 
     getClient(): MongoClient {
@@ -87,26 +75,10 @@ export class MongoManager {
         );
     }
 
-    protected toClass<K, T>(
-        classType: ClassType<K>,
-        data: T,
-        options?: ClassTransformOptions
-    ): K {
-        const classO: K = plainToClass<K, T>(classType, data, options);
-        this.log('Transform data to class from plain %O => %O', data, classO);
-        return classO;
-    }
-
-    protected toPlain(entity: any, options?: ClassTransformOptions): any {
-        const plain = classToPlain(entity, options);
-        this.log('Transform data to plain from class %O => %O', entity, plain);
-        return plain;
-    }
-
-    async save<T extends Entity>(
-        entity: T,
+    async save<Model extends EntityInterface>(
+        entity: Model,
         options?: MongoExecutionOptions
-    ): Promise<T> {
+    ): Promise<Model> {
         this.log('save %s %s', entity.constructor.name);
         const errors = await validate(entity, {
             whitelist: true,
@@ -166,33 +138,36 @@ export class MongoManager {
         return entity;
     }
 
-    async find<K>(classType: ClassType<K>, query: any): Promise<Cursor<K>> {
+    async find<Model extends EntityInterface>(
+        classType: EntityInterfaceStatic,
+        query: any
+    ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
         const cursor: Cursor<Object> = await this.getCollection(classType).find(
             query
         );
-        return cursor.map(entity => this.toClass<K, Object>(classType, entity));
+        return cursor.map(entity => classType.fromPlain<Model>(entity));
     }
 
-    async findOne<T>(
-        classType: any,
+    async findOne<Model extends EntityInterface>(
+        classType: EntityInterfaceStatic,
         query: any,
         options?: FindOneOptions
-    ): Promise<T> {
+    ): Promise<Model> {
         this.log('findOne %s %o', classType.name, query);
         const entity = await this.getCollection(classType).findOne<Object>(
             query,
             options
         );
-        return entity ? this.toClass<T, Object>(classType, entity) : null;
+        return entity ? classType.fromPlain<Model>(entity) : null;
     }
 
     async count(
-        classType: any,
+        classType: EntityInterfaceStatic,
         query: any,
         options?: MongoCountPreferences
     ): Promise<number> {
-        this.log('count %s %o', classType.name, query);
+        this.log('count %s %o', classType, query);
         return await this.getCollection(classType).countDocuments(
             query,
             options
@@ -200,16 +175,16 @@ export class MongoManager {
     }
 
     async deleteOne(
-        classType: any,
+        classType: EntityInterfaceStatic,
         query: any,
         options?: CommonOptions
-    ): Promise<any> {
-        this.log('deleteOne %s %o', classType.name, query);
+    ) {
+        this.log('deleteOne %s %o', classType, query);
         return await this.getCollection(classType).deleteOne(query, options);
     }
 
-    watch<T>(
-        classType: ClassType<T>,
+    watch(
+        classType: EntityInterfaceStatic,
         pipes?: any[],
         options?: any
     ): ChangeStream {
@@ -217,14 +192,15 @@ export class MongoManager {
         return this.getCollection(classType).watch(pipes, options);
     }
 
-    async getRelationship<T>(object: any, property: string): Promise<T> {
+    async getRelationship<Model extends EntityInterface>(
+        object: any,
+        property: string
+    ): Promise<Model> {
         this.log('getRelationship %s on %s', property, object.constructor.name);
 
-        const relationMetadata = Reflect.getMetadata(
-            'mongo:relationship',
-            object,
-            property
-        );
+        const relationMetadata: {
+            type: EntityInterfaceStatic;
+        } = Reflect.getMetadata('mongo:relationship', object, property);
 
         if (!relationMetadata) {
             throw new Error(
@@ -233,21 +209,17 @@ export class MongoManager {
         }
 
         const repository = this.getRepository(relationMetadata.type);
-        const data = await repository.findOne({
+        const relationship = await repository.findOne({
             _id: object[property]
         });
-        const entity: any = data
-            ? this.toClass<T, any>(relationMetadata.type, data)
-            : null;
 
         if (
-            entity &&
-            typeof object.setCachedRelationship === 'function' &&
-            entity
+            relationship &&
+            typeof object.setCachedRelationship === 'function'
         ) {
-            object.setCachedRelationship(property, entity);
+            object.setCachedRelationship(property, relationship);
         }
 
-        return entity;
+        return relationship;
     }
 }

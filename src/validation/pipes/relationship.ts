@@ -21,13 +21,8 @@ export class RelationshipPipe implements PipeTransform {
         if (!this.validator.isMongoId(value)) {
             throw new BadRequestException(`The ${metadata.data} is malformed`);
         }
-        switch (metadata.type) {
-            case 'query':
-            case 'param':
-                return await this.em.findOne(metadata.metatype, {
-                    _id: new ObjectId(value)
-                });
-        }
-        return value;
+        return await this.em.findOne(metadata.metatype as any, {
+            _id: new ObjectId(value)
+        });
     }
 }

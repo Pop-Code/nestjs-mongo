@@ -7,6 +7,14 @@ export interface EntityInterface {
     createdAt: Date;
     updatedAt?: Date;
     toJSON(): {};
-    merge<T>(data: any, options?: ClassTransformOptions): T;
+    merge<Model>(data: any, options?: ClassTransformOptions): Model;
     history?: HistoryActions;
+}
+
+export interface EntityInterfaceStatic {
+    new (): EntityInterface;
+    fromPlain<Model extends EntityInterface>(
+        data: Object,
+        options?: ClassTransformOptions
+    ): Model;
 }

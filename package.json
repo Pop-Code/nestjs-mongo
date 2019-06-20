@@ -1,6 +1,6 @@
 {
     "name": "nestjs-mongo",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "A NestJS module that provide a simple mongodb orm like",
     "keywords": [
         "nestjs",
@@ -37,14 +37,14 @@
         "reflect-metadata": "0.1.13",
         "@types/debug": "4.1.4",
         "@types/jest": "24.0.13",
-        "@types/mongodb": "3.1.27",
+        "@types/mongodb": "3.1.28",
         "jest": "24.8.0",
         "rxjs": "6.5.2",
         "ts-jest": "24.0.2",
         "ts-node": "8.2.0",
         "tsconfig-paths": "3.8.0",
         "typedoc": "0.14.2",
-        "typescript": "3.4.5"
+        "typescript": "3.5.1"
     },
     "scripts": {
         "build": "rm -Rf ./lib && tsc",

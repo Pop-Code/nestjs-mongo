@@ -9,7 +9,7 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { IsDate, IsOptional } from 'class-validator';
 import { TypeObjectId, WithJSONSerialize } from './decorators';
 import { ObjectId } from './helpers';
-import { EntityInterface } from './interfaces/entity';
+import { EntityInterface, EntityInterfaceStatic } from './interfaces/entity';
 import { WithJSONSerializeInterface } from './interfaces/jsonserialize';
 
 export interface Entity extends WithJSONSerializeInterface {}
@@ -45,19 +45,19 @@ export abstract class Entity implements EntityInterface {
     @IsOptional()
     updatedAt?: Date;
 
-    static fromPlain<K, T>(
-        cls: ClassType<K>,
-        data: T,
-        options?: ClassTransformOptions
-    ): K {
-        return plainToClass<K, T>(cls, data, {
+    merge<T>(data: any, options?: ClassTransformOptions): T {
+        return classToClassFromExist(data, this, {
             ...options,
             excludePrefixes: ['__']
         });
     }
 
-    merge<T>(data: any, options?: ClassTransformOptions): T {
-        return classToClassFromExist(data, this, {
+    static fromPlain<Model extends Entity>(
+        data: Object,
+        options?: ClassTransformOptions
+    ): Model {
+        const type = this;
+        return plainToClass(type as any, data, {
             ...options,
             excludePrefixes: ['__']
         });

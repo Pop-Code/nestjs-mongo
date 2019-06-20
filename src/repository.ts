@@ -1,44 +1,47 @@
 import { MongoManager } from './manager';
 import { Cursor } from 'mongodb';
 import { ObjectId } from './helpers';
-import { ClassType } from 'class-transformer/ClassTransformer';
-import { Entity } from './entity';
+import { EntityInterface, EntityInterfaceStatic } from './interfaces/entity';
 
-export class MongoRepository<T extends Entity> {
+export class MongoRepository<Model extends EntityInterface> {
     constructor(
         protected readonly em: MongoManager,
-        protected readonly cls: ClassType<T>
+        protected readonly classType: EntityInterfaceStatic
     ) {}
+
+    getClassType() {
+        return this.classType;
+    }
 
     getEm() {
         return this.em;
     }
 
-    save(entity: T, ...args: any[]): Promise<T> {
+    save(entity: Model, ...args: any[]): Promise<Model> {
         return this.em.save(entity, ...args);
     }
 
-    find(query?: any): Promise<Cursor<T>> {
-        return this.em.find(this.cls, query);
+    find(query?: any): Promise<Cursor<Model>> {
+        return this.em.find(this.classType, query);
     }
 
     count(query?: any, ...args: any[]): Promise<number> {
-        return this.em.count(this.cls, query, ...args);
+        return this.em.count(this.classType, query, ...args);
     }
 
-    findOne(query: any, ...args: any[]): Promise<T> {
-        return this.em.findOne(this.cls, query, ...args);
+    findOne(query: any, ...args: any[]): Promise<Model> {
+        return this.em.findOne(this.classType, query, ...args);
     }
 
-    findOneById(id: string | ObjectId): Promise<T> {
-        return this.em.findOne(this.cls, { _id: id });
+    findOneById(id: string | ObjectId): Promise<Model> {
+        return this.em.findOne(this.classType, { _id: id });
     }
 
     deleteOne(query: any, ...args: any) {
-        return this.em.deleteOne(this.cls, query, ...args);
+        return this.em.deleteOne(this.classType, query, ...args);
     }
 
-    getRelationship<R>(object: any, property: string): Promise<R> {
-        return this.em.getRelationship(object, property);
+    getRelationship(object: Model, property: string): Promise<Model> {
+        return this.em.getRelationship<Model>(object, property);
     }
 }

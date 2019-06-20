@@ -26,7 +26,7 @@
         "debug": "4.1.1",
         "global": "4.4.0",
         "lodash": "4.17.11",
-        "mongodb": "3.2.6"
+        "mongodb": "3.2.7"
     },
     "devDependencies": {
         "class-transformer": "0.2.3",
@@ -37,7 +37,7 @@
         "reflect-metadata": "0.1.13",
         "@types/debug": "4.1.4",
         "@types/jest": "24.0.15",
-        "@types/mongodb": "3.1.27",
+        "@types/mongodb": "3.1.28",
         "jest": "24.8.0",
         "rxjs": "6.5.2",
         "ts-jest": "24.0.2",

@@ -25,7 +25,7 @@
         "@nestjs/swagger": "3.0.2",
         "debug": "4.1.1",
         "global": "4.4.0",
-        "lodash": "4.17.11",
+        "lodash": "4.17.13",
         "mongodb": "3.2.7"
     },
     "devDependencies": {

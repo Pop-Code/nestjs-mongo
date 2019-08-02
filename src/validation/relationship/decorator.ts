@@ -1,14 +1,6 @@
-import { registerDecorator, ValidationOptions } from 'class-validator';
+import { registerDecorator } from 'class-validator';
 import { IsValidRelationshipConstraint } from './constraint';
-import { MongoManager } from '../../manager';
-
-export interface IsValidRelationshipOptions extends ValidationOptions {
-    with?: (
-        object: any,
-        relationship: any,
-        em: MongoManager
-    ) => Promise<string | true>;
-}
+import { IsValidRelationshipOptions } from './interfaces';
 
 export function IsValidRelationship(
     validationOptions?: IsValidRelationshipOptions

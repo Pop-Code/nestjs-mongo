@@ -1,10 +1,13 @@
-import { MongoManager } from '../../manager';
 import {
     ValidatorConstraint,
-    ValidatorConstraintInterface,
-    ValidationArguments
+    ValidatorConstraintInterface
 } from 'class-validator';
 import _ from 'lodash';
+import { MongoManager } from '../../manager';
+import {
+    IsValidRelationshipValidationArguments,
+    WithRelationshipTest
+} from './interfaces';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
 export class IsValidRelationshipConstraint
@@ -13,11 +16,11 @@ export class IsValidRelationshipConstraint
 
     private message: string;
 
-    defaultMessage?(args?: ValidationArguments): string {
+    defaultMessage?(args?: IsValidRelationshipValidationArguments): string {
         return this.message;
     }
 
-    async validate(value: any, args: ValidationArguments) {
+    async validate(value: any, args: IsValidRelationshipValidationArguments) {
         try {
             const relationship = await this.em.getRelationship(
                 args.object,
@@ -31,9 +34,13 @@ export class IsValidRelationshipConstraint
                 return false;
             }
 
-            const withTest = _.first(args.constraints);
-            if (withTest) {
-                const message = await withTest.bind(args.object)(
+            const withTestFunction = _.first(args.constraints);
+            if (withTestFunction) {
+                const withTest: WithRelationshipTest = withTestFunction.bind(
+                    args.object
+                );
+                const message = await withTest(
+                    args.object,
                     relationship,
                     this.em
                 );
@@ -42,7 +49,6 @@ export class IsValidRelationshipConstraint
                     return false;
                 }
             }
-
             return true;
         } catch (e) {
             throw e; // ?

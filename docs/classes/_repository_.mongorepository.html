@@ -110,9 +110,11 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#find" class="tsd-kind-icon">find</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#findone" class="tsd-kind-icon">find<wbr>One</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#findonebyid" class="tsd-kind-icon">find<wbr>One<wbr>ById</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#fromplain" class="tsd-kind-icon">from<wbr>Plain</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#getclasstype" class="tsd-kind-icon">get<wbr>Class<wbr>Type</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#getem" class="tsd-kind-icon">get<wbr>Em</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#getrelationship" class="tsd-kind-icon">get<wbr>Relationship</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="_repository_.mongorepository.html#getrelationship" class="tsd-kind-icon">get<wbr>Relationship</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#merge" class="tsd-kind-icon">merge</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#save" class="tsd-kind-icon">save</a></li>
 							</ul>
 						</section>
@@ -125,13 +127,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Repository<span class="tsd-signature-symbol">(</span>em<span class="tsd-signature-symbol">: </span><a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a>, classType<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_entity_.entityinterfacestatic.html" class="tsd-signature-type">EntityInterfaceStatic</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_repository_.mongorepository.html" class="tsd-signature-type">MongoRepository</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Repository<span class="tsd-signature-symbol">(</span>em<span class="tsd-signature-symbol">: </span><a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a>, classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_repository_.mongorepository.html" class="tsd-signature-type">MongoRepository</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L6">repository.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L8">repository.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -140,7 +142,7 @@
 									<h5>em: <a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a></h5>
 								</li>
 								<li>
-									<h5>classType: <a href="../interfaces/_interfaces_entity_.entityinterfacestatic.html" class="tsd-signature-type">EntityInterfaceStatic</a></h5>
+									<h5>classType: <span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_repository_.mongorepository.html" class="tsd-signature-type">MongoRepository</a></h4>
@@ -153,10 +155,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="classtype" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> class<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_interfaces_entity_.entityinterfacestatic.html" class="tsd-signature-type">EntityInterfaceStatic</a></div>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L9">repository.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L11">repository.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -166,7 +168,7 @@
 					<div class="tsd-signature tsd-kind-icon">em<span class="tsd-signature-symbol">:</span> <a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L8">repository.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L10">repository.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L28">repository.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L30">repository.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -209,7 +211,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L40">repository.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L42">repository.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -235,7 +237,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L24">repository.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L26">repository.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -258,7 +260,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L32">repository.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L34">repository.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,7 +286,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L36">repository.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L38">repository.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -298,19 +300,68 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getclasstype" class="tsd-anchor"></a>
-					<h3>get<wbr>Class<wbr>Type</h3>
+					<a name="fromplain" class="tsd-anchor"></a>
+					<h3>from<wbr>Plain</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Class<wbr>Type<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_entity_.entityinterfacestatic.html" class="tsd-signature-type">EntityInterfaceStatic</a></li>
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Plain<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClassTransformOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L12">repository.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L53">repository.ts:53</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_interfaces_entity_.entityinterfacestatic.html" class="tsd-signature-type">EntityInterfaceStatic</a></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>data: <span class="tsd-signature-type">Object</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">ClassTransformOptions</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Model</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getclasstype" class="tsd-anchor"></a>
+					<h3>get<wbr>Class<wbr>Type</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Class<wbr>Type<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L14">repository.ts:14</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>constructor<span class="tsd-signature-symbol">: </span>function</h5>
+									<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon">new __type<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<aside class="tsd-sources">
+												<ul>
+													<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-transformer/ClassTransformer.d.ts:2</li>
+												</ul>
+											</aside>
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+										</li>
+								</ul>        </li>
+							</ul>
 						</li>
 					</ul>
 				</section>
@@ -324,26 +375,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L16">repository.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L18">repository.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 					<a name="getrelationship" class="tsd-anchor"></a>
 					<h3>get<wbr>Relationship</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship&lt;E&gt;<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L44">repository.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L46">repository.ts:46</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>E<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_entity_.entityinterface.html" class="tsd-signature-type">EntityInterface</a></h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -353,7 +410,36 @@
 									<h5>property: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="merge" class="tsd-anchor"></a>
+					<h3>merge</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">merge<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClassTransformOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L57">repository.ts:57</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>entity: <span class="tsd-signature-type">Model</span></h5>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">ClassTransformOptions</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Model</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -367,7 +453,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7a595ef/src/repository.ts#L20">repository.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/repository.ts#L22">repository.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -428,13 +514,19 @@
 								<a href="_repository_.mongorepository.html#findonebyid" class="tsd-kind-icon">find<wbr>One<wbr>ById</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_repository_.mongorepository.html#fromplain" class="tsd-kind-icon">from<wbr>Plain</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_repository_.mongorepository.html#getclasstype" class="tsd-kind-icon">get<wbr>Class<wbr>Type</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_repository_.mongorepository.html#getem" class="tsd-kind-icon">get<wbr>Em</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="_repository_.mongorepository.html#getrelationship" class="tsd-kind-icon">get<wbr>Relationship</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_repository_.mongorepository.html#merge" class="tsd-kind-icon">merge</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_repository_.mongorepository.html#save" class="tsd-kind-icon">save</a>

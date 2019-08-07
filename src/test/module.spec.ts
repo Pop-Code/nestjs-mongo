@@ -10,7 +10,6 @@ import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 import { EntityNestedTest } from './module/entity.nested';
-import { EntityInterfaceStatic } from '../interfaces/entity';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -55,7 +54,7 @@ describe('MongoModule', () => {
 
         it('should get the collection name from the Collection decorator', () => {
             const manager = mod.get<MongoManager>(getManagerToken());
-            const name = manager.getCollectionName(EntityTest);
+            const name = manager.getCollectionName<EntityTest>(EntityTest);
             expect(name).toEqual(TEST_COLLECTION_NAME);
         });
 
@@ -172,7 +171,7 @@ describe('MongoModule', () => {
             expect(obj._id).toBeDefined();
             expect(typeof obj._id).toEqual('string');
 
-            const reEntity = EntityTest.fromPlain<EntityTest>(obj);
+            const reEntity = manager.getRepository(EntityTest).fromPlain(obj);
             expect(reEntity._id).toBeInstanceOf(ObjectId);
             expect(reEntity._id).toEqual(entity._id);
 
@@ -181,9 +180,9 @@ describe('MongoModule', () => {
             const objChild: any = child.toJSON();
             expect(objChild.parentId).toEqual(entity._id.toHexString());
 
-            const reChild = EntityChildTest.fromPlain<EntityChildTest>(
-                objChild
-            );
+            const reChild = manager
+                .getRepository(EntityChildTest)
+                .fromPlain(objChild);
             expect(reChild.parentId).toBeInstanceOf(ObjectId);
             expect(reChild.parentId).toEqual(entity._id);
         });

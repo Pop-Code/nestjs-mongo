@@ -1,23 +1,15 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import {
-    classToClassFromExist,
-    ClassTransformOptions,
-    plainToClass,
-    Type
-} from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
 import { TypeObjectId, WithJSONSerialize } from './decorators';
 import { ObjectId } from './helpers';
-import { EntityInterface, EntityInterfaceStatic } from './interfaces/entity';
+import { EntityInterface } from './interfaces/entity';
 import { WithJSONSerializeInterface } from './interfaces/jsonserialize';
 
 export interface Entity extends WithJSONSerializeInterface {}
 
 @WithJSONSerialize()
 export abstract class Entity implements EntityInterface {
-    constructor() {}
-
     @ApiModelProperty({
         description: 'The entity identifier',
         type: 'string'
@@ -44,22 +36,4 @@ export abstract class Entity implements EntityInterface {
     @IsDate()
     @IsOptional()
     updatedAt?: Date;
-
-    merge<T>(data: any, options?: ClassTransformOptions): T {
-        return classToClassFromExist(data, this, {
-            ...options,
-            excludePrefixes: ['__']
-        });
-    }
-
-    static fromPlain<Model extends Entity>(
-        data: Object,
-        options?: ClassTransformOptions
-    ): Model {
-        const type = this;
-        return plainToClass(type as any, data, {
-            ...options,
-            excludePrefixes: ['__']
-        });
-    }
 }

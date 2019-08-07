@@ -1,12 +1,14 @@
 import { MongoManager } from './manager';
 import { Cursor } from 'mongodb';
 import { ObjectId } from './helpers';
-import { EntityInterface, EntityInterfaceStatic } from './interfaces/entity';
+import { EntityInterface } from './interfaces/entity';
+import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassTransformOptions } from 'class-transformer';
 
 export class MongoRepository<Model extends EntityInterface> {
     constructor(
         protected readonly em: MongoManager,
-        protected readonly classType: EntityInterfaceStatic
+        protected readonly classType: ClassType<Model>
     ) {}
 
     getClassType() {
@@ -41,7 +43,18 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em.deleteOne(this.classType, query, ...args);
     }
 
-    getRelationship(object: Model, property: string): Promise<Model> {
-        return this.em.getRelationship<Model>(object, property);
+    getRelationship<E extends EntityInterface>(
+        object: Model,
+        property: string
+    ): Promise<E> {
+        return this.em.getRelationship<E>(object, property);
+    }
+
+    fromPlain(data: Object, options?: ClassTransformOptions): Model {
+        return this.em.fromPlain<Model>(this.getClassType(), data, options);
+    }
+
+    merge(entity: Model, data: any, options?: ClassTransformOptions): Model {
+        return this.em.merge(entity, data, options);
     }
 }

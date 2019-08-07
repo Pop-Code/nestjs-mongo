@@ -37,7 +37,7 @@ export abstract class EntityService<
 
     async create(data: any, save: boolean = false): Promise<Model> {
         const type = this.repository.getClassType();
-        const item = type.fromPlain<Model>(data);
+        const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
         if (save) return this.repository.save(item);
         return item;
@@ -71,7 +71,7 @@ export abstract class EntityService<
         data: any,
         save: boolean = false
     ): Promise<Model> {
-        const item = entity.merge<Model>(data);
+        const item = this.repository.merge(entity, data);
         this.addHistory(item, 'Item updated');
         if (save) return this.repository.save(item);
         return item;

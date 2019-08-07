@@ -12,10 +12,16 @@ import {
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';
 import { getRepositoryToken } from './helpers';
-import { EntityInterfaceStatic, EntityInterface } from './interfaces/entity';
+import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
 import { MongoRepository } from './repository';
+import { ClassType } from 'class-transformer/ClassTransformer';
+import {
+    plainToClass,
+    ClassTransformOptions,
+    classToClassFromExist
+} from 'class-transformer';
 
 @Injectable()
 export class MongoManager {
@@ -27,16 +33,22 @@ export class MongoManager {
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
-    addRepository<T extends MongoRepository<any>>(
-        token: string,
-        repository: T
-    ): MongoManager {
+    addRepository<
+        Model extends EntityInterface,
+        R extends MongoRepository<Model> = MongoRepository<Model>
+    >(token: string, repository: R): MongoManager {
         this.repositories.set(token, repository);
         return this;
     }
 
-    getRepository<T extends MongoRepository<any>>(entity: Function): T {
-        return this.repositories.get(getRepositoryToken(entity.name));
+    getRepository<
+        Model extends EntityInterface,
+        R extends MongoRepository<Model> = MongoRepository<Model>
+    >(classType: ClassType<Model>): R {
+        // todo here we must only have
+        // - one repository for one collection
+        // -  not one  repository  for one model !!
+        return this.repositories.get(getRepositoryToken(classType.name));
     }
 
     getClient(): MongoClient {
@@ -47,31 +59,36 @@ export class MongoManager {
         return this.client.db(databaseName);
     }
 
-    getCollectionName(nameOrFunction: any): string {
-        let name: string = nameOrFunction;
+    getCollectionName<Model>(nameOrInstance: Model | ClassType<Model>): string {
+        let name: string;
         if (
-            typeof nameOrFunction === 'object' ||
-            typeof nameOrFunction === 'function'
+            typeof nameOrInstance === 'object' ||
+            typeof nameOrInstance === 'function'
         ) {
             name = Reflect.getMetadata(
                 'mongo:collectionName',
-                typeof nameOrFunction === 'object'
-                    ? nameOrFunction.constructor
-                    : nameOrFunction
+                typeof nameOrInstance === 'object'
+                    ? nameOrInstance.constructor
+                    : nameOrInstance
             );
-            if (!name) {
-                throw new Error(
-                    '@Collection decorator is required to use a class as model for:' +
-                        nameOrFunction
-                );
-            }
         }
+
+        if (!name) {
+            throw new Error(
+                '@Collection decorator is required to use a class as model for:' +
+                    nameOrInstance
+            );
+        }
+
         return name;
     }
 
-    getCollection(nameOrFunction: any, databaseName?: string) {
+    getCollection<Model extends EntityInterface>(
+        nameOrInstance: Model | ClassType<Model>,
+        databaseName?: string
+    ) {
         return this.getDatabase(databaseName).collection(
-            this.getCollectionName(nameOrFunction)
+            this.getCollectionName(nameOrInstance)
         );
     }
 
@@ -89,10 +106,10 @@ export class MongoManager {
         }
 
         const opts = {
-            collection: this.getCollectionName(entity),
             ...options
         };
-        const collection = this.getCollection(opts.collection, opts.database);
+
+        const collection = this.getCollection(entity, opts.database);
 
         let operation: any;
         if (entity._id) {
@@ -139,18 +156,18 @@ export class MongoManager {
     }
 
     async find<Model extends EntityInterface>(
-        classType: EntityInterfaceStatic,
+        classType: ClassType<Model>,
         query: any
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
         const cursor: Cursor<Object> = await this.getCollection(classType).find(
             query
         );
-        return cursor.map(entity => classType.fromPlain<Model>(entity));
+        return cursor.map(entity => this.fromPlain<Model>(classType, entity));
     }
 
     async findOne<Model extends EntityInterface>(
-        classType: EntityInterfaceStatic,
+        classType: ClassType<Model>,
         query: any,
         options?: FindOneOptions
     ): Promise<Model> {
@@ -159,11 +176,11 @@ export class MongoManager {
             query,
             options
         );
-        return entity ? classType.fromPlain<Model>(entity) : null;
+        return entity ? this.fromPlain<Model>(classType, entity) : null;
     }
 
-    async count(
-        classType: EntityInterfaceStatic,
+    async count<Model extends EntityInterface>(
+        classType: ClassType<Model>,
         query: any,
         options?: MongoCountPreferences
     ): Promise<number> {
@@ -174,8 +191,8 @@ export class MongoManager {
         );
     }
 
-    async deleteOne(
-        classType: EntityInterfaceStatic,
+    async deleteOne<Model extends EntityInterface>(
+        classType: ClassType<Model>,
         query: any,
         options?: CommonOptions
     ) {
@@ -183,8 +200,8 @@ export class MongoManager {
         return await this.getCollection(classType).deleteOne(query, options);
     }
 
-    watch(
-        classType: EntityInterfaceStatic,
+    watch<Model extends EntityInterface>(
+        classType: ClassType<Model>,
         pipes?: any[],
         options?: any
     ): ChangeStream {
@@ -199,7 +216,7 @@ export class MongoManager {
         this.log('getRelationship %s on %s', property, object.constructor.name);
 
         const relationMetadata: {
-            type: EntityInterfaceStatic;
+            type: ClassType<Model>;
         } = Reflect.getMetadata('mongo:relationship', object, property);
 
         if (!relationMetadata) {
@@ -221,5 +238,27 @@ export class MongoManager {
         }
 
         return relationship;
+    }
+
+    fromPlain<Model extends EntityInterface>(
+        model: ClassType<Model>,
+        data: Object,
+        options?: ClassTransformOptions
+    ): Model {
+        return plainToClass(model, data, {
+            ...options,
+            excludePrefixes: ['__']
+        });
+    }
+
+    merge<Model extends EntityInterface>(
+        entity: Model,
+        data: any,
+        options?: ClassTransformOptions
+    ): Model {
+        return classToClassFromExist(data, entity, {
+            ...options,
+            excludePrefixes: ['__']
+        });
     }
 }

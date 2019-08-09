@@ -29,10 +29,16 @@ export const InjectRepository = (
     connectionName: string = DEFAULT_CONNECTION_NAME
 ) => Inject(getRepositoryToken(entity.name, connectionName));
 
+const objectIdFromString = (value: any) =>
+    ObjectId.isValid(value) ? new ObjectId(value) : undefined;
+const objectIdToString = (value: any) =>
+    value instanceof ObjectId ? value.toHexString() : undefined;
+
 export function ObjectIdTransformer(
     value: any,
     object: any,
-    type: TransformationType
+    type: TransformationType,
+    isArray?: boolean
 ) {
     const debug = Debug(DEBUG + ':ObjectIdTransformer');
     let newValue: any;
@@ -43,9 +49,13 @@ export function ObjectIdTransformer(
     if (type === TransformationType.CLASS_TO_CLASS) {
         newValue = value;
     } else if (type === TransformationType.PLAIN_TO_CLASS) {
-        newValue = ObjectId.isValid(value) ? new ObjectId(value) : undefined;
+        newValue = isArray
+            ? value.map(objectIdFromString)
+            : objectIdFromString(value);
     } else if (type === TransformationType.CLASS_TO_PLAIN) {
-        newValue = value instanceof ObjectId ? value.toHexString() : undefined;
+        newValue = isArray
+            ? value.map(objectIdToString)
+            : objectIdToString(value);
     }
 
     debug(
@@ -60,9 +70,12 @@ export function ObjectIdTransformer(
     return newValue;
 }
 
-export const TypeObjectId = () => {
+export const TypeObjectId = (isArray?: boolean) => {
     const typefn = Type(() => ObjectId);
-    const trfn = Transform(ObjectIdTransformer);
+    const trfn = Transform(
+        (value: any, object: any, type: TransformationType) =>
+            ObjectIdTransformer(value, object, type, isArray)
+    );
     const allowfn = Allow();
     return (target: any, property: any) => {
         typefn(target, property);

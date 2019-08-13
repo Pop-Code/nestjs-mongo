@@ -1,20 +1,21 @@
 import { Inject } from '@nestjs/common';
 import {
-    TransformationType,
-    Type,
+    classToPlain,
     Transform,
-    classToPlain
+    TransformationType,
+    Type
 } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
-import { DEFAULT_CONNECTION_NAME, DEBUG } from './constants';
+import { Allow } from 'class-validator';
+import Debug from 'debug';
+import { DEBUG, DEFAULT_CONNECTION_NAME } from './constants';
 import {
     getConnectionToken,
     getManagerToken,
     getRepositoryToken,
     ObjectId
 } from './helpers';
-import Debug from 'debug';
-import { Allow } from 'class-validator';
+import { EntityInterface } from './interfaces/entity';
 
 export const InjectMongoClient = (
     connectionName: string = DEFAULT_CONNECTION_NAME
@@ -88,11 +89,21 @@ export const Collection = (name: string) => (target: any) => {
     Reflect.defineMetadata('mongo:collectionName', name, target);
 };
 
-export const Relationship = (type?: any) => {
+export const Relationship = (
+    entityClass?: ClassType<EntityInterface>,
+    isArray: boolean = false
+) => {
+    const debug = Debug(DEBUG + ':Relationship');
+
     return (target: any, property: string) => {
+        const type = entityClass ? entityClass : target;
+        debug('Register relationship metadata %s isArray: %s', type, isArray);
         Reflect.defineMetadata(
             'mongo:relationship',
-            { type: type ? type : target.constructor },
+            {
+                type,
+                isArray
+            },
             target,
             property
         );

@@ -8,6 +8,8 @@ import {
     IsValidRelationshipValidationArguments,
     WithRelationshipTest
 } from './interfaces';
+import { RelationshipMetadata } from '../../interfaces/relationship';
+import { ObjectId } from '../../helpers';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
 export class IsValidRelationshipConstraint
@@ -20,18 +22,61 @@ export class IsValidRelationshipConstraint
         return this.message;
     }
 
-    async validate(value: any, args: IsValidRelationshipValidationArguments) {
+    async validate(
+        value: ObjectId | ObjectId[],
+        args: IsValidRelationshipValidationArguments
+    ) {
         try {
-            const relationship = await this.em.getRelationship(
+            const relationMetadata: RelationshipMetadata<
+                any
+            > = Reflect.getMetadata(
+                'mongo:relationship',
                 args.object,
                 args.property
             );
+            let relationship: any;
 
-            if (!relationship) {
-                this.message = `The ${args.property} ${
-                    args.value
-                } does not exist`;
-                return false;
+            if (relationMetadata.isArray) {
+                if (!Array.isArray(value)) {
+                    throw new Error(
+                        `The ${args.property} ${args.value} must be an array`
+                    );
+                }
+                const errors: Error[] = [];
+                relationship = [];
+                for (const [index, _id] of value.entries()) {
+                    const innerR = await this.em.findOne<any>(
+                        relationMetadata.type,
+                        {
+                            _id
+                        }
+                    );
+                    if (!innerR) {
+                        errors.push(
+                            new Error(
+                                `The property ${
+                                    args.property
+                                } contains an invalid relationship ${_id} at index ${index}`
+                            )
+                        );
+                        relationship.push(null);
+                        continue;
+                    }
+                    relationship.push(innerR);
+                }
+                if (errors.length) {
+                    throw new Error(errors.map(e => e.message).join(', '));
+                }
+            } else {
+                relationship = await this.em.getRelationship(
+                    args.object,
+                    args.property
+                );
+                if (!relationship) {
+                    throw new Error(
+                        `The ${args.property} ${args.value} does not exist`
+                    );
+                }
             }
 
             const withTestFunction = _.first(args.constraints);
@@ -45,13 +90,13 @@ export class IsValidRelationshipConstraint
                     this.em
                 );
                 if (typeof message === 'string') {
-                    this.message = message;
-                    return false;
+                    throw new Error(message);
                 }
             }
             return true;
         } catch (e) {
-            throw e; // ?
+            this.message = e.message;
+            return false;
         }
     }
 

@@ -22,6 +22,7 @@ import {
     ClassTransformOptions,
     classToClassFromExist
 } from 'class-transformer';
+import { RelationshipMetadata } from './interfaces/relationship';
 
 @Injectable()
 export class MongoManager {
@@ -211,23 +212,37 @@ export class MongoManager {
 
     async getRelationship<Model extends EntityInterface>(
         object: any,
-        property: string
+        property: string,
+        cachedMetadata?: RelationshipMetadata<Model>
     ): Promise<Model> {
-        this.log('getRelationship %s on %s', property, object.constructor.name);
+        this.log('getRelationship %s on %s', property, object.constructor);
 
-        const relationMetadata: {
-            type: ClassType<Model>;
-        } = Reflect.getMetadata('mongo:relationship', object, property);
-
+        let relationMetadata = cachedMetadata;
         if (!relationMetadata) {
+            relationMetadata = Reflect.getMetadata(
+                'mongo:relationship',
+                object,
+                property
+            );
+            if (!relationMetadata) {
+                throw new Error(
+                    `The property ${property} metadata @Relationship must be set to call getRelationship on ${JSON.stringify(
+                        object
+                    )}`
+                );
+            }
+        }
+
+        if (relationMetadata.isArray) {
             throw new Error(
-                `The ${property} metadata (@Relationship(type)) must be set to call getRelationship`
+                `The property ${property} is defined as an array, please use getRelationships instead of getRelationship`
             );
         }
 
         const repository = this.getRepository(relationMetadata.type);
+        const value = object[property];
         const relationship = await repository.findOne({
-            _id: object[property]
+            _id: value
         });
 
         if (
@@ -240,11 +255,51 @@ export class MongoManager {
         return relationship;
     }
 
+    async getRelationships<Model extends EntityInterface>(
+        object: any,
+        property: string
+    ): Promise<Model[]> {
+        this.log('getRelationships %s on %s', property, object.constructor);
+
+        const relationMetadata: RelationshipMetadata<
+            Model
+        > = Reflect.getMetadata('mongo:relationship', object, property);
+
+        if (!relationMetadata) {
+            throw new Error(
+                `The property ${property} metadata @Relationship must be set to call getRelationship on ${JSON.stringify(
+                    object
+                )}`
+            );
+        }
+
+        if (!relationMetadata.isArray) {
+            throw new Error(
+                `The property ${property} is not defined as an array, please use getRelationship instead of getRelationships`
+            );
+        }
+
+        const repository = this.getRepository(relationMetadata.type);
+        const value = object[property];
+        const relationships = (await repository.find({
+            _id: { $in: value }
+        })).toArray();
+        if (
+            relationships &&
+            typeof object.setCachedRelationship === 'function'
+        ) {
+            object.setCachedRelationship(property, relationships);
+        }
+
+        return relationships;
+    }
+
     fromPlain<Model extends EntityInterface>(
         model: ClassType<Model>,
         data: Object,
         options?: ClassTransformOptions
     ): Model {
+        this.log('%s transform fromPlain', model);
         return plainToClass(model, data, {
             ...options,
             excludePrefixes: ['__']
@@ -256,6 +311,7 @@ export class MongoManager {
         data: any,
         options?: ClassTransformOptions
     ): Model {
+        this.log('%s transform merge', entity.constructor.name);
         return classToClassFromExist(data, entity, {
             ...options,
             excludePrefixes: ['__']

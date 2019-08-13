@@ -1,4 +1,9 @@
-import { IsString, IsDefined, ValidateNested } from 'class-validator';
+import {
+    IsString,
+    IsDefined,
+    ValidateNested,
+    IsOptional
+} from 'class-validator';
 import {
     Collection,
     Relationship,
@@ -10,9 +15,9 @@ import { ObjectId } from '../../helpers';
 import { WithRelationshipInterface } from '../../interfaces/relationship';
 import { IsValidRelationship } from '../../validation/relationship/decorator';
 import { EntityTest } from './entity';
-import { Optional } from '@nestjs/common';
 import { EntityNestedTest } from './entity.nested';
 import { Type } from 'class-transformer';
+import { EntityRelationship } from './entity.relationship';
 
 export const TEST_CHILD_COLLECTION_NAME = 'testchild';
 
@@ -31,7 +36,13 @@ export class EntityChildTest extends Entity {
     parentId: ObjectId;
 
     @ValidateNested()
-    @Optional()
+    @IsOptional()
     @Type(() => EntityNestedTest)
     nestedEntity?: EntityNestedTest;
+
+    @TypeObjectId(true)
+    @IsOptional()
+    @Relationship(EntityRelationship, true)
+    @IsValidRelationship()
+    entities?: ObjectId[];
 }

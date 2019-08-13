@@ -10,6 +10,7 @@ import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 import { EntityNestedTest } from './module/entity.nested';
+import { EntityRelationship } from './module/entity.relationship';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -130,7 +131,7 @@ describe('MongoModule', () => {
             const child = new EntityChildTest();
             child.foo = 'child';
             child.parentId = entity._id;
-            await manager.save<EntityChildTest>(child);
+            await manager.save(child);
 
             const parent = await manager.getRelationship<EntityTest>(
                 child,
@@ -146,9 +147,26 @@ describe('MongoModule', () => {
             // set the parent as a nestedEntity on the child
             const nested = new EntityNestedTest();
             nested.parentId = parent._id;
-
             child.nestedEntity = nested;
+
+            const entity1 = new EntityRelationship();
+            entity1.foo = 'entity1';
+            await manager.save(entity1);
+
+            const entity2 = new EntityRelationship();
+            entity2.foo = 'entity2';
+            await manager.save(entity2);
+
+            child.entities = [entity1._id, entity2._id];
             await manager.save(child);
+
+            const relationshipEntities = await manager.getRelationships(
+                child,
+                'entities'
+            );
+            expect(relationshipEntities).toHaveLength(2);
+            expect(relationshipEntities[0]).toBeInstanceOf(EntityRelationship);
+            expect(relationshipEntities[0]._id).toEqual(entity1._id);
 
             // find the item as it is in db and test that cache is not present
             const childOBj = await manager
@@ -158,9 +176,12 @@ describe('MongoModule', () => {
             expect(childOBj.nestedEntity).not.toHaveProperty(
                 '__cachedRelationships'
             );
+            expect(childOBj.entities).toHaveLength(2);
+            expect(childOBj.entities[0]).toEqual(entity1._id);
+            expect(childOBj.entities[1]).toEqual(entity2._id);
         });
 
-        it('should serialize entity', async () => {
+        it('should serialize an entity', async () => {
             const manager = mod.get<MongoManager>(getManagerToken());
 
             const entity = await manager.findOne<EntityTest>(EntityTest, {});

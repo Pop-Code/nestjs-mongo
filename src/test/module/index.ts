@@ -4,11 +4,12 @@ import { EntityTest } from './entity';
 import { MongoModule } from '../../module';
 import { InjectRepository } from '../../decorators';
 import { EntityChildTest } from './child';
+import { EntityRelationship } from './entity.relationship';
 
 @Module({
     imports: [
         MongoModule.forFeature({
-            models: [EntityTest, EntityChildTest]
+            models: [EntityTest, EntityChildTest, EntityRelationship]
         })
     ]
 })

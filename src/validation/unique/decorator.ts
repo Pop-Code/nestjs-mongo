@@ -3,7 +3,10 @@ import { IsUniqueConstraint } from './constraint';
 import _ from 'lodash';
 
 export function IsUnique(
-    validationOptions?: ValidationOptions & { keys?: string[] }
+    validationOptions?: ValidationOptions & {
+        keys?: string[];
+        sparse?: boolean;
+    }
 ) {
     return (object: any, propertyName: string) => {
         const options = {

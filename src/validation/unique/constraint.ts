@@ -26,6 +26,9 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
             for (const prop of options.keys) {
                 const v = object[prop];
                 if (!v) {
+                    if (options.sparse) {
+                        query[prop] = { $exists: false };
+                    }
                     continue;
                 }
                 query[prop] = v;

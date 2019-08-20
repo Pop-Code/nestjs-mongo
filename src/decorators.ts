@@ -15,7 +15,6 @@ import {
     getRepositoryToken,
     ObjectId
 } from './helpers';
-import { EntityInterface } from './interfaces/entity';
 
 export const InjectMongoClient = (
     connectionName: string = DEFAULT_CONNECTION_NAME
@@ -87,52 +86,6 @@ export const TypeObjectId = (isArray?: boolean) => {
 
 export const Collection = (name: string) => (target: any) => {
     Reflect.defineMetadata('mongo:collectionName', name, target);
-};
-
-export const Relationship = (
-    entityClass?: ClassType<EntityInterface>,
-    isArray: boolean = false
-) => {
-    const debug = Debug(DEBUG + ':Relationship');
-
-    return (target: any, property: string) => {
-        const type = entityClass ? entityClass : target;
-        debug('Register relationship metadata %s isArray: %s', type, isArray);
-        Reflect.defineMetadata(
-            'mongo:relationship',
-            {
-                type,
-                isArray
-            },
-            target,
-            property
-        );
-    };
-};
-
-function getCachedRelationship(prop: string) {
-    if (!this.__cachedRelationships) {
-        return;
-    }
-    return this.__cachedRelationships.get(prop);
-}
-function setCachedRelationship(prop: string, value: any) {
-    if (!this.__cachedRelationships) {
-        Object.defineProperty(this, '__cachedRelationships', {
-            writable: true,
-            value: new Map(),
-            enumerable: false,
-            configurable: false
-        });
-    }
-    this.__cachedRelationships.set(prop, value);
-    return this;
-}
-export const WithRelationship = () => {
-    return (target: any) => {
-        target.prototype.getCachedRelationship = getCachedRelationship;
-        target.prototype.setCachedRelationship = setCachedRelationship;
-    };
 };
 
 function toJSON() {

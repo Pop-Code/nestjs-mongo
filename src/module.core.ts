@@ -20,7 +20,8 @@ import {
     getConfigToken
 } from './helpers';
 import { getFromContainer } from 'class-validator';
-import { IsValidRelationshipConstraint } from './validation/relationship/constraint';
+import { IsValidRelationshipConstraint } from './relationship/validation/constraint';
+import { IsUniqueConstraint } from './validation/unique/constraint';
 
 @Global()
 @Module({})
@@ -77,8 +78,12 @@ export class MongoCoreModule implements OnModuleDestroy {
                 config: MongoModuleOptions
             ): MongoManager => {
                 const em = new MongoManager(client, config.exceptionFactory);
+
                 const c = getFromContainer(IsValidRelationshipConstraint);
                 c.setEm(em);
+                const c2 = getFromContainer(IsUniqueConstraint);
+                c2.setEm(em);
+
                 return em;
             },
             inject: [mongoConnectionToken, configToken]

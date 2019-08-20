@@ -1,22 +1,18 @@
+import { Type } from 'class-transformer';
 import {
-    IsString,
     IsDefined,
-    ValidateNested,
-    IsOptional
+    IsOptional,
+    IsString,
+    ValidateNested
 } from 'class-validator';
-import {
-    Collection,
-    Relationship,
-    TypeObjectId,
-    WithRelationship
-} from '../../decorators';
+import { Collection, TypeObjectId } from '../../decorators';
 import { Entity } from '../../entity';
 import { ObjectId } from '../../helpers';
-import { WithRelationshipInterface } from '../../interfaces/relationship';
-import { IsValidRelationship } from '../../validation/relationship/decorator';
+import { Relationship, WithRelationship } from '../../relationship/decorators';
+import { WithRelationshipInterface } from '../../relationship/metadata';
+import { IsValidRelationship } from '../../relationship/validation/decorator';
 import { EntityTest } from './entity';
 import { EntityNestedTest } from './entity.nested';
-import { Type } from 'class-transformer';
 import { EntityRelationship } from './entity.relationship';
 
 export const TEST_CHILD_COLLECTION_NAME = 'testchild';
@@ -42,7 +38,10 @@ export class EntityChildTest extends Entity {
 
     @TypeObjectId(true)
     @IsOptional()
-    @Relationship(EntityRelationship, true)
+    @Relationship({
+        typeFn: object => EntityRelationship,
+        isArray: true
+    })
     @IsValidRelationship()
     entities?: ObjectId[];
 }

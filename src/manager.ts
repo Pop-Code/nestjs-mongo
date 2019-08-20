@@ -22,7 +22,11 @@ import {
     ClassTransformOptions,
     classToClassFromExist
 } from 'class-transformer';
-import { RelationshipMetadata } from './interfaces/relationship';
+import {
+    RelationshipMetadata,
+    getRelationshipMetadata,
+    WithRelationshipInterface
+} from './relationship/metadata';
 
 @Injectable()
 export class MongoManager {
@@ -210,17 +214,19 @@ export class MongoManager {
         return this.getCollection(classType).watch(pipes, options);
     }
 
-    async getRelationship<Model extends EntityInterface>(
-        object: any,
+    async getRelationship<
+        Relationship extends EntityInterface = any,
+        Model extends EntityInterface & WithRelationshipInterface = any
+    >(
+        object: Model,
         property: string,
-        cachedMetadata?: RelationshipMetadata<Model>
-    ): Promise<Model> {
+        cachedMetadata?: RelationshipMetadata<Model, Relationship>
+    ): Promise<Relationship> {
         this.log('getRelationship %s on %s', property, object.constructor);
 
         let relationMetadata = cachedMetadata;
         if (!relationMetadata) {
-            relationMetadata = Reflect.getMetadata(
-                'mongo:relationship',
+            relationMetadata = getRelationshipMetadata<Model, Relationship>(
                 object,
                 property
             );

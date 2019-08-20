@@ -8,7 +8,7 @@ import {
     IsValidRelationshipValidationArguments,
     WithRelationshipTest
 } from './interfaces';
-import { RelationshipMetadata } from '../../interfaces/relationship';
+import { RelationshipMetadata, getRelationshipMetadata } from '../metadata';
 import { ObjectId } from '../../helpers';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
@@ -29,11 +29,7 @@ export class IsValidRelationshipConstraint
         try {
             const relationMetadata: RelationshipMetadata<
                 any
-            > = Reflect.getMetadata(
-                'mongo:relationship',
-                args.object,
-                args.property
-            );
+            > = getRelationshipMetadata(args.object as any, args.property);
             let relationship: any;
 
             if (relationMetadata.isArray) {
@@ -69,7 +65,7 @@ export class IsValidRelationshipConstraint
                 }
             } else {
                 relationship = await this.em.getRelationship(
-                    args.object,
+                    args.object as any,
                     args.property
                 );
                 if (!relationship) {

@@ -2,6 +2,8 @@ import { DEFAULT_CONNECTION_NAME } from './constants';
 
 export { ObjectId } from 'mongodb';
 
+export const isClass = (fn: any) => /^\s*class/.test(fn.toString());
+
 export function getRepositoryToken(
     model: string,
     connectionName: string = DEFAULT_CONNECTION_NAME

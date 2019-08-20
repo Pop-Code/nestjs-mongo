@@ -1,16 +1,11 @@
-import { IsString, IsDefined, ValidateNested } from 'class-validator';
-import {
-    Collection,
-    Relationship,
-    TypeObjectId,
-    WithRelationship
-} from '../../decorators';
+import { IsDefined } from 'class-validator';
+import { Collection, TypeObjectId } from '../../decorators';
 import { Entity } from '../../entity';
 import { ObjectId } from '../../helpers';
-import { WithRelationshipInterface } from '../../interfaces/relationship';
-import { IsValidRelationship } from '../../validation/relationship/decorator';
+import { Relationship, WithRelationship } from '../../relationship/decorators';
+import { WithRelationshipInterface } from '../../relationship/metadata';
+import { IsValidRelationship } from '../../relationship/validation/decorator';
 import { EntityTest } from './entity';
-
 export const TEST_CHILD_NESTED_COLLECTION_NAME = 'testnested';
 
 export interface EntityNestedTest extends WithRelationshipInterface {}

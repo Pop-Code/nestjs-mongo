@@ -20,7 +20,7 @@ import {
     getConfigToken
 } from './helpers';
 import { getFromContainer } from 'class-validator';
-import { IsValidRelationshipConstraint } from './relationship/validation/constraint';
+import { IsValidRelationshipConstraint } from './relationship/constraint';
 import { IsUniqueConstraint } from './validation/unique/constraint';
 
 @Global()

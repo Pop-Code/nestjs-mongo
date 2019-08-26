@@ -8,9 +8,12 @@ import {
 import { Collection, TypeObjectId } from '../../decorators';
 import { Entity } from '../../entity';
 import { ObjectId } from '../../helpers';
-import { Relationship, WithRelationship } from '../../relationship/decorators';
-import { WithRelationshipInterface } from '../../relationship/metadata';
-import { IsValidRelationship } from '../../relationship/validation/decorator';
+import {
+    Relationship,
+    WithRelationship,
+    WithRelationshipInterface,
+    IsValidRelationship
+} from '../../relationship/decorators';
 import { EntityTest } from './entity';
 import { EntityNestedTest } from './entity.nested';
 import { EntityRelationship } from './entity.relationship';

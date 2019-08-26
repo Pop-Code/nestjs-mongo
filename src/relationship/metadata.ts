@@ -1,33 +1,28 @@
 import { EntityInterface } from '../interfaces/entity';
-import { ClassType } from 'class-transformer/ClassTransformer';
 import { RELATIONSHIP_METADATA_NAME } from '../constants';
+import { ClassType } from 'class-transformer/ClassTransformer';
 
-export interface WithRelationshipInterface {
-    getCachedRelationship<T = any>(prop: string): T;
-    setCachedRelationship(prop: string, value: any): WithRelationshipInterface;
-}
+export type RelationshipTypeDescriptor<
+    Relationship extends EntityInterface,
+    Obj = any
+> = (object: Obj) => ClassType<Relationship>;
 
 export interface RelationshipMetadata<
-    Model extends EntityInterface = any,
-    Relationship extends EntityInterface = any
+    Relationship extends EntityInterface = any,
+    Obj = any
 > {
     type?: ClassType<Relationship>;
-    typeFn?: RelationshipTypeDescriptor<Model, Relationship>;
+    typeFn?: RelationshipTypeDescriptor<Relationship, Obj>;
     isArray?: boolean;
 }
 
-export type RelationshipTypeDescriptor<
-    Model extends EntityInterface,
-    Relationship extends EntityInterface
-> = (object: Model) => ClassType<Relationship>;
-
 export const setRelationshipMetadata = <
-    Model extends EntityInterface = any,
-    Relationship extends EntityInterface = any
+    Relationship extends EntityInterface = any,
+    Obj = any
 >(
     target: any,
     property: string | symbol,
-    metadata: RelationshipMetadata<Model, Relationship>
+    metadata: RelationshipMetadata<Relationship, Obj>
 ) => {
     if (!metadata.type && !metadata.typeFn) {
         throw new Error(
@@ -43,15 +38,15 @@ export const setRelationshipMetadata = <
 };
 
 export const getRelationshipMetadata = <
-    Model extends EntityInterface = any,
-    Relationship extends EntityInterface = any
+    Relationship extends EntityInterface = any,
+    Obj = any
 >(
-    target: Model,
+    target: Obj,
     property: string | symbol
 ) => {
     const metadata: RelationshipMetadata<
-        Model,
-        Relationship
+        Relationship,
+        Obj
     > = Reflect.getMetadata(RELATIONSHIP_METADATA_NAME, target, property);
 
     // determine the final metadata type here

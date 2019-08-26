@@ -3,13 +3,14 @@ import {
     ValidatorConstraintInterface
 } from 'class-validator';
 import _ from 'lodash';
-import { MongoManager } from '../../manager';
+import { MongoManager } from '../manager';
+
+import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
+import { ObjectId } from '../helpers';
 import {
     IsValidRelationshipValidationArguments,
     WithRelationshipTest
-} from './interfaces';
-import { RelationshipMetadata, getRelationshipMetadata } from '../metadata';
-import { ObjectId } from '../../helpers';
+} from './decorators';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
 export class IsValidRelationshipConstraint

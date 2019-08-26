@@ -20,7 +20,11 @@ export abstract class EntityService<
         this.log = Debug(DEBUG + '_' + this.constructor.name);
     }
 
-    addHistory(item: Model, action: string, date?: Date) {
+    addHistory<Obj extends EntityInterface>(
+        item: Obj,
+        action: string,
+        date?: Date
+    ) {
         if (
             item.hasOwnProperty('history') &&
             item.history instanceof HistoryActions
@@ -35,7 +39,11 @@ export abstract class EntityService<
         return this.repository;
     }
 
-    async create(data: any, save: boolean = false): Promise<Model> {
+    async create(
+        data: any,
+        save: boolean = false,
+        ...rest: any[]
+    ): Promise<Model> {
         const type = this.repository.getClassType();
         const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
@@ -43,11 +51,15 @@ export abstract class EntityService<
         return item;
     }
 
-    async get(item: Model, context?: any): Promise<Model> {
+    async get(item: Model, ...rest: any[]): Promise<Model> {
         return item;
     }
 
-    async list(filter: Filter, responseType: any): Promise<PaginatedResponse> {
+    async list(
+        filter: Filter,
+        responseType: any,
+        ...rest: any[]
+    ): Promise<PaginatedResponse> {
         let items = (await this.repository.find(filter.toQuery()))
             .skip(filter.skip)
             .limit(filter.limit);
@@ -69,7 +81,8 @@ export abstract class EntityService<
     async update(
         entity: Model,
         data: any,
-        save: boolean = false
+        save: boolean = false,
+        ...rest: any[]
     ): Promise<Model> {
         const item = this.repository.merge(entity, data);
         this.addHistory(item, 'Item updated');
@@ -77,7 +90,7 @@ export abstract class EntityService<
         return item;
     }
 
-    async delete(item: Model): Promise<void> {
+    async delete(item: Model, ...rest: any[]): Promise<void> {
         const { result } = await this.repository.deleteOne({
             _id: item._id
         });

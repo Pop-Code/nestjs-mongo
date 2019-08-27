@@ -222,7 +222,7 @@ export class MongoManager {
         property: string,
         cachedMetadata?: RelationshipMetadata<Relationship, Model>
     ): Promise<Relationship> {
-        this.log('getRelationship %s on %s', property, object.constructor);
+        this.log('getRelationship %s on %s', property, object.constructor.name);
 
         let relationMetadata = cachedMetadata;
         if (!relationMetadata) {
@@ -265,7 +265,7 @@ export class MongoManager {
         Relationship extends EntityInterface = any,
         Model extends EntityInterface & WithRelationshipInterface = any
     >(object: Model, property: string): Promise<Relationship[]> {
-        this.log('getRelationships %s on %s', property, object.constructor);
+        this.log('getRelationships %s on %s', property, object.constructor.name);
 
         const relationMetadata: RelationshipMetadata<
             Relationship

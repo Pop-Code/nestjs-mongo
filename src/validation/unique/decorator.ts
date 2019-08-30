@@ -10,7 +10,8 @@ export function IsUnique(
 ) {
     return (object: any, propertyName: string) => {
         const options = {
-            keys: _.get(validationOptions, 'keys', [])
+            keys: _.get(validationOptions, 'keys', []),
+            sparse: _.get(validationOptions, 'sparse', false)
         };
         return registerDecorator({
             target: object.constructor,

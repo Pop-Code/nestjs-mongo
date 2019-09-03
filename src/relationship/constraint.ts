@@ -46,8 +46,7 @@ export class IsValidRelationshipConstraint
                         relationMetadata.type,
                         {
                             _id
-                        },
-                        { dataloader: get(obj, '__context.requestId') }
+                        }
                     );
                     if (!innerR) {
                         errors.push(
@@ -66,8 +65,7 @@ export class IsValidRelationshipConstraint
             } else {
                 relationship = await this.em.getRelationship(
                     args.object as any,
-                    args.property,
-                    { dataloader: get(obj, '__context.requestId') }
+                    args.property
                 );
                 if (!relationship) {
                     throw new Error(

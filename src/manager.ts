@@ -327,12 +327,9 @@ export class MongoManager {
 
         const repository = this.getRepository(relationMetadata.type);
         const value = object[property];
-        const relationship = await repository.findOne(
-            {
-                _id: value
-            },
-            { dataloader: options.dataloader || object.constructor.name }
-        );
+        const relationship = await repository.findOne({
+            _id: value
+        });
 
         if (
             relationship &&
@@ -381,9 +378,7 @@ export class MongoManager {
 
         const repository = this.getRepository(relationMetadata.type);
         const value = object[property];
-        const relationships = await repository.findById(value, {
-            dataloader: options.dataloader || object.constructor.name
-        });
+        const relationships = await repository.findById(value);
         if (
             relationships &&
             typeof object.setCachedRelationship === 'function'

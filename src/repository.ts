@@ -27,10 +27,8 @@ export class MongoRepository<Model extends EntityInterface> {
     }
 
     async find(query?: any, ...args: any[]): Promise<Model[]> {
-        if (this.em.isIdsQuery(query)) {
-            if (this.dataloader) {
-                return this.dataloader.loadMany(query._id.$in);
-            }
+        if (this.dataloader && this.em.isIdsQuery(query)) {
+            return this.dataloader.loadMany(query._id.$in);
         }
         return (await this.em.find(this.classType, query, ...args)).toArray();
     }
@@ -48,11 +46,6 @@ export class MongoRepository<Model extends EntityInterface> {
     }
 
     findOne(query: any, ...args: any[]): Promise<Model> {
-        if (this.em.isIdQuery(query)) {
-            if (this.dataloader) {
-                return this.dataloader.load(query._id);
-            }
-        }
         return this.em.findOne(this.classType, query, ...args);
     }
 

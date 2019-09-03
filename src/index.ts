@@ -23,6 +23,7 @@ export * from './relationship/constraint';
 export * from './relationship/decorators';
 export * from './relationship/metadata';
 export * from './repository';
+export * from './transformers/objectid';
 export * from './validation/pipes/relationship';
 export * from './validation/pipes/required.relationship';
 export * from './validation/unique/constraint';

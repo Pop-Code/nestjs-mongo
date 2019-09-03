@@ -6,9 +6,7 @@ export class RequiredRelationshipPipe extends RelationshipPipe {
         const val = await super.transform(value, metadata);
         if (!val) {
             throw new NotFoundException(
-                `${metadata.metatype.name} with ${
-                    metadata.data
-                } "${value}" not found`
+                `${metadata.metatype.name} with ${metadata.data} "${value}" not found`
             );
         }
         return val;

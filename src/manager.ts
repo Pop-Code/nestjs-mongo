@@ -286,12 +286,12 @@ export class MongoManager {
 
     async getRelationship<
         Relationship extends EntityInterface = any,
-        Model extends EntityInterface & WithRelationshipInterface = any
+        O extends WithRelationshipInterface = any
     >(
-        object: Model,
+        object: O,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<Relationship, Model>;
+            cachedMetadata?: RelationshipMetadata<Relationship, O>;
             dataloader?: string;
         } = {}
     ): Promise<Relationship> {
@@ -299,7 +299,7 @@ export class MongoManager {
 
         let relationMetadata = options && options.cachedMetadata;
         if (!relationMetadata) {
-            relationMetadata = getRelationshipMetadata<Relationship, Model>(
+            relationMetadata = getRelationshipMetadata<Relationship, O>(
                 object,
                 property
             );
@@ -337,12 +337,12 @@ export class MongoManager {
 
     async getRelationships<
         Relationship extends EntityInterface = any,
-        Model extends EntityInterface & WithRelationshipInterface = any
+        O extends WithRelationshipInterface = any
     >(
-        object: Model,
+        object: O,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<Relationship, Model>;
+            cachedMetadata?: RelationshipMetadata<Relationship, O>;
             dataloader?: string;
         } = {}
     ): Promise<Relationship[]> {
@@ -353,7 +353,7 @@ export class MongoManager {
         );
         let relationMetadata = options && options.cachedMetadata;
         if (!relationMetadata) {
-            relationMetadata = getRelationshipMetadata<Relationship, Model>(
+            relationMetadata = getRelationshipMetadata<Relationship, O>(
                 object,
                 property
             );

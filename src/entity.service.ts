@@ -7,6 +7,7 @@ import { PaginatedResponse } from './classes/paginated.response';
 import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
 import { MongoRepository } from './repository';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export abstract class EntityService<
@@ -44,15 +45,14 @@ export abstract class EntityService<
         save: boolean = false,
         ...rest: any[]
     ): Promise<Model> {
-        const type = this.repository.getClassType();
         const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
-        if (save) return this.repository.save(item);
+        if (save) return this.repository.save(item, ...rest);
         return item;
     }
 
-    async get(item: Model, ...rest: any[]): Promise<Model> {
-        return item;
+    async get(itemId: ObjectId, ...rest: any[]): Promise<Model> {
+        return this.repository.findOne({ _id: itemId }, ...rest);
     }
 
     async list(
@@ -60,7 +60,7 @@ export abstract class EntityService<
         responseType: any,
         ...rest: any[]
     ): Promise<PaginatedResponse> {
-        let items = (await this.repository.find(filter.toQuery()))
+        let items = (await this.repository.findPaginated(filter.toQuery()))
             .skip(filter.skip)
             .limit(filter.limit);
 
@@ -79,21 +79,25 @@ export abstract class EntityService<
     }
 
     async update(
-        entity: Model,
+        itemId: ObjectId,
         data: any,
         save: boolean = false,
         ...rest: any[]
     ): Promise<Model> {
+        const entity = await this.get(itemId);
         const item = this.repository.merge(entity, data);
         this.addHistory(item, 'Item updated');
-        if (save) return this.repository.save(item);
+        if (save) return this.repository.save(item, ...rest);
         return item;
     }
 
-    async delete(item: Model, ...rest: any[]): Promise<void> {
-        const { result } = await this.repository.deleteOne({
-            _id: item._id
-        });
+    async delete(itemId: ObjectId, ...rest: any[]): Promise<void> {
+        const { result } = await this.repository.deleteOne(
+            {
+                _id: itemId
+            },
+            ...rest
+        );
         if (result.n !== 1) {
             throw new NotFoundException();
         }

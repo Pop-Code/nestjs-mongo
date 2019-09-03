@@ -11,6 +11,13 @@ export function getRepositoryToken(
     return `${connectionName}_${model}Repository`;
 }
 
+export function getDataloaderToken(
+    model: string,
+    connectionName: string = DEFAULT_CONNECTION_NAME
+) {
+    return `${connectionName}_${model}Dataloader`;
+}
+
 export function getConfigToken(
     connectionName: string = DEFAULT_CONNECTION_NAME
 ) {

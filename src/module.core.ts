@@ -4,10 +4,11 @@ import {
     OnModuleDestroy,
     Inject,
     Global,
-    Optional
+    Optional,
+    Scope
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import { MongoRepository } from './repository';
 import { MongoManager } from './manager';
 import { NAMED_CONNECTION_TOKEN, DEFAULT_CONNECTION_NAME } from './constants';
@@ -17,11 +18,15 @@ import {
     getRepositoryToken,
     getConnectionToken,
     getManagerToken,
-    getConfigToken
+    getConfigToken,
+    getDataloaderToken
 } from './helpers';
 import { getFromContainer } from 'class-validator';
 import { IsValidRelationshipConstraint } from './relationship/constraint';
 import { IsUniqueConstraint } from './validation/unique/constraint';
+import Dataloader from 'dataloader';
+import { EntityInterface } from './interfaces/entity';
+import { DataloaderService } from './dataloader/service';
 
 @Global()
 @Module({})
@@ -69,15 +74,26 @@ export class MongoCoreModule implements OnModuleDestroy {
             inject: [configToken]
         };
 
+        // the mongo client provider
+        const dataServiceProvider = {
+            provide: DataloaderService,
+            useClass: DataloaderService
+        };
+
         // the mongo manager provider
         const managerToken = getManagerToken(connectionName);
         const mongoManagerProvider = {
             provide: managerToken,
             useFactory: (
                 client: MongoClient,
-                config: MongoModuleOptions
+                config: MongoModuleOptions,
+                dataloaderService: DataloaderService
             ): MongoManager => {
-                const em = new MongoManager(client, config.exceptionFactory);
+                const em = new MongoManager(
+                    client,
+                    dataloaderService,
+                    config.exceptionFactory
+                );
 
                 const c = getFromContainer(IsValidRelationshipConstraint);
                 c.setEm(em);
@@ -86,7 +102,7 @@ export class MongoCoreModule implements OnModuleDestroy {
 
                 return em;
             },
-            inject: [mongoConnectionToken, configToken]
+            inject: [mongoConnectionToken, configToken, DataloaderService]
         };
 
         return {
@@ -96,6 +112,7 @@ export class MongoCoreModule implements OnModuleDestroy {
                 mongoConnectionNameProvider,
                 configProvider,
                 mongoClientProvider,
+                dataServiceProvider,
                 mongoManagerProvider
             ],
             exports: [
@@ -118,40 +135,49 @@ export class MongoCoreModule implements OnModuleDestroy {
         models: any[] = [],
         connectionName: string = DEFAULT_CONNECTION_NAME
     ) {
-        // expose models to be injectable
-        const ms = models.map(m => {
-            // without custom repo
+        const providers: any = [];
+
+        for (const m of models) {
+            const managerToken = getManagerToken(connectionName);
+            const model = typeof m === 'function' ? m : m.model;
             if (typeof m === 'function') {
-                return {
+                providers.push({
                     provide: m,
                     useClass: m
-                };
+                });
+            } else {
+                providers.push({
+                    provide: m.model,
+                    useClass: m.model
+                });
             }
-            // console.log(m);
-            // console.trace();
-            return {
-                provide: m.model,
-                useClass: m.model
-            };
-        });
 
-        // expose repository
-        const mr = models.map(m => {
-            const model = typeof m === 'function' ? m : m.model;
+            const loaderToken = getDataloaderToken(model.name, connectionName);
+            providers.push({
+                scope: Scope.REQUEST,
+                provide: loaderToken,
+                inject: [getManagerToken(connectionName)],
+                useFactory: (em: MongoManager) => {
+                    const dataloader = em.createDataLoader(model);
+                    //em.addDataloader(loaderToken, dataloader);
+                    return dataloader;
+                }
+            });
+
+            const repoToken = getRepositoryToken(model.name, connectionName);
             const RepoClass =
                 typeof m === 'function' ? MongoRepository : m.repository;
-            const token = getRepositoryToken(model.name, connectionName);
-            return {
-                provide: token,
-                inject: [getManagerToken(connectionName)],
-                useFactory: (em: MongoManager): MongoRepository<any> => {
+            providers.push({
+                provide: repoToken,
+                inject: [managerToken],
+                useFactory: (em: MongoManager) => {
                     const repo = new RepoClass(em, model);
-                    em.addRepository(token, repo);
+                    em.addRepository(repoToken, repo);
                     return repo;
                 }
-            };
-        });
+            });
+        }
 
-        return [...ms, ...mr];
+        return providers;
     }
 }

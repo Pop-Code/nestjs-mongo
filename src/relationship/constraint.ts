@@ -2,15 +2,14 @@ import {
     ValidatorConstraint,
     ValidatorConstraintInterface
 } from 'class-validator';
-import _ from 'lodash';
-import { MongoManager } from '../manager';
-
-import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
+import { first, get } from 'lodash';
 import { ObjectId } from '../helpers';
+import { MongoManager } from '../manager';
 import {
     IsValidRelationshipValidationArguments,
     WithRelationshipTest
 } from './decorators';
+import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
 export class IsValidRelationshipConstraint
@@ -27,10 +26,11 @@ export class IsValidRelationshipConstraint
         value: ObjectId | ObjectId[],
         args: IsValidRelationshipValidationArguments
     ) {
+        const obj = args.object as any;
         try {
             const relationMetadata: RelationshipMetadata<
                 any
-            > = getRelationshipMetadata(args.object as any, args.property);
+            > = getRelationshipMetadata(obj, args.property);
             let relationship: any;
 
             if (relationMetadata.isArray) {
@@ -46,14 +46,13 @@ export class IsValidRelationshipConstraint
                         relationMetadata.type,
                         {
                             _id
-                        }
+                        },
+                        { dataloader: get(obj, '__context.requestId') }
                     );
                     if (!innerR) {
                         errors.push(
                             new Error(
-                                `The property ${
-                                    args.property
-                                } contains an invalid relationship ${_id} at index ${index}`
+                                `The property ${args.property} contains an invalid relationship ${_id} at index ${index}`
                             )
                         );
                         relationship.push(null);
@@ -67,7 +66,8 @@ export class IsValidRelationshipConstraint
             } else {
                 relationship = await this.em.getRelationship(
                     args.object as any,
-                    args.property
+                    args.property,
+                    { dataloader: get(obj, '__context.requestId') }
                 );
                 if (!relationship) {
                     throw new Error(
@@ -76,7 +76,7 @@ export class IsValidRelationshipConstraint
                 }
             }
 
-            const withTestFunction = _.first(args.constraints);
+            const withTestFunction = first(args.constraints);
             if (withTestFunction) {
                 const withTest: WithRelationshipTest = withTestFunction.bind(
                     args.object

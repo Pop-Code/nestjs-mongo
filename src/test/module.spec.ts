@@ -4,13 +4,19 @@ import { MongoClient } from 'mongodb';
 import { MongoDbModuleTest } from './module';
 import { MongoRepository } from '../repository';
 import { MongoCoreModule } from '../module.core';
-import { getConnectionToken, getManagerToken, ObjectId } from '../helpers';
+import {
+    getConnectionToken,
+    getManagerToken,
+    ObjectId,
+    getRepositoryToken
+} from '../helpers';
 import { MongoManager } from '../manager';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { BadRequestException } from '@nestjs/common';
 import { EntityChildTest } from './module/child';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
+import { DataloaderService } from '../dataloader/service';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -206,6 +212,59 @@ describe('MongoModule', () => {
                 .fromPlain(objChild);
             expect(reChild.parentId).toBeInstanceOf(ObjectId);
             expect(reChild.parentId).toEqual(entity._id);
+        });
+
+        it('should use dataloader during the whole request', async () => {
+            const dataloaderService = mod.get<DataloaderService>(
+                DataloaderService
+            );
+
+            const repo = mod.get<MongoRepository<EntityTest>>(
+                getRepositoryToken(EntityTest.name)
+            );
+
+            const dataloader = dataloaderService.createAndRegister(
+                'dataloader',
+                EntityTest,
+                repo.getEm()
+            );
+
+            // entity will not be put in the dataloader cache caus enot key was passed
+            const entity = new EntityTest();
+            entity.foo = 'test';
+            entity.bar = 'dataloader';
+            await repo.save(entity);
+
+            // fetch a new entity, this should trigger the dataloader for the first time
+            const entity1 = await repo.findOne(
+                {
+                    _id: entity._id
+                },
+                { dataloader: 'dataloader' }
+            );
+
+            // refetch just after
+            const entity2 = await repo.findOne(
+                {
+                    _id: entity._id
+                },
+                { dataloader: 'dataloader' }
+            );
+
+            // entity 1 should come from cache and equals entity
+            expect(entity1).toBe(entity2);
+
+            //remove item from the cache
+            dataloader.clear(entity._id);
+
+            // call the database should get the real item
+            const entity3 = await repo.findOne(
+                {
+                    _id: entity._id
+                },
+                { dataloader: 'dataloader' }
+            );
+            expect(entity).toEqual(entity3);
         });
     });
 });

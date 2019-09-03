@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { validate } from 'class-validator';
 import Debug from 'debug';
 import {
@@ -7,11 +6,12 @@ import {
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences
+    MongoCountPreferences,
+    ObjectId
 } from 'mongodb';
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';
-import { getRepositoryToken } from './helpers';
+import { getRepositoryToken, getDataloaderToken } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
@@ -27,14 +27,16 @@ import {
     RelationshipMetadata
 } from './relationship/metadata';
 import { WithRelationshipInterface } from './relationship/decorators';
+import DataLoader from 'dataloader';
+import { DataloaderService } from './dataloader/service';
 
-@Injectable()
 export class MongoManager {
     protected readonly repositories: Map<string, any> = new Map();
-    protected log = Debug(DEBUG + ':' + MongoManager.name);
+    protected log = Debug(DEBUG + ':MongoManager');
     constructor(
         @InjectMongoClient()
         protected readonly client: MongoClient,
+        protected readonly dataloaderService: DataloaderService,
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
@@ -42,6 +44,7 @@ export class MongoManager {
         Model extends EntityInterface,
         R extends MongoRepository<Model> = MongoRepository<Model>
     >(token: string, repository: R): MongoManager {
+        this.log('Add respoitory %s %s', token, repository.constructor.name);
         this.repositories.set(token, repository);
         return this;
     }
@@ -50,9 +53,6 @@ export class MongoManager {
         Model extends EntityInterface,
         R extends MongoRepository<Model> = MongoRepository<Model>
     >(classType: ClassType<Model>): R {
-        // todo here we must only have
-        // - one repository for one collection
-        // -  not one  repository  for one model !!
         return this.repositories.get(getRepositoryToken(classType.name));
     }
 
@@ -99,89 +99,144 @@ export class MongoManager {
 
     async save<Model extends EntityInterface>(
         entity: Model,
-        options?: MongoExecutionOptions
+        options: MongoExecutionOptions & { dataloader?: string } = {}
     ): Promise<Model> {
-        this.log('save %s %s', entity.constructor.name);
-        const errors = await validate(entity, {
-            whitelist: true,
-            validationError: { target: true, value: true }
-        });
-        if (errors.length) {
-            throw this.exceptionFactory(errors);
-        }
+        try {
+            this.log('save %s %s', entity.constructor.name);
+            const errors = await validate(entity, {
+                whitelist: true,
+                validationError: { target: true, value: true }
+            });
+            if (errors.length) {
+                throw this.exceptionFactory(errors);
+            }
 
-        const opts = {
-            ...options
-        };
+            const collection = this.getCollection(entity, options.database);
+            let operation: any;
+            if (entity._id) {
+                entity.updatedAt = new Date();
 
-        const collection = this.getCollection(entity, opts.database);
-
-        let operation: any;
-        if (entity._id) {
-            entity.updatedAt = new Date();
-
-            const $unset: any = {};
-            for (const p in entity) {
-                if (entity.hasOwnProperty(p)) {
-                    const v: any = entity[p];
-                    if (v === undefined) {
-                        $unset[p] = 1;
-                        delete entity[p];
+                const $unset: any = {};
+                for (const p in entity) {
+                    if (entity.hasOwnProperty(p)) {
+                        const v: any = entity[p];
+                        if (v === undefined) {
+                            $unset[p] = 1;
+                            delete entity[p];
+                        }
                     }
                 }
+
+                const sets: any = { $set: entity };
+
+                if (Object.keys($unset).length) {
+                    sets.$unset = $unset;
+                }
+
+                operation = collection.updateOne({ _id: entity._id }, sets, {
+                    upsert: false,
+                    ...options.mongoOperationOptions
+                });
+            } else {
+                operation = collection.insertOne(
+                    entity,
+                    options.mongoOperationOptions
+                );
+            }
+            const { result, insertedId } = await operation;
+            if (!result.ok) {
+                throw new Error('Unknow Error during entity save');
             }
 
-            const sets: any = { $set: entity };
-
-            if (Object.keys($unset).length) {
-                sets.$unset = $unset;
+            // new id
+            if (insertedId) {
+                entity._id = insertedId;
             }
 
-            operation = collection.updateOne({ _id: entity._id }, sets, {
-                upsert: false,
-                ...opts.mongoOperationOptions
-            });
-        } else {
-            operation = collection.insertOne(
-                entity,
-                opts.mongoOperationOptions
-            );
+            const dataloader = this.getDataloader(options.dataloader);
+            if (dataloader) {
+                this.log(
+                    'Updating dataloader %s %s',
+                    entity.constructor.name,
+                    entity._id
+                );
+                dataloader.clear(entity._id).prime(entity._id, entity);
+            }
+            return entity;
+        } catch (e) {
+            const dataloader = this.getDataloader(options.dataloader);
+            if (dataloader) {
+                this.log(
+                    'Clearing dataloader %s %s',
+                    entity.constructor.name,
+                    entity._id
+                );
+                dataloader.clear(entity._id);
+            }
+            throw e;
         }
-        const { result, insertedId } = await operation;
-        if (!result.ok) {
-            throw new Error('Unknow Error during entity save');
-        }
+    }
 
-        // new id
-        if (insertedId) {
-            entity._id = insertedId;
+    getDataloader<Model extends EntityInterface>(id: string) {
+        if (!id) {
+            return;
         }
-
-        return entity;
+        return this.dataloaderService.get<Model>(id);
     }
 
     async find<Model extends EntityInterface>(
         classType: ClassType<Model>,
-        query: any
+        query: any,
+        options: { dataloader?: string } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
         const cursor: Cursor<Object> = await this.getCollection(classType).find(
             query
         );
-        return cursor.map(entity => this.fromPlain<Model>(classType, entity));
+        const dataloader = this.getDataloader(options.dataloader);
+        return cursor.map(entity => {
+            const instance = this.fromPlain<Model>(classType, entity);
+            if (dataloader) {
+                this.log(
+                    'Updating dataloader object id %s on %s',
+                    instance._id,
+                    classType.name
+                );
+                dataloader.clear(instance._id).prime(instance._id, instance);
+            }
+            return instance;
+        });
     }
 
     async findOne<Model extends EntityInterface>(
         classType: ClassType<Model>,
         query: any,
-        options?: FindOneOptions
+        options: FindOneOptions & { dataloader?: string } = {}
     ): Promise<Model> {
         this.log('findOne %s %o', classType.name, query);
-        const entity = await this.getCollection(classType).findOne<Object>(
-            query,
-            options
-        );
-        return entity ? this.fromPlain<Model>(classType, entity) : null;
+        let entity: Model;
+        const dataloader = this.getDataloader<Model>(options.dataloader);
+        if (dataloader && this.isIdQuery(query)) {
+            this.log('findOne delegated to dataloader');
+            entity = await dataloader.load(query._id);
+        }
+        if (!entity) {
+            const obj = await this.getCollection(classType).findOne<Object>(
+                query,
+                options
+            );
+            if (!obj) {
+                return null;
+            }
+            entity = this.fromPlain<Model>(classType, obj);
+        }
+
+        if (dataloader) {
+            this.log('Updating dataloader %s', classType.name);
+            dataloader.clear(entity._id).prime(entity._id, entity);
+        }
+
+        return entity;
     }
 
     async count<Model extends EntityInterface>(
@@ -189,20 +244,35 @@ export class MongoManager {
         query: any,
         options?: MongoCountPreferences
     ): Promise<number> {
-        this.log('count %s %o', classType, query);
+        this.log('count %s %o', classType.name, query);
         return await this.getCollection(classType).countDocuments(
             query,
             options
         );
     }
 
+    isIdQuery(query: any): boolean {
+        return Object.keys(query).length === 1 && query._id;
+    }
+    isIdsQuery(query: any): boolean {
+        return this.isIdQuery(query) && Array.isArray(query._id.$in);
+    }
+
     async deleteOne<Model extends EntityInterface>(
         classType: ClassType<Model>,
         query: any,
-        options?: CommonOptions
+        options: CommonOptions & { dataloader?: string } = {}
     ) {
-        this.log('deleteOne %s %o', classType, query);
-        return await this.getCollection(classType).deleteOne(query, options);
+        this.log('deleteOne %s %o', classType.name, query);
+        const result = await this.getCollection(classType).deleteOne(
+            query,
+            options
+        );
+        const dataloader = this.getDataloader<Model>(options.dataloader);
+        if (dataloader && this.isIdQuery(query)) {
+            dataloader.clear(query._id);
+        }
+        return result;
     }
 
     watch<Model extends EntityInterface>(
@@ -220,11 +290,14 @@ export class MongoManager {
     >(
         object: Model,
         property: string,
-        cachedMetadata?: RelationshipMetadata<Relationship, Model>
+        options: {
+            cachedMetadata?: RelationshipMetadata<Relationship, Model>;
+            dataloader?: string;
+        } = {}
     ): Promise<Relationship> {
         this.log('getRelationship %s on %s', property, object.constructor.name);
 
-        let relationMetadata = cachedMetadata;
+        let relationMetadata = options && options.cachedMetadata;
         if (!relationMetadata) {
             relationMetadata = getRelationshipMetadata<Relationship, Model>(
                 object,
@@ -232,9 +305,7 @@ export class MongoManager {
             );
             if (!relationMetadata) {
                 throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getRelationship on ${JSON.stringify(
-                        object
-                    )}`
+                    `The property ${property} metadata @Relationship must be set to call getRelationship on ${object.constructor.name}`
                 );
             }
         }
@@ -247,9 +318,12 @@ export class MongoManager {
 
         const repository = this.getRepository(relationMetadata.type);
         const value = object[property];
-        const relationship = await repository.findOne({
-            _id: value
-        });
+        const relationship = await repository.findOne(
+            {
+                _id: value
+            },
+            { dataloader: options.dataloader }
+        );
 
         if (
             relationship &&
@@ -264,32 +338,43 @@ export class MongoManager {
     async getRelationships<
         Relationship extends EntityInterface = any,
         Model extends EntityInterface & WithRelationshipInterface = any
-    >(object: Model, property: string): Promise<Relationship[]> {
-        this.log('getRelationships %s on %s', property, object.constructor.name);
-
-        const relationMetadata: RelationshipMetadata<
-            Relationship
-        > = Reflect.getMetadata('mongo:relationship', object, property);
-
+    >(
+        object: Model,
+        property: string,
+        options: {
+            cachedMetadata?: RelationshipMetadata<Relationship, Model>;
+            dataloader?: string;
+        } = {}
+    ): Promise<Relationship[]> {
+        this.log(
+            'getRelationships %s on %s',
+            property,
+            object.constructor.name
+        );
+        let relationMetadata = options && options.cachedMetadata;
         if (!relationMetadata) {
-            throw new Error(
-                `The property ${property} metadata @Relationship must be set to call getRelationship on ${JSON.stringify(
-                    object
-                )}`
+            relationMetadata = getRelationshipMetadata<Relationship, Model>(
+                object,
+                property
             );
+            if (!relationMetadata) {
+                throw new Error(
+                    `The property ${property} metadata @Relationship must be set to call getRelationships on ${object.constructor.name}`
+                );
+            }
         }
 
         if (!relationMetadata.isArray) {
             throw new Error(
-                `The property ${property} is not defined as an array, please use getRelationship instead of getRelationships`
+                `The property ${property} is not defined as an array, please use getRelationship instead of getRelationships in ${object.constructor.name}`
             );
         }
 
         const repository = this.getRepository(relationMetadata.type);
         const value = object[property];
-        const relationships = (await repository.find({
-            _id: { $in: value }
-        })).toArray();
+        const relationships = await repository.findById(value, {
+            dataloader: options.dataloader
+        });
         if (
             relationships &&
             typeof object.setCachedRelationship === 'function'
@@ -301,12 +386,12 @@ export class MongoManager {
     }
 
     fromPlain<Model extends EntityInterface>(
-        model: ClassType<Model>,
+        classType: ClassType<Model>,
         data: Object,
         options?: ClassTransformOptions
     ): Model {
-        this.log('%s transform fromPlain', model);
-        return plainToClass(model, data, {
+        this.log('transform fromPlain %s', classType.name);
+        return plainToClass(classType, data, {
             ...options,
             excludePrefixes: ['__']
         });
@@ -322,5 +407,22 @@ export class MongoManager {
             ...options,
             excludePrefixes: ['__']
         });
+    }
+
+    createDataLoader<Model extends EntityInterface>(model: ClassType<Model>) {
+        const log = this.log.extend('Dataloader:' + model.name);
+        return new DataLoader<ObjectId, Model>(
+            async keys => {
+                log('find', keys);
+                const cursor = await this.find(model, { _id: { $in: keys } });
+                return await cursor.toArray();
+            },
+            {
+                batch: true,
+                maxBatchSize: 500,
+                cache: true,
+                cacheKeyFn: (key: ObjectId) => key.toString()
+            }
+        );
     }
 }

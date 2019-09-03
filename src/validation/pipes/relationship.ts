@@ -2,7 +2,8 @@ import {
     PipeTransform,
     Injectable,
     ArgumentMetadata,
-    BadRequestException
+    BadRequestException,
+    Inject
 } from '@nestjs/common';
 import { MongoManager } from '../../manager';
 import { Validator } from 'class-validator';

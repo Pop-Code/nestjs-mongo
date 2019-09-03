@@ -52,7 +52,11 @@ export abstract class EntityService<
     }
 
     async get(itemId: ObjectId, ...rest: any[]): Promise<Model> {
-        return this.repository.findOne({ _id: itemId }, ...rest);
+        const item = await this.repository.findOne({ _id: itemId }, ...rest);
+        if (!item) {
+            throw new NotFoundException();
+        }
+        return item;
     }
 
     async list(

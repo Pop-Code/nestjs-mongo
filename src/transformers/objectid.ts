@@ -4,15 +4,13 @@ import {
     ArgumentMetadata,
     BadRequestException
 } from '@nestjs/common';
-import { MongoManager } from '../manager';
 import { Validator } from 'class-validator';
 import { ObjectId } from '../helpers';
-import { InjectManager } from '../decorators';
 
 @Injectable()
 export class ObjectIdPipe implements PipeTransform {
     protected validator: Validator;
-    constructor(@InjectManager() protected readonly em: MongoManager) {
+    constructor() {
         this.validator = new Validator();
     }
 

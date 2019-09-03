@@ -27,6 +27,7 @@ import { IsUniqueConstraint } from './validation/unique/constraint';
 import Dataloader from 'dataloader';
 import { EntityInterface } from './interfaces/entity';
 import { DataloaderService } from './dataloader/service';
+import { MongoDataloader } from './dataloader/data';
 
 @Global()
 @Module({})
@@ -75,7 +76,7 @@ export class MongoCoreModule implements OnModuleDestroy {
         };
 
         // the mongo client provider
-        const dataServiceProvider = {
+        const dataloaderServiceProvider = {
             provide: DataloaderService,
             useClass: DataloaderService
         };
@@ -112,13 +113,14 @@ export class MongoCoreModule implements OnModuleDestroy {
                 mongoConnectionNameProvider,
                 configProvider,
                 mongoClientProvider,
-                dataServiceProvider,
+                dataloaderServiceProvider,
                 mongoManagerProvider
             ],
             exports: [
                 mongoConnectionNameProvider,
                 configProvider,
                 mongoClientProvider,
+                dataloaderServiceProvider,
                 mongoManagerProvider
             ]
         };
@@ -140,27 +142,22 @@ export class MongoCoreModule implements OnModuleDestroy {
         for (const m of models) {
             const managerToken = getManagerToken(connectionName);
             const model = typeof m === 'function' ? m : m.model;
-            if (typeof m === 'function') {
-                providers.push({
-                    provide: m,
-                    useClass: m
-                });
-            } else {
-                providers.push({
-                    provide: m.model,
-                    useClass: m.model
-                });
-            }
-
+            providers.push({
+                provide: model,
+                useClass: model
+            });
             const loaderToken = getDataloaderToken(model.name, connectionName);
             providers.push({
-                scope: Scope.REQUEST,
                 provide: loaderToken,
-                inject: [getManagerToken(connectionName)],
+                inject: [managerToken],
                 useFactory: (em: MongoManager) => {
-                    const dataloader = em.createDataLoader(model);
-                    //em.addDataloader(loaderToken, dataloader);
-                    return dataloader;
+                    const dataloaderService = em.getDataloaderService();
+                    const loader = dataloaderService.createAndRegister(
+                        model.name,
+                        model,
+                        em
+                    );
+                    return loader;
                 }
             });
 
@@ -169,9 +166,12 @@ export class MongoCoreModule implements OnModuleDestroy {
                 typeof m === 'function' ? MongoRepository : m.repository;
             providers.push({
                 provide: repoToken,
-                inject: [managerToken],
-                useFactory: (em: MongoManager) => {
-                    const repo = new RepoClass(em, model);
+                inject: [managerToken, loaderToken],
+                useFactory: (
+                    em: MongoManager,
+                    loader: MongoDataloader<typeof model>
+                ) => {
+                    const repo = new RepoClass(em, model, loader);
                     em.addRepository(repoToken, repo);
                     return repo;
                 }

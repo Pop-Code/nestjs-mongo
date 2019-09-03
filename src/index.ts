@@ -5,6 +5,7 @@ export * from './classes/history.action';
 export * from './classes/paginated.response';
 export * from './constants';
 export * from './dataloader/service';
+export * from './dataloader/data';
 export * from './decorators';
 export * from './entity';
 export * from './entity.service';

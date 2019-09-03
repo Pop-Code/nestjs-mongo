@@ -6,8 +6,7 @@ import {
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences,
-    ObjectId
+    MongoCountPreferences
 } from 'mongodb';
 import { DEBUG } from './constants';
 import { InjectMongoClient } from './decorators';
@@ -62,6 +61,10 @@ export class MongoManager {
 
     getDatabase(databaseName?: string) {
         return this.client.db(databaseName);
+    }
+
+    getDataloaderService() {
+        return this.dataloaderService;
     }
 
     getCollectionName<Model>(nameOrInstance: Model | ClassType<Model>): string {
@@ -193,7 +196,9 @@ export class MongoManager {
         const cursor: Cursor<Object> = await this.getCollection(classType).find(
             query
         );
-        const dataloader = this.getDataloader(options.dataloader);
+        const dataloader = this.getDataloader(
+            options.dataloader || classType.name
+        );
         return cursor.map(entity => {
             const instance = this.fromPlain<Model>(classType, entity);
             if (dataloader) {
@@ -215,7 +220,9 @@ export class MongoManager {
     ): Promise<Model> {
         this.log('findOne %s %o', classType.name, query);
         let entity: Model;
-        const dataloader = this.getDataloader<Model>(options.dataloader);
+        const dataloader = this.getDataloader<Model>(
+            options.dataloader || classType.name
+        );
         if (dataloader && this.isIdQuery(query)) {
             this.log('findOne delegated to dataloader');
             entity = await dataloader.load(query._id);
@@ -268,7 +275,9 @@ export class MongoManager {
             query,
             options
         );
-        const dataloader = this.getDataloader<Model>(options.dataloader);
+        const dataloader = this.getDataloader<Model>(
+            options.dataloader || classType.name
+        );
         if (dataloader && this.isIdQuery(query)) {
             dataloader.clear(query._id);
         }
@@ -322,7 +331,7 @@ export class MongoManager {
             {
                 _id: value
             },
-            { dataloader: options.dataloader }
+            { dataloader: options.dataloader || object.constructor.name }
         );
 
         if (
@@ -373,7 +382,7 @@ export class MongoManager {
         const repository = this.getRepository(relationMetadata.type);
         const value = object[property];
         const relationships = await repository.findById(value, {
-            dataloader: options.dataloader
+            dataloader: options.dataloader || object.constructor.name
         });
         if (
             relationships &&
@@ -407,22 +416,5 @@ export class MongoManager {
             ...options,
             excludePrefixes: ['__']
         });
-    }
-
-    createDataLoader<Model extends EntityInterface>(model: ClassType<Model>) {
-        const log = this.log.extend('Dataloader:' + model.name);
-        return new DataLoader<ObjectId, Model>(
-            async keys => {
-                log('find', keys);
-                const cursor = await this.find(model, { _id: { $in: keys } });
-                return await cursor.toArray();
-            },
-            {
-                batch: true,
-                maxBatchSize: 500,
-                cache: true,
-                cacheKeyFn: (key: ObjectId) => key.toString()
-            }
-        );
     }
 }

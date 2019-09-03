@@ -223,47 +223,38 @@ describe('MongoModule', () => {
                 getRepositoryToken(EntityTest.name)
             );
 
-            const dataloader = dataloaderService.createAndRegister(
-                'dataloader',
-                EntityTest,
-                repo.getEm()
-            );
+            const dataloader = dataloaderService.get(EntityTest.name);
+            expect(dataloader).toBeDefined();
 
-            // entity will not be put in the dataloader cache caus enot key was passed
+            // entity will not be put in the dataloader cache cause no key was passed
             const entity = new EntityTest();
             entity.foo = 'test';
             entity.bar = 'dataloader';
             await repo.save(entity);
 
             // fetch a new entity, this should trigger the dataloader for the first time
-            const entity1 = await repo.findOne(
-                {
-                    _id: entity._id
-                },
-                { dataloader: 'dataloader' }
-            );
-
-            // refetch just after
-            const entity2 = await repo.findOne(
-                {
-                    _id: entity._id
-                },
-                { dataloader: 'dataloader' }
-            );
+            const entity1 = await repo.findOne({
+                _id: entity._id
+            });
 
             // entity 1 should come from cache and equals entity
-            expect(entity1).toBe(entity2);
+            expect(entity).toEqual(entity1);
+
+            // fetch a new entity, this should trigger the dataloader for the first time
+            const entity2 = await repo.findOne({
+                _id: entity._id
+            });
+
+            // entity 1 should come from cache and equals entity
+            expect(entity).toEqual(entity2);
 
             //remove item from the cache
             dataloader.clear(entity._id);
 
             // call the database should get the real item
-            const entity3 = await repo.findOne(
-                {
-                    _id: entity._id
-                },
-                { dataloader: 'dataloader' }
-            );
+            const entity3 = await repo.findOne({
+                _id: entity._id
+            });
             expect(entity).toEqual(entity3);
         });
     });

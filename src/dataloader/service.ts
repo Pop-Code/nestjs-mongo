@@ -1,32 +1,27 @@
 import { ClassType } from 'class-transformer/ClassTransformer';
-import Dataloader from 'dataloader';
 import Debug from 'debug';
 import { ObjectId } from 'mongodb';
 import { DEBUG } from '../constants';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
+import { MongoDataloader } from './data';
 
 export class DataloaderService {
     protected log = Debug(DEBUG + ':DataloaderService');
 
-    protected readonly loaders: Map<
-        string,
-        Dataloader<ObjectId, any>
-    > = new Map();
+    protected readonly loaders: Map<string, MongoDataloader<any>> = new Map();
 
     getLoaders() {
         return this.loaders;
     }
 
-    get<Model extends EntityInterface>(
-        id: string
-    ): Dataloader<ObjectId, Model> {
+    get<Model extends EntityInterface>(id: string): MongoDataloader<Model> {
         return this.loaders.get(id);
     }
 
     register<Model extends EntityInterface>(
         id: string,
-        dataloader: Dataloader<ObjectId, Model>
+        dataloader: MongoDataloader<Model>
     ): DataloaderService {
         this.log('Register %s', id);
         this.loaders.set(id, dataloader);
@@ -39,7 +34,7 @@ export class DataloaderService {
     ) {
         const log = this.log.extend(model.name);
         log('creating data loader');
-        return new Dataloader<ObjectId, Model>(
+        return new MongoDataloader<Model>(
             async keys => {
                 log('find', keys);
                 const cursor = await em.find(model, { _id: { $in: keys } });

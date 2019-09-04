@@ -28,6 +28,7 @@ import {
 import { WithRelationshipInterface } from './relationship/decorators';
 import DataLoader from 'dataloader';
 import { DataloaderService } from './dataloader/service';
+import { NotFoundException } from '@nestjs/common';
 
 export class MongoManager {
     protected readonly repositories: Map<string, any> = new Map();
@@ -271,15 +272,19 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteOne %s %o', classType.name, query);
+        const item = await this.findOne<Model>(classType, query);
+        if (!item) {
+            throw new NotFoundException();
+        }
         const result = await this.getCollection(classType).deleteOne(
-            query,
+            { _id: item._id },
             options
         );
         const dataloader = this.getDataloader<Model>(
             options.dataloader || classType.name
         );
-        if (dataloader && this.isIdQuery(query)) {
-            dataloader.clear(query._id);
+        if (dataloader) {
+            dataloader.clear(item._id);
         }
         return result;
     }

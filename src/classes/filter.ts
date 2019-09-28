@@ -49,7 +49,7 @@ export class Filter {
     @Matches(/^(.+):(asc|desc)$/, { each: true })
     orderBy?: string[] = ['_id:asc'];
 
-    get sort(): any[] {
+    get sort(): [string, 1 | -1][] {
         return this.orderBy.reduce((sorts: any[], orderString) => {
             const order = orderString.split(':');
             const property = order[0];
@@ -57,6 +57,18 @@ export class Filter {
             sorts.push([property, direction]);
             return sorts;
         }, []);
+    }
+
+    get sortForAggregation(): { [property: string]: 1 | -1 } {
+        const sorts = {};
+        this.orderBy.forEach(sort => {
+            const order = sort.split(':');
+            const property = order[0];
+            const direction = order[1] === 'asc' ? 1 : -1;
+            sorts[property] = direction;
+        }, []);
+
+        return sorts;
     }
 
     toQuery() {

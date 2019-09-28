@@ -37,8 +37,17 @@ export class DataloaderService {
         return new MongoDataloader<Model>(
             async keys => {
                 log('find', keys);
-                const cursor = await em.find(model, { _id: { $in: keys } });
-                return await cursor.toArray();
+                const jobs: Promise<Model | undefined>[] = [];
+                for (const key of keys) {
+                    jobs.push(
+                        em.findOne(
+                            model,
+                            { _id: key },
+                            { dataloader: 'ignore' }
+                        )
+                    );
+                }
+                return await Promise.all(jobs);
             },
             {
                 batch: true,

@@ -1,6 +1,6 @@
 {
     "name": "nestjs-mongo",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "description": "A NestJS module that provide a simple mongodb orm like",
     "keywords": [
         "nestjs",
@@ -23,11 +23,11 @@
     },
     "dependencies": {
         "@nestjs/swagger": "3.1.0",
-        "dataloader": "^1.4.0",
+        "dataloader": "1.4.0",
         "debug": "4.1.1",
         "global": "4.4.0",
         "lodash": "4.17.15",
-        "mongodb": "3.2.7"
+        "mongodb": "3.3.2"
     },
     "devDependencies": {
         "@nestjs/common": "6.8.3",

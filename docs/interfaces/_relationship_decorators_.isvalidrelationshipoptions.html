@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_validation_relationship_interfaces_.html">&quot;validation/relationship/interfaces&quot;</a>
+					<a href="../modules/_relationship_decorators_.html">&quot;relationship/decorators&quot;</a>
 				</li>
 				<li>
-					<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html">IsValidRelationshipOptions</a>
+					<a href="_relationship_decorators_.isvalidrelationshipoptions.html">IsValidRelationshipOptions</a>
 				</li>
 			</ul>
 			<h1>Interface IsValidRelationshipOptions</h1>
@@ -89,12 +89,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#always" class="tsd-kind-icon">always</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#context" class="tsd-kind-icon">context</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#each" class="tsd-kind-icon">each</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#groups" class="tsd-kind-icon">groups</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#message" class="tsd-kind-icon">message</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#with" class="tsd-kind-icon">with</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_decorators_.isvalidrelationshipoptions.html#always" class="tsd-kind-icon">always</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_decorators_.isvalidrelationshipoptions.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_decorators_.isvalidrelationshipoptions.html#each" class="tsd-kind-icon">each</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_decorators_.isvalidrelationshipoptions.html#groups" class="tsd-kind-icon">groups</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_decorators_.isvalidrelationshipoptions.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_decorators_.isvalidrelationshipoptions.html#with" class="tsd-kind-icon">with</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,7 +109,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ValidationOptions.always</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:25</li>
+							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:22</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -125,7 +125,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ValidationOptions.context</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:26</li>
+							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:23</li>
 						</ul>
 					</aside>
 				</section>
@@ -136,7 +136,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ValidationOptions.each</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:8</li>
+							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:9</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -152,7 +152,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ValidationOptions.groups</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:21</li>
+							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:18</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -168,17 +168,13 @@
 					<aside class="tsd-sources">
 						<p>Inherited from ValidationOptions.message</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:17</li>
+							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/decorator/ValidationOptions.d.ts:14</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Error message used to be used on validation fail.
-								You can use &quot;$value&quot; to use value that was failed by validation.
-								You can use &quot;$constraint1&quot; and &quot;$constraint2&quot; keys in the message string,
-								and they will be replaced with constraint values if they exist.
-								Message can be either string, either a function that returns a string.
-							Second option allows to use values and custom messages depend of them.</p>
+							Message can be either string, either a function that returns a string.</p>
 						</div>
 					</div>
 				</section>
@@ -188,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">with<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/validation/relationship/interfaces.ts#L11">validation/relationship/interfaces.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/relationship/decorators.ts#L16">relationship/decorators.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -228,7 +224,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_validation_relationship_interfaces_.html">"validation/relationship/interfaces"</a>
+						<a href="../modules/_relationship_decorators_.html">"relationship/decorators"</a>
 					</li>
 				</ul>
 			</nav>
@@ -237,35 +233,53 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship<wbr>Options</a>
+						<a href="_relationship_decorators_.isvalidrelationshipoptions.html" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#always" class="tsd-kind-icon">always</a>
+								<a href="_relationship_decorators_.isvalidrelationshipoptions.html#always" class="tsd-kind-icon">always</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#context" class="tsd-kind-icon">context</a>
+								<a href="_relationship_decorators_.isvalidrelationshipoptions.html#context" class="tsd-kind-icon">context</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#each" class="tsd-kind-icon">each</a>
+								<a href="_relationship_decorators_.isvalidrelationshipoptions.html#each" class="tsd-kind-icon">each</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#groups" class="tsd-kind-icon">groups</a>
+								<a href="_relationship_decorators_.isvalidrelationshipoptions.html#groups" class="tsd-kind-icon">groups</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#message" class="tsd-kind-icon">message</a>
+								<a href="_relationship_decorators_.isvalidrelationshipoptions.html#message" class="tsd-kind-icon">message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html#with" class="tsd-kind-icon">with</a>
+								<a href="_relationship_decorators_.isvalidrelationshipoptions.html#with" class="tsd-kind-icon">with</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship<wbr>Validation<wbr>Arguments</a>
+						<a href="_relationship_decorators_.isvalidrelationshipvalidationarguments.html" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship<wbr>Validation<wbr>Arguments</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_relationship_decorators_.withrelationshipinterface.html" class="tsd-kind-icon">With<wbr>Relationship<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_validation_relationship_interfaces_.html#withrelationshiptest" class="tsd-kind-icon">With<wbr>Relationship<wbr>Test</a>
+						<a href="../modules/_relationship_decorators_.html#withrelationshiptest" class="tsd-kind-icon">With<wbr>Relationship<wbr>Test</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_relationship_decorators_.html#isvalidrelationship" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_decorators_.html#relationship" class="tsd-kind-icon">Relationship</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_relationship_decorators_.html#withrelationship" class="tsd-kind-icon">With<wbr>Relationship</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../modules/_relationship_decorators_.html#getcachedrelationship" class="tsd-kind-icon">get<wbr>Cached<wbr>Relationship</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_relationship_decorators_.html#setcachedrelationship" class="tsd-kind-icon">set<wbr>Cached<wbr>Relationship</a>
 					</li>
 				</ul>
 			</nav>

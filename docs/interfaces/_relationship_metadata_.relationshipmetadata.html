@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IsValidRelationshipValidationArguments | NestJS Mongo</title>
+	<title>RelationshipMetadata | NestJS Mongo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,29 +56,35 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_validation_relationship_interfaces_.html">&quot;validation/relationship/interfaces&quot;</a>
+					<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
 				</li>
 				<li>
-					<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html">IsValidRelationshipValidationArguments</a>
+					<a href="_relationship_metadata_.relationshipmetadata.html">RelationshipMetadata</a>
 				</li>
 			</ul>
-			<h1>Interface IsValidRelationshipValidationArguments</h1>
+			<h1>Interface RelationshipMetadata&lt;Relationship, Obj&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>Relationship<span class="tsd-signature-symbol">: </span><a href="_interfaces_entity_.entityinterface.html" class="tsd-signature-type">EntityInterface</a></h4>
+					</li>
+					<li>
+						<h4>Obj</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">ValidationArguments</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">IsValidRelationshipValidationArguments</span>
-							</li>
-						</ul>
+						<span class="target">RelationshipMetadata</span>
 					</li>
 				</ul>
 			</section>
@@ -89,11 +95,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#constraints" class="tsd-kind-icon">constraints</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#object" class="tsd-kind-icon">object</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#property" class="tsd-kind-icon">property</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#targetname" class="tsd-kind-icon">target<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#value" class="tsd-kind-icon">value</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadata.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadata.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadata.html#typefn" class="tsd-kind-icon">type<wbr>Fn</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,80 +105,35 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="constraints" class="tsd-anchor"></a>
-					<h3>constraints</h3>
-					<div class="tsd-signature tsd-kind-icon">constraints<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">]</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="isarray" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Array</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides ValidationArguments.constraints</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/8c26726/src/validation/relationship/interfaces.ts#L20">validation/relationship/interfaces.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/relationship/metadata.ts#L16">relationship/metadata.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="object" class="tsd-anchor"></a>
-					<h3>object</h3>
-					<div class="tsd-signature tsd-kind-icon">object<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="type" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ValidationArguments.object</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/validation/ValidationArguments.d.ts:21</li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/relationship/metadata.ts#L14">relationship/metadata.ts:14</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Object that is being validated.</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="property" class="tsd-anchor"></a>
-					<h3>property</h3>
-					<div class="tsd-signature tsd-kind-icon">property<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="typefn" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type<wbr>Fn</h3>
+					<div class="tsd-signature tsd-kind-icon">type<wbr>Fn<span class="tsd-signature-symbol">:</span> <a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-signature-type">RelationshipTypeDescriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Obj</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from ValidationArguments.property</p>
 						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/validation/ValidationArguments.d.ts:25</li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/relationship/metadata.ts#L15">relationship/metadata.ts:15</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Name of the object&#39;s property being validated.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="targetname" class="tsd-anchor"></a>
-					<h3>target<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">target<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from ValidationArguments.targetName</p>
-						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/validation/ValidationArguments.d.ts:17</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Name of the target that is being validated.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="value" class="tsd-anchor"></a>
-					<h3>value</h3>
-					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from ValidationArguments.value</p>
-						<ul>
-							<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-validator/validation/ValidationArguments.d.ts:9</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Validating value.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -185,41 +144,38 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_validation_relationship_interfaces_.html">"validation/relationship/interfaces"</a>
+						<a href="../modules/_relationship_metadata_.html">"relationship/metadata"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_validation_relationship_interfaces_.isvalidrelationshipoptions.html" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship<wbr>Options</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html" class="tsd-kind-icon">Is<wbr>Valid<wbr>Relationship<wbr>Validation<wbr>Arguments</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#constraints" class="tsd-kind-icon">constraints</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_relationship_metadata_.relationshipmetadata.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#object" class="tsd-kind-icon">object</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_relationship_metadata_.relationshipmetadata.html#type" class="tsd-kind-icon">type</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#property" class="tsd-kind-icon">property</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#targetname" class="tsd-kind-icon">target<wbr>Name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_validation_relationship_interfaces_.isvalidrelationshipvalidationarguments.html#value" class="tsd-kind-icon">value</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_relationship_metadata_.relationshipmetadata.html#typefn" class="tsd-kind-icon">type<wbr>Fn</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_validation_relationship_interfaces_.html#withrelationshiptest" class="tsd-kind-icon">With<wbr>Relationship<wbr>Test</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipmetadata" class="tsd-kind-icon">set<wbr>Relationship<wbr>Metadata</a>
 					</li>
 				</ul>
 			</nav>

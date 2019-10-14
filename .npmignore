@@ -9,3 +9,4 @@ jest.config.js
 renovate.json
 lib/test
 renovate.json
+.DS_Store

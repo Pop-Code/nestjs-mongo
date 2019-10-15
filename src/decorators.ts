@@ -26,8 +26,10 @@ export const InjectRepository = (
 
 const objectIdFromString = (value: any) =>
     ObjectId.isValid(value) ? new ObjectId(value) : undefined;
-const objectIdToString = (value: any) =>
-    value instanceof ObjectId ? value.toHexString() : undefined;
+const objectIdToString = (value: any) => {
+    if (value instanceof ObjectId) return value.toHexString();
+    if (typeof value === 'string') return value;
+};
 
 export function ObjectIdTransformer(
     value: any,

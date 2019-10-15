@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>WithJSONSerializeInterface | NestJS Mongo</title>
+	<title>ISerializable | NestJS Mongo</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_interfaces_jsonserialize_.html">&quot;interfaces/jsonserialize&quot;</a>
+					<a href="../modules/_serializer_.html">&quot;serializer&quot;</a>
 				</li>
 				<li>
-					<a href="_interfaces_jsonserialize_.withjsonserializeinterface.html">WithJSONSerializeInterface</a>
+					<a href="_serializer_.iserializable.html">ISerializable</a>
 				</li>
 			</ul>
-			<h1>Interface WithJSONSerializeInterface</h1>
+			<h1>Interface ISerializable</h1>
 		</div>
 	</div>
 </header>
@@ -73,13 +73,16 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">WithJSONSerializeInterface</span>
+						<span class="target">ISerializable</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<a href="../classes/_classes_filter_.filter.html" class="tsd-signature-type">Filter</a>
 							</li>
 							<li>
 								<a href="../classes/_classes_paginated_response_.paginatedresponse.html" class="tsd-signature-type">PaginatedResponse</a>
+							</li>
+							<li>
+								<a href="_interfaces_entity_.entityinterface.html" class="tsd-signature-type">EntityInterface</a>
 							</li>
 							<li>
 								<a href="../classes/_entity_.entity.html" class="tsd-signature-type">Entity</a>
@@ -95,7 +98,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_interfaces_jsonserialize_.withjsonserializeinterface.html#tojson" class="tsd-kind-icon">toJSON</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_serializer_.iserializable.html#serialize" class="tsd-kind-icon">serialize</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,16 +107,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="tojson" class="tsd-anchor"></a>
-					<h3>toJSON</h3>
+					<a name="serialize" class="tsd-anchor"></a>
+					<h3>serialize</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
+						<li class="tsd-signature tsd-kind-icon">serialize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/interfaces/jsonserialize.ts#L2">interfaces/jsonserialize.ts:2</a></li>
+									<li>Defined in serializer.ts:4</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object</span></h4>
@@ -129,7 +132,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_interfaces_jsonserialize_.html">"interfaces/jsonserialize"</a>
+						<a href="../modules/_serializer_.html">"serializer"</a>
 					</li>
 				</ul>
 			</nav>
@@ -138,15 +141,21 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_interfaces_jsonserialize_.withjsonserializeinterface.html" class="tsd-kind-icon">WithJSONSerialize<wbr>Interface</a>
+						<a href="_serializer_.iserializable.html" class="tsd-kind-icon">ISerializable</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_interfaces_jsonserialize_.withjsonserializeinterface.html#tojson" class="tsd-kind-icon">toJSON</a>
+								<a href="_serializer_.iserializable.html#serialize" class="tsd-kind-icon">serialize</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_serializer_.html#serializable" class="tsd-kind-icon">Serializable</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_serializer_.html#serialize" class="tsd-kind-icon">serialize</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

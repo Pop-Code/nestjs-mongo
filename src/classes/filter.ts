@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { classToPlain, Transform, Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
     IsArray,
     IsInt,
@@ -8,12 +8,11 @@ import {
     Matches,
     Max
 } from 'class-validator';
-import { WithJSONSerialize } from '../decorators';
-import { WithJSONSerializeInterface } from '../interfaces/jsonserialize';
+import { ISerializable, Serializable } from '../serializer';
 
-export interface Filter extends WithJSONSerializeInterface {}
+export interface Filter extends ISerializable {}
 
-@WithJSONSerialize()
+@Serializable()
 export class Filter {
     @ApiModelProperty({
         description: 'The number of items to skip',

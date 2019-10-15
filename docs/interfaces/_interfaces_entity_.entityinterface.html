@@ -73,7 +73,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EntityInterface</span>
+						<a href="_serializer_.iserializable.html" class="tsd-signature-type">ISerializable</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">EntityInterface</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -96,10 +101,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_entity_.entityinterface.html#updatedat" class="tsd-kind-icon">updated<wbr>At</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_interfaces_entity_.entityinterface.html#tojson" class="tsd-kind-icon">toJSON</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="_interfaces_entity_.entityinterface.html#serialize" class="tsd-kind-icon">serialize</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,7 +118,7 @@
 					<div class="tsd-signature tsd-kind-icon">_id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ObjectId</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/interfaces/entity.ts#L5">interfaces/entity.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/interfaces/entity.ts#L6">interfaces/entity.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -123,7 +128,7 @@
 					<div class="tsd-signature tsd-kind-icon">created<wbr>At<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/interfaces/entity.ts#L6">interfaces/entity.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/interfaces/entity.ts#L7">interfaces/entity.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -133,7 +138,7 @@
 					<div class="tsd-signature tsd-kind-icon">history<span class="tsd-signature-symbol">:</span> <a href="../classes/_classes_history_.historyactions.html" class="tsd-signature-type">HistoryActions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/interfaces/entity.ts#L8">interfaces/entity.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/interfaces/entity.ts#L9">interfaces/entity.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -143,24 +148,25 @@
 					<div class="tsd-signature tsd-kind-icon">updated<wbr>At<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/interfaces/entity.ts#L7">interfaces/entity.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/interfaces/entity.ts#L8">interfaces/entity.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="tojson" class="tsd-anchor"></a>
-					<h3>toJSON</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="serialize" class="tsd-anchor"></a>
+					<h3>serialize</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">serialize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_serializer_.iserializable.html">ISerializable</a>.<a href="_serializer_.iserializable.html#serialize">serialize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/bb2a525/src/interfaces/entity.ts#L9">interfaces/entity.ts:9</a></li>
+									<li>Defined in serializer.ts:4</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object</span></h4>
@@ -199,8 +205,8 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_interfaces_entity_.entityinterface.html#updatedat" class="tsd-kind-icon">updated<wbr>At</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_interfaces_entity_.entityinterface.html#tojson" class="tsd-kind-icon">toJSON</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_interfaces_entity_.entityinterface.html#serialize" class="tsd-kind-icon">serialize</a>
 							</li>
 						</ul>
 					</li>

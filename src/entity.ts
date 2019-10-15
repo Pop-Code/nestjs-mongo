@@ -1,14 +1,14 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
-import { TypeObjectId, WithJSONSerialize } from './decorators';
+import { TypeObjectId } from './decorators';
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
-import { WithJSONSerializeInterface } from './interfaces/jsonserialize';
+import { Serializable, ISerializable } from './serializer';
 
-export interface Entity extends WithJSONSerializeInterface {}
+export interface Entity extends ISerializable {}
 
-@WithJSONSerialize()
+@Serializable()
 export abstract class Entity implements EntityInterface {
     @ApiModelProperty({
         description: 'The entity identifier',

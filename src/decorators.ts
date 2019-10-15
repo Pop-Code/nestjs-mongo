@@ -1,10 +1,5 @@
 import { Inject } from '@nestjs/common';
-import {
-    classToPlain,
-    Transform,
-    TransformationType,
-    Type
-} from 'class-transformer';
+import { Transform, TransformationType, Type } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { Allow } from 'class-validator';
 import Debug from 'debug';
@@ -86,11 +81,4 @@ export const TypeObjectId = (isArray?: boolean) => {
 
 export const Collection = (name: string) => (target: any) => {
     Reflect.defineMetadata('mongo:collectionName', name, target);
-};
-
-function toJSON() {
-    return classToPlain(this);
-}
-export const WithJSONSerialize = () => (target: any) => {
-    target.prototype.toJSON = toJSON;
 };

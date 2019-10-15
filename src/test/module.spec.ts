@@ -194,7 +194,7 @@ describe('MongoModule', () => {
 
             expect(entity._id).toBeInstanceOf(ObjectId);
 
-            const obj: any = entity.toJSON();
+            const obj: any = entity.serialize();
             expect(obj._id).toBeDefined();
             expect(typeof obj._id).toEqual('string');
 
@@ -204,7 +204,7 @@ describe('MongoModule', () => {
 
             const child = new EntityChildTest();
             child.parentId = entity._id;
-            const objChild: any = child.toJSON();
+            const objChild: any = child.serialize();
             expect(objChild.parentId).toEqual(entity._id.toHexString());
 
             const reChild = manager

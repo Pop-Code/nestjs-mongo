@@ -1,11 +1,10 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
-import { WithJSONSerialize } from '../decorators';
-import { WithJSONSerializeInterface } from '../interfaces/jsonserialize';
+import { ISerializable, Serializable } from '../serializer';
 
-export interface PaginatedResponse extends WithJSONSerializeInterface {}
+export interface PaginatedResponse extends ISerializable {}
 
-@WithJSONSerialize()
+@Serializable()
 export class PaginatedResponse {
     @ApiModelProperty({
         description: 'The total count of data',

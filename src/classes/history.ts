@@ -5,17 +5,13 @@ import { Type } from 'class-transformer';
 export class HistoryActions {
     @IsArray()
     @Type(() => HistoryAction)
-    protected actions: HistoryAction[] = [];
-
-    get length() {
-        return this.actions.length;
-    }
+    actions: HistoryAction[] = [];
 
     add(historyAction: HistoryAction) {
         this.actions.push(historyAction);
     }
 
-    clear(historyAction: HistoryAction) {
+    clear() {
         this.actions = [];
     }
 

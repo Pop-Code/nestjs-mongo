@@ -71,7 +71,7 @@ export abstract class EntityService<
             .limit(filter.limit);
 
         if (filter.orderBy) {
-            items = items.sort(filter.sort);
+            items = items.sort(filter.getSort());
         }
 
         const count = await items.count(false);

@@ -107,6 +107,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#count" class="tsd-kind-icon">count</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#deletemany" class="tsd-kind-icon">delete<wbr>Many</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#deleteone" class="tsd-kind-icon">delete<wbr>One</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#find" class="tsd-kind-icon">find</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#findbyid" class="tsd-kind-icon">find<wbr>ById</a></li>
@@ -119,6 +120,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#merge" class="tsd-kind-icon">merge</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#save" class="tsd-kind-icon">save</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_repository_.mongorepository.html#watch" class="tsd-kind-icon">watch</a></li>
 							</ul>
 						</section>
 					</div>
@@ -136,7 +138,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L10">repository.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L10">src/repository.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -164,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">class<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L13">repository.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L13">src/repository.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -174,7 +176,7 @@
 					<div class="tsd-signature tsd-kind-icon">dataloader<span class="tsd-signature-symbol">:</span> <a href="_dataloader_data_.mongodataloader.html" class="tsd-signature-type">MongoDataloader</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L14">repository.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L14">src/repository.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -184,7 +186,7 @@
 					<div class="tsd-signature tsd-kind-icon">em<span class="tsd-signature-symbol">:</span> <a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L12">repository.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L12">src/repository.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -201,7 +203,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L44">repository.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L48">src/repository.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -218,6 +220,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="deletemany" class="tsd-anchor"></a>
+					<h3>delete<wbr>Many</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Many<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L64">src/repository.ts:64</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>query: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="deleteone" class="tsd-anchor"></a>
 					<h3>delete<wbr>One</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -227,7 +255,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L56">repository.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L60">src/repository.ts:60</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -253,7 +281,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L29">repository.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L33">src/repository.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -279,7 +307,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L52">repository.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L56">src/repository.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -305,7 +333,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L48">repository.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L52">src/repository.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -331,7 +359,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L36">repository.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L40">src/repository.ts:40</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -357,7 +385,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L67">repository.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L75">src/repository.ts:75</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -383,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L17">repository.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L17">src/repository.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
@@ -397,7 +425,7 @@
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in /Users/alexandrehermann/Dev/nestjs/nestjs-mongo/node_modules/class-transformer/ClassTransformer.d.ts:2</li>
+													<li>Defined in node_modules/class-transformer/ClassTransformer.d.ts:2</li>
 												</ul>
 											</aside>
 											<h4 class="tsd-parameters-title">Parameters</h4>
@@ -423,7 +451,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L21">repository.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L21">src/repository.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_manager_.mongomanager.html" class="tsd-signature-type">MongoManager</a></h4>
@@ -440,7 +468,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L60">repository.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L68">src/repository.ts:68</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -472,7 +500,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L40">repository.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L44">src/repository.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -495,7 +523,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L71">repository.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L79">src/repository.ts:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -524,7 +552,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/fce5c84/src/repository.ts#L25">repository.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L25">src/repository.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -540,6 +568,32 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="watch" class="tsd-anchor"></a>
+					<h3>watch</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">watch<span class="tsd-signature-symbol">(</span>pipes<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ChangeStream</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7e36c23/src/repository.ts#L29">src/repository.ts:29</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> pipes: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ChangeStream</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -549,7 +603,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_repository_.html">"repository"</a>
+						<a href="../modules/_repository_.html">&quot;repository&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -574,6 +628,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_repository_.mongorepository.html#count" class="tsd-kind-icon">count</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_repository_.mongorepository.html#deletemany" class="tsd-kind-icon">delete<wbr>Many</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_repository_.mongorepository.html#deleteone" class="tsd-kind-icon">delete<wbr>One</a>
@@ -610,6 +667,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_repository_.mongorepository.html#save" class="tsd-kind-icon">save</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_repository_.mongorepository.html#watch" class="tsd-kind-icon">watch</a>
 							</li>
 						</ul>
 					</li>

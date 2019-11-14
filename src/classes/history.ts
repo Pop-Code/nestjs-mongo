@@ -1,14 +1,8 @@
 import { HistoryAction } from './history.action';
 import { IsArray } from 'class-validator';
-import { ApiModelProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
 export class HistoryActions {
-    @ApiModelProperty({
-        description: 'A list of HisotryAction',
-        isArray: true,
-        type: HistoryAction
-    })
     @IsArray()
     @Type(() => HistoryAction)
     protected actions: HistoryAction[] = [];

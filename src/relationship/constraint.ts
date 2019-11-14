@@ -28,9 +28,10 @@ export class IsValidRelationshipConstraint
     ) {
         const obj = args.object as any;
         try {
-            const relationMetadata: RelationshipMetadata<
-                any
-            > = getRelationshipMetadata(obj, args.property);
+            const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
+                obj,
+                args.property
+            );
             let relationship: any;
 
             if (relationMetadata.isArray) {

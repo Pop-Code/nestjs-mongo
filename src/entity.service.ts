@@ -9,12 +9,7 @@ import { EntityInterface } from './interfaces/entity';
 import { MongoRepository } from './repository';
 import { ObjectId, ChangeStream } from 'mongodb';
 import { camelCase } from 'lodash';
-
-export type EventCallback<Model extends EntityInterface> = (
-    eventName: string,
-    eventType: 'create' | 'update' | 'delete',
-    entity: Model | ObjectId
-) => void;
+import { EventCallback } from './interfaces/event';
 
 @Injectable()
 export abstract class EntityService<
@@ -115,14 +110,12 @@ export abstract class EntityService<
     }
 
     /**
-     * Subscribe to a a change stream. The method onChange will be called on the service to pub
+     * Subscribe to a a change stream.
      */
     subscribe(onData: EventCallback<Model>): ChangeStream {
         return this.repository
             .watch([], { updateLookup: 'fullDocument' })
-            .on('change', (change: any) => {
-                this._onData(change, onData);
-            });
+            .on('change', (change: any) => this._onData(change, onData));
     }
 
     private _onData = async (change: any, onData: EventCallback<Model>) => {

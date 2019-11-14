@@ -1,3 +1,10 @@
+import { NotFoundException } from '@nestjs/common';
+import {
+    classToClassFromExist,
+    ClassTransformOptions,
+    plainToClass
+} from 'class-transformer';
+import { ClassType } from 'class-transformer/ClassTransformer';
 import { validate } from 'class-validator';
 import Debug from 'debug';
 import {
@@ -9,26 +16,18 @@ import {
     MongoCountPreferences
 } from 'mongodb';
 import { DEBUG } from './constants';
+import { DataloaderService } from './dataloader/service';
 import { InjectMongoClient } from './decorators';
-import { getRepositoryToken, getDataloaderToken } from './helpers';
+import { getRepositoryToken } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
-import { MongoRepository } from './repository';
-import { ClassType } from 'class-transformer/ClassTransformer';
-import {
-    plainToClass,
-    ClassTransformOptions,
-    classToClassFromExist
-} from 'class-transformer';
+import { WithRelationshipInterface } from './relationship/decorators';
 import {
     getRelationshipMetadata,
     RelationshipMetadata
 } from './relationship/metadata';
-import { WithRelationshipInterface } from './relationship/decorators';
-import DataLoader from 'dataloader';
-import { DataloaderService } from './dataloader/service';
-import { NotFoundException } from '@nestjs/common';
+import { MongoRepository } from './repository';
 
 export class MongoManager {
     protected readonly repositories: Map<string, any> = new Map();
@@ -285,6 +284,26 @@ export class MongoManager {
         );
         if (dataloader) {
             dataloader.clear(item._id);
+        }
+        return result;
+    }
+
+    async deleteMany<Model extends EntityInterface>(
+        classType: ClassType<Model>,
+        query: any,
+        options: CommonOptions & { dataloader?: string } = {}
+    ) {
+        this.log('deleteMany %s %o', classType.name, query);
+        const items = await this.find(classType, query, options);
+        const result = await this.getCollection(classType).deleteMany(
+            query,
+            options
+        );
+        const dataloader = this.getDataloader<Model>(
+            options.dataloader || classType.name
+        );
+        if (dataloader && items.count) {
+            items.forEach(i => dataloader.clear(i._id));
         }
         return result;
     }

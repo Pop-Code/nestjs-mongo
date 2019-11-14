@@ -1,33 +1,30 @@
 import {
-    Module,
     DynamicModule,
-    OnModuleDestroy,
-    Inject,
     Global,
-    Optional,
-    Scope
+    Inject,
+    Module,
+    OnModuleDestroy,
+    Optional
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { MongoClient, ObjectId } from 'mongodb';
-import { MongoRepository } from './repository';
-import { MongoManager } from './manager';
-import { NAMED_CONNECTION_TOKEN, DEFAULT_CONNECTION_NAME } from './constants';
-import { MongoModuleOptions } from './interfaces/module.options';
-import { MongoModuleAsyncOptions } from './interfaces/async.options';
-import {
-    getRepositoryToken,
-    getConnectionToken,
-    getManagerToken,
-    getConfigToken,
-    getDataloaderToken
-} from './helpers';
 import { getFromContainer } from 'class-validator';
-import { IsValidRelationshipConstraint } from './relationship/constraint';
-import { IsUniqueConstraint } from './validation/unique/constraint';
-import Dataloader from 'dataloader';
-import { EntityInterface } from './interfaces/entity';
-import { DataloaderService } from './dataloader/service';
+import { MongoClient } from 'mongodb';
+import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from './constants';
 import { MongoDataloader } from './dataloader/data';
+import { DataloaderService } from './dataloader/service';
+import {
+    getConfigToken,
+    getConnectionToken,
+    getDataloaderToken,
+    getManagerToken,
+    getRepositoryToken
+} from './helpers';
+import { MongoModuleAsyncOptions } from './interfaces/async.options';
+import { MongoModuleOptions } from './interfaces/module.options';
+import { MongoManager } from './manager';
+import { IsValidRelationshipConstraint } from './relationship/constraint';
+import { MongoRepository } from './repository';
+import { IsUniqueConstraint } from './validation/unique/constraint';
 
 @Global()
 @Module({})
@@ -68,6 +65,7 @@ export class MongoCoreModule implements OnModuleDestroy {
                 const { uri, exceptionFactory, ...mongoOpts } = config;
                 const client = new MongoClient(uri, {
                     useNewUrlParser: true,
+                    useUnifiedTopology: true,
                     ...mongoOpts
                 });
                 return client.connect();

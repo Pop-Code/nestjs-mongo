@@ -1,5 +1,5 @@
 import { MongoManager } from './manager';
-import { Cursor } from 'mongodb';
+import { Cursor, ChangeStream } from 'mongodb';
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { ClassType } from 'class-transformer/ClassTransformer';
@@ -24,6 +24,10 @@ export class MongoRepository<Model extends EntityInterface> {
 
     save(entity: Model, ...args: any[]): Promise<Model> {
         return this.em.save(entity, ...args);
+    }
+
+    watch(pipes?: any[], options?: any): ChangeStream {
+        return this.em.getCollection(this.classType).watch(pipes, options);
     }
 
     async find(query?: any, ...args: any[]): Promise<Model[]> {
@@ -55,6 +59,10 @@ export class MongoRepository<Model extends EntityInterface> {
 
     deleteOne(query: any, ...args: any) {
         return this.em.deleteOne(this.classType, query, ...args);
+    }
+
+    deleteMany(query: any, ...args: any) {
+        return this.em.deleteMany(this.classType, query, ...args);
     }
 
     getRelationship<E extends EntityInterface>(

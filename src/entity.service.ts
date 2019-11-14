@@ -7,7 +7,14 @@ import { PaginatedResponse } from './classes/paginated.response';
 import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
 import { MongoRepository } from './repository';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ChangeStream } from 'mongodb';
+import { camelCase } from 'lodash';
+
+export type EventCallback<Model extends EntityInterface> = (
+    eventName: string,
+    eventType: 'create' | 'update' | 'delete',
+    entity: Model | ObjectId
+) => void;
 
 @Injectable()
 export abstract class EntityService<
@@ -106,4 +113,48 @@ export abstract class EntityService<
             throw new NotFoundException();
         }
     }
+
+    /**
+     * Subscribe to a a change stream. The method onChange will be called on the service to pub
+     */
+    subscribe(onData: EventCallback<Model>): ChangeStream {
+        return this.repository
+            .watch([], { updateLookup: 'fullDocument' })
+            .on('change', (change: any) => {
+                this._onData(change, onData);
+            });
+    }
+
+    private _onData = async (change: any, onData: EventCallback<Model>) => {
+        try {
+            const em = this.repository.getEm();
+            const classType = this.repository.getClassType();
+            const { operationType, fullDocument } = change;
+            let operation = operationType;
+            if (operationType === 'insert') operation = 'create';
+            if (['create', 'update', 'delete'].indexOf(operation) === -1) {
+                return;
+            }
+            const eventName = camelCase(
+                this.repository.getClassType().name + '_' + operation
+            );
+            this.log(
+                'Event:%s for %s:%s',
+                eventName,
+                classType.name,
+                change.documentKey._id
+            );
+            if (operation === 'delete') {
+                onData(eventName, operation, change.documentKey._id);
+            } else {
+                onData(
+                    eventName,
+                    operation,
+                    em.fromPlain(this.repository.getClassType(), fullDocument)
+                );
+            }
+        } catch (e) {
+            this.log('Entity listener error: %s', e.message);
+        }
+    };
 }

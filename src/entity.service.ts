@@ -124,10 +124,13 @@ export abstract class EntityService<
             const classType = this.repository.getClassType();
             const { operationType, fullDocument } = change;
             let operation = operationType;
+
             if (operationType === 'insert') operation = 'create';
+            if (operationType === 'replace') operation = 'update';
             if (['create', 'update', 'delete'].indexOf(operation) === -1) {
                 return;
             }
+
             const eventName = camelCase(`on_${operation}_${classType.name}`);
             this.log(
                 'Event:%s for %s:%s',

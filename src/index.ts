@@ -17,6 +17,7 @@ export * from './interfaces/execution.options';
 export * from './interfaces/feature.options';
 export * from './interfaces/module.options';
 export * from './interfaces/module.options.factory';
+export * from './interfaces/event';
 export * from './manager';
 export * from './module';
 export * from './relationship/constraint';

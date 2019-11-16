@@ -128,9 +128,7 @@ export abstract class EntityService<
             if (['create', 'update', 'delete'].indexOf(operation) === -1) {
                 return;
             }
-            const eventName = camelCase(
-                this.repository.getClassType().name + '_' + operation
-            );
+            const eventName = camelCase(`on_${operation}_${classType.name}`);
             this.log(
                 'Event:%s for %s:%s',
                 eventName,
@@ -143,7 +141,7 @@ export abstract class EntityService<
                 onData(
                     eventName,
                     operation,
-                    em.fromPlain(this.repository.getClassType(), fullDocument)
+                    em.fromPlain(classType, fullDocument)
                 );
             }
         } catch (e) {

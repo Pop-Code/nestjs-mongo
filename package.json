@@ -22,7 +22,7 @@
         "reflect-metadata": "^0.1.13"
     },
     "dependencies": {
-        "dataloader": "1.4.0",
+        "dataloader": "2.0.0",
         "debug": "4.1.1",
         "global": "4.4.0",
         "lodash": "4.17.15",

@@ -62,7 +62,7 @@
 					<a href="_dataloader_data_.mongodataloader.html">MongoDataloader</a>
 				</li>
 			</ul>
-			<h1>Class MongoDataloader&lt;M&gt;</h1>
+			<h1>Class MongoDataloader&lt;Model&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>M</h4>
+						<h4>Model</h4>
 					</li>
 				</ul>
 			</section>
@@ -81,7 +81,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span>
+						<span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">MongoDataloader</span>
@@ -129,7 +129,7 @@
 					<div class="tsd-signature tsd-kind-icon">Batch<wbr>Load<wbr>Fn&lt;K, V&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/dataloader/index.d.ts:75</li>
+							<li>Defined in node_modules/dataloader/index.d.ts:73</li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -146,17 +146,17 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>keys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>keys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ArrayLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>keys: <span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">[]</span></h5>
+												<h5>keys: <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ArrayLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 									</li>
 								</ul>
 							</li>
@@ -169,7 +169,7 @@
 					<div class="tsd-signature tsd-kind-icon">Cache<wbr>Map&lt;K, V&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/dataloader/index.d.ts:66</li>
+							<li>Defined in node_modules/dataloader/index.d.ts:64</li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -193,7 +193,7 @@
 									<li class="tsd-description">
 										<aside class="tsd-sources">
 											<ul>
-												<li>Defined in node_modules/dataloader/index.d.ts:70</li>
+												<li>Defined in node_modules/dataloader/index.d.ts:68</li>
 											</ul>
 										</aside>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
@@ -208,7 +208,7 @@
 									<li class="tsd-description">
 										<aside class="tsd-sources">
 											<ul>
-												<li>Defined in node_modules/dataloader/index.d.ts:69</li>
+												<li>Defined in node_modules/dataloader/index.d.ts:67</li>
 											</ul>
 										</aside>
 										<h4 class="tsd-parameters-title">Parameters</h4>
@@ -229,7 +229,7 @@
 									<li class="tsd-description">
 										<aside class="tsd-sources">
 											<ul>
-												<li>Defined in node_modules/dataloader/index.d.ts:67</li>
+												<li>Defined in node_modules/dataloader/index.d.ts:65</li>
 											</ul>
 										</aside>
 										<h4 class="tsd-parameters-title">Parameters</h4>
@@ -253,7 +253,7 @@
 									<li class="tsd-description">
 										<aside class="tsd-sources">
 											<ul>
-												<li>Defined in node_modules/dataloader/index.d.ts:68</li>
+												<li>Defined in node_modules/dataloader/index.d.ts:66</li>
 											</ul>
 										</aside>
 										<h4 class="tsd-parameters-title">Parameters</h4>
@@ -274,10 +274,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a name="options" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> Options</h3>
-					<div class="tsd-signature tsd-kind-icon">Options&lt;K, V&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">Options&lt;K, V, C&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/dataloader/index.d.ts:79</li>
+							<li>Defined in node_modules/dataloader/index.d.ts:78</li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -288,6 +288,9 @@
 						<li>
 							<h4>V</h4>
 						</li>
+						<li>
+							<h4>C</h4>
+						</li>
 					</ul>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
@@ -296,19 +299,59 @@
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> batch<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
-										<p>Default <code>true</code>. Set to <code>false</code> to disable batching,
-											instead immediately invoking <code>batchLoadFn</code> with a
-										single load key.</p>
+										<p>Default <code>true</code>. Set to <code>false</code> to disable batching, invoking
+											<code>batchLoadFn</code> with a single load key. This is equivalent to setting
+										<code>maxBatchSize</code> to <code>1</code>.</p>
 									</div>
 								</div>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> batch<wbr>Schedule<wbr>Fn<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Default see <a href="https://github.com/graphql/dataloader#batch-scheduling">https://github.com/graphql/dataloader#batch-scheduling</a>.
+											A function to schedule the later execution of a batch. The function is
+										expected to call the provided callback in the immediate future.</p>
+									</div>
+								</div>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-siganture">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-variable tsd-is-not-exported">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>callback: <span class="tsd-signature-type">function</span></h5>
+														<ul class="tsd-parameters">
+															<li class="tsd-parameter-siganture">
+																<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+																	<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+																</ul>
+																<ul class="tsd-descriptions">
+																	<li class="tsd-description">
+																		<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+																	</li>
+																</ul>
+															</li>
+														</ul>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
 							</li>
 							<li class="tsd-parameter">
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
-										<p>Default <code>true</code>. Set to <code>false</code> to disable memoization caching,
-											instead creating a new Promise and new key in the <code>batchLoadFn</code> for every
-										load of the same key.</p>
+										<p>Default <code>true</code>. Set to <code>false</code> to disable memoization caching, creating a
+											new Promise and new key in the <code>batchLoadFn</code> for every load of the same
+										key. This is equivalent to setting <code>cacheMap</code> to <code>null</code>.</p>
 									</div>
 								</div>
 							</li>
@@ -316,38 +359,35 @@
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache<wbr>Key<wbr>Fn<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
-										<p>A function to produce a cache key for a given load key.
-											Defaults to <code>key =&gt; key</code>. Useful to provide when JavaScript
-											objects are keys and two similarly shaped objects should
-										be considered equivalent.</p>
+										<p>Default <code>key =&gt; key</code>. Produces cache key for a given load key. Useful
+										when objects are keys and two objects should be considered equivalent.</p>
 									</div>
 								</div>
 								<ul class="tsd-parameters">
 									<li class="tsd-parameter-siganture">
 										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-variable tsd-is-not-exported">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">C</span></li>
 										</ul>
 										<ul class="tsd-descriptions">
 											<li class="tsd-description">
 												<h4 class="tsd-parameters-title">Parameters</h4>
 												<ul class="tsd-parameters">
 													<li>
-														<h5>key: <span class="tsd-signature-type">any</span></h5>
+														<h5>key: <span class="tsd-signature-type">K</span></h5>
 													</li>
 												</ul>
-												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">C</span></h4>
 											</li>
 										</ul>
 									</li>
 								</ul>
 							</li>
 							<li class="tsd-parameter">
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache<wbr>Map<span class="tsd-signature-symbol">?: </span><a href="_dataloader_data_.mongodataloader.html#cachemap" class="tsd-signature-type">CacheMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> cache<wbr>Map<span class="tsd-signature-symbol">?: </span><a href="_dataloader_data_.mongodataloader.html#cachemap" class="tsd-signature-type">CacheMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
-										<p>An instance of Map (or an object with a similar API) to
-											be used as the underlying cache for this loader.
-										Default <code>new Map()</code>.</p>
+										<p>Default <code>new Map()</code>. Instance of <code>Map</code> (or an object with a similar API)
+										to be used as cache. May be set to <code>null</code> to disable caching.</p>
 									</div>
 								</div>
 							</li>
@@ -355,8 +395,8 @@
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Batch<wbr>Size<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
 								<div class="tsd-comment tsd-typography">
 									<div class="lead">
-										<p>Default <code>Infinity</code>. Limits the number of items that get
-										passed in to the <code>batchLoadFn</code>.</p>
+										<p>Default <code>Infinity</code>. Limits the number of items that get passed in to the
+										<code>batchLoadFn</code>. May be set to <code>1</code> to disable batching.</p>
 									</div>
 								</div>
 							</li>
@@ -370,23 +410,23 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Dataloader<span class="tsd-signature-symbol">(</span>batchLoadFn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataLoader.BatchLoadFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">DataLoader.Options</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_dataloader_data_.mongodataloader.html" class="tsd-signature-type">MongoDataloader</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Dataloader<span class="tsd-signature-symbol">(</span>batchLoadFn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataLoader.BatchLoadFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">DataLoader.Options</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_dataloader_data_.mongodataloader.html" class="tsd-signature-type">MongoDataloader</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DataLoader.__constructor</p>
 								<ul>
-									<li>Defined in node_modules/dataloader/index.d.ts:20</li>
+									<li>Defined in node_modules/dataloader/index.d.ts:18</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>batchLoadFn: <span class="tsd-signature-type">DataLoader.BatchLoadFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>batchLoadFn: <span class="tsd-signature-type">DataLoader.BatchLoadFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">DataLoader.Options</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">DataLoader.Options</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_dataloader_data_.mongodataloader.html" class="tsd-signature-type">MongoDataloader</a></h4>
@@ -400,14 +440,14 @@
 					<a name="clear-1" class="tsd-anchor"></a>
 					<h3>clear</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DataLoader.clear</p>
 								<ul>
-									<li>Defined in node_modules/dataloader/index.d.ts:48</li>
+									<li>Defined in node_modules/dataloader/index.d.ts:46</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -422,7 +462,7 @@
 									<h5>key: <span class="tsd-signature-type">ObjectId</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -430,14 +470,14 @@
 					<a name="clearall" class="tsd-anchor"></a>
 					<h3>clear<wbr>All</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>All<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>All<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DataLoader.clearAll</p>
 								<ul>
-									<li>Defined in node_modules/dataloader/index.d.ts:55</li>
+									<li>Defined in node_modules/dataloader/index.d.ts:53</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -447,7 +487,7 @@
 									method chaining.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -455,14 +495,14 @@
 					<a name="load" class="tsd-anchor"></a>
 					<h3>load</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">load<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">load<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DataLoader.load</p>
 								<ul>
-									<li>Defined in node_modules/dataloader/index.d.ts:27</li>
+									<li>Defined in node_modules/dataloader/index.d.ts:25</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -476,7 +516,7 @@
 									<h5>key: <span class="tsd-signature-type">ObjectId</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -484,14 +524,14 @@
 					<a name="loadmany" class="tsd-anchor"></a>
 					<h3>load<wbr>Many</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">load<wbr>Many<span class="tsd-signature-symbol">(</span>keys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Many<span class="tsd-signature-symbol">(</span>keys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DataLoader.loadMany</p>
 								<ul>
-									<li>Defined in node_modules/dataloader/index.d.ts:42</li>
+									<li>Defined in node_modules/dataloader/index.d.ts:40</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -507,10 +547,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>keys: <span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>keys: <span class="tsd-signature-type">ArrayLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -518,14 +558,14 @@
 					<a name="prime" class="tsd-anchor"></a>
 					<h3>prime</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">prime<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">prime<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectId</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DataLoader.prime</p>
 								<ul>
-									<li>Defined in node_modules/dataloader/index.d.ts:61</li>
+									<li>Defined in node_modules/dataloader/index.d.ts:59</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -540,10 +580,10 @@
 									<h5>key: <span class="tsd-signature-type">ObjectId</span></h5>
 								</li>
 								<li>
-									<h5>value: <span class="tsd-signature-type">M</span></h5>
+									<h5>value: <span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DataLoader</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>

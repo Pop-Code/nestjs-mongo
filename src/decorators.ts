@@ -1,9 +1,8 @@
-import { Inject } from '@nestjs/common';
+import { Inject, applyDecorators } from '@nestjs/common';
 import { Transform, TransformationType, Type } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { Allow } from 'class-validator';
-import Debug from 'debug';
-import { DEBUG, DEFAULT_CONNECTION_NAME } from './constants';
+import { DEFAULT_CONNECTION_NAME } from './constants';
 import {
     getConnectionToken,
     getManagerToken,
@@ -11,24 +10,35 @@ import {
     ObjectId
 } from './helpers';
 
-export const InjectMongoClient = (
+export function InjectMongoClient(
     connectionName: string = DEFAULT_CONNECTION_NAME
-) => Inject(getConnectionToken(connectionName));
+) {
+    return Inject(getConnectionToken(connectionName));
+}
 
-export const InjectManager = (
+export function InjectManager(
     connectionName: string = DEFAULT_CONNECTION_NAME
-) => Inject(getManagerToken(connectionName));
+) {
+    return Inject(getManagerToken(connectionName));
+}
 
-export const InjectRepository = (
+export function InjectRepository(
     entity: ClassType<any>,
     connectionName: string = DEFAULT_CONNECTION_NAME
-) => Inject(getRepositoryToken(entity.name, connectionName));
+) {
+    return Inject(getRepositoryToken(entity.name, connectionName));
+}
 
 const objectIdFromString = (value: any) =>
     ObjectId.isValid(value) ? new ObjectId(value) : undefined;
+
 const objectIdToString = (value: any) => {
-    if (value instanceof ObjectId) return value.toHexString();
-    if (typeof value === 'string') return value;
+    if (value instanceof ObjectId) {
+        return value.toHexString();
+    }
+    if (typeof value === 'string') {
+        return value;
+    }
 };
 
 export function ObjectIdTransformer(
@@ -37,10 +47,8 @@ export function ObjectIdTransformer(
     type: TransformationType,
     isArray?: boolean
 ) {
-    const debug = Debug(DEBUG + ':ObjectIdTransformer');
     let newValue: any;
     if (!value) {
-        debug('No value to transform, skipping');
         return;
     }
     if (type === TransformationType.CLASS_TO_CLASS) {
@@ -55,32 +63,20 @@ export function ObjectIdTransformer(
             : objectIdToString(value);
     }
 
-    debug(
-        'After Transform (%s)%s => (%s)%s for %s',
-        typeof value,
-        value,
-        typeof newValue,
-        newValue,
-        type
-    );
-
     return newValue;
 }
 
-export const TypeObjectId = (isArray?: boolean) => {
+export function TypeObjectId(isArray?: boolean) {
     const typefn = Type(() => ObjectId);
     const trfn = Transform(
         (value: any, object: any, type: TransformationType) =>
             ObjectIdTransformer(value, object, type, isArray)
     );
     const allowfn = Allow();
-    return (target: any, property: any) => {
-        typefn(target, property);
-        trfn(target, property);
-        allowfn(target, property);
-    };
-};
+    return applyDecorators(typefn, trfn, allowfn);
+}
 
-export const Collection = (name: string) => (target: any) => {
-    Reflect.defineMetadata('mongo:collectionName', name, target);
-};
+export function Collection(name: string) {
+    return (target: any) =>
+        Reflect.defineMetadata('mongo:collectionName', name, target);
+}

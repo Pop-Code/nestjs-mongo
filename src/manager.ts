@@ -193,7 +193,7 @@ export class MongoManager {
         options: { dataloader?: string } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
-        const cursor: Cursor<Object> = await this.getCollection(classType).find(
+        const cursor: Cursor<object> = await this.getCollection(classType).find(
             query
         );
         const dataloader = this.getDataloader(
@@ -228,7 +228,7 @@ export class MongoManager {
             entity = await dataloader.load(query._id);
         }
         if (!entity) {
-            const obj = await this.getCollection(classType).findOne<Object>(
+            const obj = await this.getCollection(classType).findOne<object>(
                 query,
                 options
             );
@@ -375,7 +375,7 @@ export class MongoManager {
             cachedMetadata?: RelationshipMetadata<Relationship, O>;
             dataloader?: string;
         } = {}
-    ): Promise<Relationship[]> {
+    ): Promise<Array<Relationship | Error>> {
         this.log(
             'getRelationships %s on %s',
             property,
@@ -415,7 +415,7 @@ export class MongoManager {
 
     fromPlain<Model extends EntityInterface>(
         classType: ClassType<Model>,
-        data: Object,
+        data: object,
         options?: ClassTransformOptions
     ): Model {
         this.log('transform fromPlain %s', classType.name);

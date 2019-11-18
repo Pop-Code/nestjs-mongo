@@ -160,7 +160,7 @@ export class MongoCoreModule implements OnModuleDestroy {
             });
 
             const repoToken = getRepositoryToken(model.name, connectionName);
-            const RepoClass =
+            const repoClass =
                 typeof m === 'function' ? MongoRepository : m.repository;
             providers.push({
                 provide: repoToken,
@@ -169,7 +169,7 @@ export class MongoCoreModule implements OnModuleDestroy {
                     em: MongoManager,
                     loader: MongoDataloader<typeof model>
                 ) => {
-                    const repo = new RepoClass(em, model, loader);
+                    const repo = new repoClass(em, model, loader);
                     em.addRepository(repoToken, repo);
                     return repo;
                 }

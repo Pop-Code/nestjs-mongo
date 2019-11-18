@@ -1,4 +1,8 @@
 import BaseDataloader from 'dataloader';
 import { ObjectId } from 'mongodb';
 
-export class MongoDataloader<M> extends BaseDataloader<ObjectId, M> {}
+export class MongoDataloader<Model> extends BaseDataloader<
+    ObjectId,
+    Model,
+    string
+> {}

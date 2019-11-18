@@ -2,7 +2,7 @@ import {
     ValidatorConstraint,
     ValidatorConstraintInterface
 } from 'class-validator';
-import { first, get } from 'lodash';
+import { first } from 'lodash';
 import { ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
 import {

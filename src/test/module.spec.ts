@@ -248,7 +248,7 @@ describe('MongoModule', () => {
             // entity 1 should come from cache and equals entity
             expect(entity).toEqual(entity2);
 
-            //remove item from the cache
+            // remove item from the cache
             dataloader.clear(entity._id);
 
             // call the database should get the real item

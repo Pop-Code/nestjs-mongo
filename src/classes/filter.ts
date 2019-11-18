@@ -31,7 +31,7 @@ export class Filter {
     @Matches(/^(.+):(asc|desc)$/, { each: true })
     orderBy?: string[] = ['_id:asc'];
 
-    getSort(): [string, 1 | -1][] {
+    getSort(): Array<[string, 1 | -1]> {
         return this.orderBy.reduce((sorts: any[], orderString) => {
             const order = orderString.split(':');
             const property = order[0];

@@ -16,14 +16,14 @@ export interface RelationshipMetadata<
     isArray?: boolean;
 }
 
-export const setRelationshipMetadata = <
+export function setRelationshipMetadata<
     Relationship extends EntityInterface = any,
     Obj = any
 >(
     target: any,
     property: string | symbol,
     metadata: RelationshipMetadata<Relationship, Obj>
-) => {
+) {
     if (!metadata.type && !metadata.typeFn) {
         throw new Error(
             'type or typeFn are required in setRelationshipMetadata'
@@ -35,15 +35,12 @@ export const setRelationshipMetadata = <
         target,
         property
     );
-};
+}
 
-export const getRelationshipMetadata = <
+export function getRelationshipMetadata<
     Relationship extends EntityInterface = any,
     Obj = any
->(
-    target: Obj,
-    property: string | symbol
-) => {
+>(target: Obj, property: string | symbol) {
     const metadata: RelationshipMetadata<
         Relationship,
         Obj
@@ -55,4 +52,4 @@ export const getRelationshipMetadata = <
     }
 
     return metadata;
-};
+}

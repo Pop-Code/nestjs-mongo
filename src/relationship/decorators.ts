@@ -49,43 +49,39 @@ export function IsValidRelationship(
     };
 }
 
-export const Relationship = <
-    Relationship extends EntityInterface = any,
-    Model = any
->(
-    options: RelationshipMetadata<Relationship, Model> | ClassType<Relationship>
-) => {
+export function Relationship<R extends EntityInterface = any, Model = any>(
+    options: RelationshipMetadata<R, Model> | ClassType<R>
+) {
     const debug = Debug(DEBUG + ':Relationship');
-
     return (target: Model, property: string) => {
         debug('Register relationship metadata %o', options);
         if (isClass(options)) {
-            setRelationshipMetadata<Relationship, Model>(target, property, {
-                type: options as ClassType<Relationship>,
+            setRelationshipMetadata<R, Model>(target, property, {
+                type: options as ClassType<R>,
                 isArray: false
             });
         } else {
-            setRelationshipMetadata<Relationship, Model>(
+            setRelationshipMetadata<R, Model>(
                 target,
                 property,
-                options as RelationshipMetadata<Relationship, Model>
+                options as RelationshipMetadata<R, Model>
             );
         }
     };
-};
+}
 
 export interface WithRelationshipInterface {
     getCachedRelationship<T = any>(prop: string): T;
     setCachedRelationship(prop: string, value: any): WithRelationshipInterface;
 }
 
-function getCachedRelationship<Relationship = any>(prop: string): Relationship {
+export function getCachedRelationship<R = any>(prop: string): R {
     if (!this.__cachedRelationships) {
         return;
     }
     return this.__cachedRelationships.get(prop);
 }
-function setCachedRelationship(prop: string, value: any) {
+export function setCachedRelationship(prop: string, value: any) {
     if (!this.__cachedRelationships) {
         Object.defineProperty(this, '__cachedRelationships', {
             writable: true,
@@ -97,9 +93,10 @@ function setCachedRelationship(prop: string, value: any) {
     this.__cachedRelationships.set(prop, value);
     return this;
 }
-export const WithRelationship = () => {
+
+export function WithRelationship() {
     return (target: any) => {
         target.prototype.getCachedRelationship = getCachedRelationship;
         target.prototype.setCachedRelationship = setCachedRelationship;
     };
-};
+}

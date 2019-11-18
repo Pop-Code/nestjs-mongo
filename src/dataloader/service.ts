@@ -37,7 +37,7 @@ export class DataloaderService {
         return new MongoDataloader<Model>(
             async keys => {
                 log('find', keys);
-                const jobs: Promise<Model | undefined>[] = [];
+                const jobs: Array<Promise<Model | Error | undefined>> = [];
                 for (const key of keys) {
                     jobs.push(
                         em.findOne(
@@ -47,7 +47,7 @@ export class DataloaderService {
                         )
                     );
                 }
-                return await Promise.all(jobs);
+                return await Promise.all(jobs.map(j => j.catch(e => e)));
             },
             {
                 batch: true,

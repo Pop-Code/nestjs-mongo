@@ -49,7 +49,7 @@ export abstract class EntityService<
     ): Promise<Model> {
         const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
-        if (save) return this.repository.save(item, ...rest);
+        if (save) { return this.repository.save(item, ...rest); }
         return item;
     }
 
@@ -93,7 +93,7 @@ export abstract class EntityService<
         const entity = await this.get(itemId);
         const item = this.repository.merge(entity, data);
         this.addHistory(item, 'Item updated');
-        if (save) return this.repository.save(item, ...rest);
+        if (save) { return this.repository.save(item, ...rest); }
         return item;
     }
 
@@ -125,8 +125,8 @@ export abstract class EntityService<
             const { operationType, fullDocument } = change;
             let operation = operationType;
 
-            if (operationType === 'insert') operation = 'create';
-            if (operationType === 'replace') operation = 'update';
+            if (operationType === 'insert') { operation = 'create'; }
+            if (operationType === 'replace') { operation = 'update'; }
             if (['create', 'update', 'delete'].indexOf(operation) === -1) {
                 return;
             }
@@ -150,5 +150,5 @@ export abstract class EntityService<
         } catch (e) {
             this.log('Entity listener error: %s', e.message);
         }
-    };
+    }
 }

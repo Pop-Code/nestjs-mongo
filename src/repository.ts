@@ -30,7 +30,7 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em.getCollection(this.classType).watch(pipes, options);
     }
 
-    async find(query?: any, ...args: any[]): Promise<Model[]> {
+    async find(query?: any, ...args: any[]): Promise<Array<Model | Error>> {
         if (this.dataloader && this.em.isIdsQuery(query)) {
             return this.dataloader.loadMany(query._id.$in);
         }
@@ -53,7 +53,10 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em.findOne(this.classType, query, ...args);
     }
 
-    async findById(ids?: ObjectId[], ...args: any[]): Promise<Model[]> {
+    async findById(
+        ids?: ObjectId[],
+        ...args: any[]
+    ): Promise<Array<Model | Error>> {
         return await this.find({ _id: { $in: ids } }, ...args);
     }
 
@@ -72,7 +75,7 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em.getRelationship<E>(object, property);
     }
 
-    fromPlain(data: Object, options?: ClassTransformOptions): Model {
+    fromPlain(data: object, options?: ClassTransformOptions): Model {
         return this.em.fromPlain<Model>(this.classType, data, options);
     }
 

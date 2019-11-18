@@ -1,13 +1,15 @@
 import { classToPlain } from 'class-transformer';
 
 export interface ISerializable {
-    serialize(): Object;
+    serialize(): object;
 }
 
 export function serialize() {
     return classToPlain(this);
 }
 
-export const Serializable = () => (target: any) => {
-    target.prototype.serialize = serialize;
-};
+export function Serializable() {
+    return (target: any) => {
+        target.prototype.serialize = serialize;
+    };
+}

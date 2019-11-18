@@ -1,6 +1,6 @@
 {
     "name": "nestjs-mongo",
-    "version": "0.8.41",
+    "version": "0.8.5",
     "description": "A NestJS module that provide a simple mongodb orm like",
     "keywords": [
         "nestjs",
@@ -15,43 +15,45 @@
     "author": "Rmannn <alex.hermann@pop-code.com>",
     "license": "MIT",
     "peerDependencies": {
-        "@nestjs/common": "^6",
-        "@nestjs/core": "^6",
+        "@nestjs/common": "^6.0.0",
+        "@nestjs/core": "^6.0.0",
+        "class-validator": "^0.11.0",
         "class-transformer": "^0.2.3",
-        "class-validator": "^0.10.2",
         "reflect-metadata": "^0.1.13"
     },
     "dependencies": {
-        "dataloader": "1.4.0",
-        "debug": "4.1.1",
+        "dataloader": "2.0.0",
         "global": "4.4.0",
         "lodash": "4.17.15",
-        "mongodb": "3.3.4"
+        "mongodb": "3.3.4",
+        "class-transformer": "^0.2.3",
+        "debug": "4.1.1"
     },
     "devDependencies": {
-        "@nestjs/common": "6.9.0",
-        "@nestjs/core": "6.9.0",
-        "@nestjs/testing": "6.9.0",
+        "@nestjs/common": "6.10.1",
+        "@nestjs/core": "6.10.1",
+        "@nestjs/testing": "6.10.1",
+        "class-validator": "0.11.0",
         "@types/debug": "4.1.5",
         "@types/jest": "24.0.23",
-        "@types/lodash": "4.14.147",
+        "@types/lodash": "4.14.148",
         "@types/mongodb": "3.3.10",
-        "class-transformer": "0.2.3",
-        "class-validator": "0.11.0",
         "jest": "24.9.0",
         "prettier": "1.19.1",
         "reflect-metadata": "0.1.13",
         "rxjs": "6.5.3",
         "ts-jest": "24.1.0",
-        "ts-node": "8.5.0",
+        "ts-node": "8.5.2",
         "tsconfig-paths": "3.9.0",
         "typedoc": "0.15.2",
-        "typescript": "3.7.2"
+        "typescript": "3.7.2",
+        "tslint": "5.20.1"
     },
     "scripts": {
         "build": "rm -Rf ./lib && tsc",
         "doc": "rm -Rf ./docs && typedoc ./src && touch ./docs/.nojekyll",
         "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+        "lint": "yarn run tslint -c tslint.json -t verbose 'src/**/*.{ts,js}'",
         "test:ci": "jest --runInBand",
         "test": "jest",
         "test:watch": "jest --watch",

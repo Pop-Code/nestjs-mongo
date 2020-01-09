@@ -413,6 +413,36 @@ export class MongoManager {
         return relationships;
     }
 
+    async getInversedRelationships<
+        P extends EntityInterface = any,
+        C extends EntityInterface = any
+    >(parent: P, childType: ClassType<C>, property: string) {
+        let relationMetadata: RelationshipMetadata<P, C>;
+        if (!relationMetadata) {
+            relationMetadata = getRelationshipMetadata<P, C>(
+                new childType(), // fix typing
+                property
+            );
+            if (!relationMetadata) {
+                throw new Error(
+                    `The property ${property} metadata @Relationship must be set to call getInversedRelationships of ${parent.constructor.name}`
+                );
+            }
+        }
+
+        if (!relationMetadata.inversedBy) {
+            throw new Error(`Can not get inversed metadata`);
+        }
+
+        const repository = this.getRepository(childType);
+        // todo set metadata for inversed side insted of using implicit _id ? ?
+        const children = await repository.find({
+            [property]: parent._id
+        });
+
+        return children;
+    }
+
     fromPlain<Model extends EntityInterface>(
         classType: ClassType<Model>,
         data: object,

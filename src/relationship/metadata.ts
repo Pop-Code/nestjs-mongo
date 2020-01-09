@@ -14,6 +14,7 @@ export interface RelationshipMetadata<
     type?: ClassType<Relationship>;
     typeFn?: RelationshipTypeDescriptor<Relationship, Obj>;
     isArray?: boolean;
+    inversedBy?: string;
 }
 
 export function setRelationshipMetadata<
@@ -29,6 +30,7 @@ export function setRelationshipMetadata<
             'type or typeFn are required in setRelationshipMetadata'
         );
     }
+
     Reflect.defineMetadata(
         RELATIONSHIP_METADATA_NAME,
         metadata,
@@ -46,7 +48,6 @@ export function getRelationshipMetadata<
         Obj
     > = Reflect.getMetadata(RELATIONSHIP_METADATA_NAME, target, property);
 
-    // determine the final metadata type here
     if (metadata && metadata.typeFn instanceof Function) {
         metadata.type = metadata.typeFn(target);
     }

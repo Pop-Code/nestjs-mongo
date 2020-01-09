@@ -40,7 +40,7 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
         const type: any = object.constructor;
         const count = await this.em.count(type, query);
         if (count > 0) {
-            this.message = `A ${
+            this.message = `An item ${
                 args.object.constructor.name
             } with similar values already exists (${Object.keys(query).join(
                 ', '

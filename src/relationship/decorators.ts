@@ -61,11 +61,8 @@ export function Relationship<R extends EntityInterface = any, Model = any>(
                 isArray: false
             });
         } else {
-            setRelationshipMetadata<R, Model>(
-                target,
-                property,
-                options as RelationshipMetadata<R, Model>
-            );
+            const opts = options as RelationshipMetadata<R, Model>;
+            setRelationshipMetadata<R, Model>(target, property, opts);
         }
     };
 }

@@ -3,7 +3,7 @@ import Debug from 'debug';
 import { Filter } from './classes/filter';
 import { HistoryActions } from './classes/history';
 import { HistoryAction } from './classes/history.action';
-import { PaginatedResponse } from './classes/paginated.response';
+import { PaginatedData } from './classes/paginated';
 import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
 import { MongoRepository } from './repository';
@@ -49,7 +49,9 @@ export abstract class EntityService<
     ): Promise<Model> {
         const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
-        if (save) { return this.repository.save(item, ...rest); }
+        if (save) {
+            return this.repository.save(item, ...rest);
+        }
         return item;
     }
 
@@ -65,7 +67,7 @@ export abstract class EntityService<
         filter: Filter,
         responseType: any,
         ...rest: any[]
-    ): Promise<PaginatedResponse> {
+    ): Promise<PaginatedData<Model>> {
         let items = (await this.repository.findPaginated(filter.toQuery()))
             .skip(filter.skip)
             .limit(filter.limit);
@@ -93,7 +95,9 @@ export abstract class EntityService<
         const entity = await this.get(itemId);
         const item = this.repository.merge(entity, data);
         this.addHistory(item, 'Item updated');
-        if (save) { return this.repository.save(item, ...rest); }
+        if (save) {
+            return this.repository.save(item, ...rest);
+        }
         return item;
     }
 
@@ -125,8 +129,12 @@ export abstract class EntityService<
             const { operationType, fullDocument } = change;
             let operation = operationType;
 
-            if (operationType === 'insert') { operation = 'create'; }
-            if (operationType === 'replace') { operation = 'update'; }
+            if (operationType === 'insert') {
+                operation = 'create';
+            }
+            if (operationType === 'replace') {
+                operation = 'update';
+            }
             if (['create', 'update', 'delete'].indexOf(operation) === -1) {
                 return;
             }

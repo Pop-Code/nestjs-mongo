@@ -29,7 +29,7 @@ export class EntityChildTest extends Entity {
     foo: string;
 
     @TypeObjectId()
-    @Relationship(EntityTest)
+    @Relationship({ type: EntityTest, inversedBy: 'children' })
     @IsValidRelationship()
     @IsDefined()
     parentId: ObjectId;

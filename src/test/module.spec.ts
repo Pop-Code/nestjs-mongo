@@ -187,6 +187,28 @@ describe('MongoModule', () => {
             expect(childOBj.entities[1]).toEqual(entity2._id);
         });
 
+        it('should get an inverted relationship', async () => {
+            const manager = mod.get<MongoManager>(getManagerToken());
+
+            const entity = new EntityTest();
+            entity.foo = 'bar';
+            entity.bar = 'foo';
+            await manager.save<EntityTest>(entity);
+
+            const child = new EntityChildTest();
+            child.foo = 'childInversed';
+            child.parentId = entity._id;
+            await manager.save(child);
+
+            const children = await manager.getInversedRelationships(
+                entity,
+                EntityChildTest,
+                'parentId'
+            );
+            expect(children).toHaveLength(1);
+            expect((children[0] as EntityChildTest)._id).toEqual(child._id);
+        });
+
         it('should serialize an entity', async () => {
             const manager = mod.get<MongoManager>(getManagerToken());
 

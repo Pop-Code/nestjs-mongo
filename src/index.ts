@@ -2,7 +2,7 @@ export { Cursor } from 'mongodb';
 export * from './classes/filter';
 export * from './classes/history';
 export * from './classes/history.action';
-export * from './classes/paginated.response';
+export * from './classes/paginated';
 export * from './constants';
 export * from './dataloader/data';
 export * from './dataloader/service';

@@ -46,7 +46,7 @@
         "tsconfig-paths": "3.9.0",
         "typedoc": "0.15.2",
         "typescript": "3.7.2",
-        "tslint": "5.20.1"
+        "tslint": "6.1.0"
     },
     "scripts": {
         "build": "rm -Rf ./lib && tsc",

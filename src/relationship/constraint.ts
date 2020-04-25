@@ -1,20 +1,13 @@
-import {
-    ValidatorConstraint,
-    ValidatorConstraintInterface
-} from 'class-validator';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { first } from 'lodash';
 
 import { ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
-import {
-    IsValidRelationshipValidationArguments,
-    WithRelationshipTest
-} from './decorators';
+import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
 import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
-export class IsValidRelationshipConstraint
-    implements ValidatorConstraintInterface {
+export class IsValidRelationshipConstraint implements ValidatorConstraintInterface {
     private em: MongoManager;
 
     private message: string;

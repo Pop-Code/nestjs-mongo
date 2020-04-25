@@ -17,3 +17,4 @@ tslint.json
 *.tgz
 .eslintrc.js
 .github/
+dist/test/

@@ -5,4 +5,6 @@ export class MongoDataloader<Model> extends BaseDataloader<
     ObjectId,
     Model,
     string
-> {}
+> {
+    uuid: string;
+}

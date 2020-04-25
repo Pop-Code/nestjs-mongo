@@ -1,6 +1,8 @@
 docs/
 src/
+test/
 .prettierrc
+.pretiierignore
 .gitignore
 tsconfig.json
 typedoc.js
@@ -13,3 +15,5 @@ renovate.json
 .vscode
 tslint.json
 *.tgz
+.eslintrc.js
+.github/

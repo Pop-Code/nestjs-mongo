@@ -1,17 +1,16 @@
-import { MongoManager } from './manager';
-import { Cursor, ChangeStream } from 'mongodb';
+import { ClassTransformOptions } from 'class-transformer';
+import { ClassType } from 'class-transformer/ClassTransformer';
+import { ChangeStream, Cursor } from 'mongodb';
+
+import { MongoDataloader } from './dataloader/data';
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
-import { ClassType } from 'class-transformer/ClassTransformer';
-import { ClassTransformOptions } from 'class-transformer';
-import { get } from 'lodash';
-import { MongoDataloader } from './dataloader/data';
+import { MongoManager } from './manager';
 
 export class MongoRepository<Model extends EntityInterface> {
     constructor(
         protected readonly em: MongoManager,
-        protected readonly classType: ClassType<Model>,
-        protected readonly dataloader?: MongoDataloader<Model>
+        protected readonly classType: ClassType<Model>
     ) {}
 
     getClassType() {
@@ -30,11 +29,17 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em.getCollection(this.classType).watch(pipes, options);
     }
 
-    async find(query?: any, ...args: any[]): Promise<Array<Model | Error>> {
-        if (this.dataloader && this.em.isIdsQuery(query)) {
-            return this.dataloader.loadMany(query._id.$in);
+    async find(
+        query?: any,
+        options: { dataloader?: string } = {}
+    ): Promise<Array<Model | Error>> {
+        const dataloader = this.em.getDataloader<Model>(
+            options.dataloader || this.classType.name
+        );
+        if (dataloader && this.em.isIdsQuery(query)) {
+            return dataloader.loadMany(query._id.$in);
         }
-        return (await this.em.find(this.classType, query, ...args)).toArray();
+        return (await this.em.find(this.classType, query, options)).toArray();
     }
 
     async findPaginated(query?: any, ...args: any[]): Promise<Cursor<Model>> {

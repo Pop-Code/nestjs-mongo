@@ -1,23 +1,21 @@
 import {
-    PipeTransform,
-    Injectable,
     ArgumentMetadata,
-    BadRequestException
+    BadRequestException,
+    Injectable,
+    PipeTransform
 } from '@nestjs/common';
-import { MongoManager } from '../../manager';
-import { Validator } from 'class-validator';
-import { ObjectId } from '../../helpers';
+import { isMongoId } from 'class-validator';
+
 import { InjectManager } from '../../decorators';
+import { ObjectId } from '../../helpers';
+import { MongoManager } from '../../manager';
 
 @Injectable()
 export class RelationshipPipe implements PipeTransform {
-    protected validator: Validator;
-    constructor(@InjectManager() protected readonly em: MongoManager) {
-        this.validator = new Validator();
-    }
+    constructor(@InjectManager() protected readonly em: MongoManager) {}
 
     async transform(value: any, metadata: ArgumentMetadata) {
-        if (!this.validator.isMongoId(value)) {
+        if (!isMongoId(value)) {
             throw new BadRequestException(`The ${metadata.data} is malformed`);
         }
         return await this.em.findOne(metadata.metatype as any, {

@@ -4,11 +4,13 @@ import {
     Inject,
     Module,
     OnModuleDestroy,
+    OnModuleInit,
     Optional
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { getFromContainer } from 'class-validator';
 import { MongoClient } from 'mongodb';
+
 import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from './constants';
 import { MongoDataloader } from './dataloader/data';
 import { DataloaderService } from './dataloader/service';
@@ -73,7 +75,6 @@ export class MongoCoreModule implements OnModuleDestroy {
             inject: [configToken]
         };
 
-        // the mongo client provider
         const dataloaderServiceProvider = {
             provide: DataloaderService,
             useClass: DataloaderService
@@ -140,37 +141,20 @@ export class MongoCoreModule implements OnModuleDestroy {
         for (const m of models) {
             const managerToken = getManagerToken(connectionName);
             const model = typeof m === 'function' ? m : m.model;
-            providers.push({
-                provide: model,
-                useClass: model
-            });
-            const loaderToken = getDataloaderToken(model.name, connectionName);
-            providers.push({
-                provide: loaderToken,
-                inject: [managerToken],
-                useFactory: (em: MongoManager) => {
-                    const dataloaderService = em.getDataloaderService();
-                    const loader = dataloaderService.createAndRegister(
-                        model.name,
-                        model,
-                        em
-                    );
-                    return loader;
-                }
-            });
 
             const repoToken = getRepositoryToken(model.name, connectionName);
             const repoClass =
                 typeof m === 'function' ? MongoRepository : m.repository;
             providers.push({
                 provide: repoToken,
-                inject: [managerToken, loaderToken],
-                useFactory: (
-                    em: MongoManager,
-                    loader: MongoDataloader<typeof model>
-                ) => {
-                    const repo = new repoClass(em, model, loader);
-                    em.addRepository(repoToken, repo);
+                inject: [managerToken],
+                useFactory: async (em: MongoManager) => {
+                    // register model on manager
+                    em.registerModel(model.name, model);
+
+                    // register repository
+                    const repo = new repoClass(em, model);
+                    em.registerRepository(repoToken, repo);
                     return repo;
                 }
             });

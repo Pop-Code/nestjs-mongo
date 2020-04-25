@@ -7,6 +7,7 @@ import {
     Matches,
     Max
 } from 'class-validator';
+
 import { ISerializable, Serializable } from '../serializer';
 
 export interface Filter extends ISerializable {}
@@ -16,16 +17,16 @@ export class Filter {
     @IsInt()
     @IsOptional()
     @Type(() => Number)
-    skip?: number = 0;
+    skip = 0;
 
     @IsPositive()
     @IsOptional()
     @IsInt()
     @Max(500)
     @Type(() => Number)
-    limit: number = 50;
+    limit = 50;
 
-    @Transform(v => (typeof v === 'string' ? v.split(',') : v))
+    @Transform((v) => (typeof v === 'string' ? v.split(',') : v))
     @IsOptional()
     @IsArray()
     @Matches(/^(.+):(asc|desc)$/, { each: true })
@@ -43,7 +44,7 @@ export class Filter {
 
     getSortForAggregation(): { [property: string]: 1 | -1 } {
         const sorts = {};
-        this.orderBy.forEach(sort => {
+        this.orderBy.forEach((sort) => {
             const order = sort.split(':');
             const property = order[0];
             const direction = order[1] === 'asc' ? 1 : -1;

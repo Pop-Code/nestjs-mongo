@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import Debug from 'debug';
+import { camelCase } from 'lodash';
+import { ChangeStream, ObjectId } from 'mongodb';
+
 import { Filter } from './classes/filter';
 import { HistoryActions } from './classes/history';
 import { HistoryAction } from './classes/history.action';
 import { PaginatedData } from './classes/paginated';
 import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
-import { MongoRepository } from './repository';
-import { ObjectId, ChangeStream } from 'mongodb';
-import { camelCase } from 'lodash';
 import { EventCallback } from './interfaces/event';
+import { MongoRepository } from './repository';
 
 @Injectable()
 export abstract class EntityService<
@@ -42,11 +43,7 @@ export abstract class EntityService<
         return this.repository;
     }
 
-    async create(
-        data: any,
-        save: boolean = false,
-        ...rest: any[]
-    ): Promise<Model> {
+    async create(data: any, save = false, ...rest: any[]): Promise<Model> {
         const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
         if (save) {
@@ -89,7 +86,7 @@ export abstract class EntityService<
     async update(
         itemId: ObjectId,
         data: any,
-        save: boolean = false,
+        save = false,
         ...rest: any[]
     ): Promise<Model> {
         const entity = await this.get(itemId);
@@ -158,5 +155,5 @@ export abstract class EntityService<
         } catch (e) {
             this.log('Entity listener error: %s', e.message);
         }
-    }
+    };
 }

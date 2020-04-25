@@ -1,25 +1,29 @@
+import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoModule, DEFAULT_CONNECTION_NAME } from '..';
 import { MongoClient } from 'mongodb';
-import { MongoDbModuleTest } from './module';
-import { MongoRepository } from '../repository';
-import { MongoCoreModule } from '../module.core';
+import request from 'supertest';
+
+import { DEFAULT_CONNECTION_NAME, MongoModule } from '..';
+import { DataloaderService } from '../dataloader/service';
 import {
     getConnectionToken,
     getManagerToken,
-    ObjectId,
-    getRepositoryToken
+    getRepositoryToken,
+    ObjectId
 } from '../helpers';
 import { MongoManager } from '../manager';
-import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
-import { BadRequestException } from '@nestjs/common';
+import { MongoCoreModule } from '../module.core';
+import { MongoRepository } from '../repository';
+import { MongoDbModuleTest } from './module';
 import { EntityChildTest } from './module/child';
+import { TestController } from './module/controller';
+import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
-import { DataloaderService } from '../dataloader/service';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
+let app: INestApplication;
 
 beforeAll(async () => {
     mod = await Test.createTestingModule({
@@ -27,258 +31,274 @@ beforeAll(async () => {
             MongoModule.forRootAsync({
                 useFactory: () => ({
                     uri: DBTEST,
-                    exceptionFactory: errors => new BadRequestException(errors)
+                    exceptionFactory: (errors) =>
+                        new BadRequestException(errors)
                 })
             }),
             MongoDbModuleTest
         ]
     }).compile();
+    app = mod.createNestApplication();
+    await app.init();
 });
 
-describe('MongoModule', () => {
-    describe('forRootAsync', () => {
-        it('should get the default connection', () => {
-            const mongoModule = mod.get<MongoModule>(MongoModule);
-            expect(mongoModule).toBeDefined();
-            const core = mod.get<MongoCoreModule>(MongoCoreModule);
-            const namedConnectionToken = getConnectionToken(
-                DEFAULT_CONNECTION_NAME
-            );
-            expect(core.namedConnectionToken).toBe(namedConnectionToken);
+describe('forRootAsync', () => {
+    it('should get the default connection', () => {
+        const mongoModule = mod.get<MongoModule>(MongoModule);
+        expect(mongoModule).toBeDefined();
+        const core = mod.get<MongoCoreModule>(MongoCoreModule);
+        const namedConnectionToken = getConnectionToken(
+            DEFAULT_CONNECTION_NAME
+        );
+        expect(core.namedConnectionToken).toBe(namedConnectionToken);
 
-            const client = mod.get<MongoClient>(namedConnectionToken);
-            expect(client).toBeDefined();
-            expect(client).toBeInstanceOf(MongoClient);
-        });
+        const client = mod.get<MongoClient>(namedConnectionToken);
+        expect(client).toBeDefined();
+        expect(client).toBeInstanceOf(MongoClient);
+    });
+});
+
+describe('forFeature', () => {
+    it('should get the entity manager', () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        expect(manager).toBeDefined();
+        expect(manager).toBeInstanceOf(MongoManager);
     });
 
-    describe('forFeature', () => {
-        it('should get the entity manager', () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
-            expect(manager).toBeDefined();
-            expect(manager).toBeInstanceOf(MongoManager);
-        });
+    it('should get the collection name from the Collection decorator', () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const name = manager.getCollectionName<EntityTest>(EntityTest);
+        expect(name).toEqual(TEST_COLLECTION_NAME);
+    });
 
-        it('should get the collection name from the Collection decorator', () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
-            const name = manager.getCollectionName<EntityTest>(EntityTest);
-            expect(name).toEqual(TEST_COLLECTION_NAME);
-        });
+    it('should save a new entity', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const entity = new EntityTest();
+        entity.foo = 'bar';
+        entity.bar = 'foo';
+        const response = await manager.save<EntityTest>(entity);
+        expect(response).toBeInstanceOf(EntityTest);
+        expect(response._id).toBeInstanceOf(ObjectId);
+        expect(response.foo).toEqual(entity.foo);
+        expect(response.bar).toEqual(entity.bar);
+    });
 
-        it('should save a new entity', async () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
-            const entity = new EntityTest();
-            entity.foo = 'bar';
-            entity.bar = 'foo';
-            const response = await manager.save<EntityTest>(entity);
-            expect(response).toBeInstanceOf(EntityTest);
-            expect(response._id).toBeInstanceOf(ObjectId);
-            expect(response.foo).toEqual(entity.foo);
-            expect(response.bar).toEqual(entity.bar);
-        });
+    it('should save and update an existing entity', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const entity = new EntityTest();
+        entity.foo = 'bar';
+        entity.bar = 'foo';
 
-        it('should save and update an existing entity', async () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
-            const entity = new EntityTest();
-            entity.foo = 'bar';
-            entity.bar = 'foo';
+        const response = await manager.save<EntityTest>(entity);
+        response.foo = 'UPDATED_VALUE';
 
-            const response = await manager.save<EntityTest>(entity);
-            response.foo = 'UPDATED_VALUE';
+        try {
+            const updated = await manager.save<EntityTest>(entity);
+            expect(updated).toBeInstanceOf(EntityTest);
+            expect(updated._id).toBeInstanceOf(ObjectId);
+            expect(updated.foo).toEqual(entity.foo);
+            expect(updated.bar).toEqual(entity.bar);
+            expect(updated._id).toEqual(response._id);
+        } catch (e) {
+            console.log(e.response.message);
+        }
+    });
 
-            try {
-                const updated = await manager.save<EntityTest>(entity);
-                expect(updated).toBeInstanceOf(EntityTest);
-                expect(updated._id).toBeInstanceOf(ObjectId);
-                expect(updated.foo).toEqual(entity.foo);
-                expect(updated.bar).toEqual(entity.bar);
-                expect(updated._id).toEqual(response._id);
-            } catch (e) {
-                console.log(e.response.message);
-            }
-        });
+    it('should get a repository', () => {
+        const mongoModuleTest = mod.get<MongoDbModuleTest>(MongoDbModuleTest);
+        expect(mongoModuleTest).toBeDefined();
+        expect(mongoModuleTest.repo).toBeDefined();
+        expect(mongoModuleTest.repo).toBeInstanceOf(MongoRepository);
+    });
 
-        it('should get a repository', () => {
-            const mongoModuleTest = mod.get<MongoDbModuleTest>(
-                MongoDbModuleTest
-            );
-            expect(mongoModuleTest).toBeDefined();
-            expect(mongoModuleTest.repo).toBeDefined();
-            expect(mongoModuleTest.repo).toBeInstanceOf(MongoRepository);
-        });
+    it('should save an new entity and set a relation ship with a new child', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
 
-        it('should save an new entity and set a relation ship with a new child', async () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
+        const entity = new EntityTest();
+        entity.foo = 'bar';
+        entity.bar = 'foo';
+        await manager.save<EntityTest>(entity);
 
-            const entity = new EntityTest();
-            entity.foo = 'bar';
-            entity.bar = 'foo';
-            await manager.save<EntityTest>(entity);
+        const child = new EntityChildTest();
+        child.foo = 'child';
+        child.parentId = entity._id;
+        const response = await manager.save<EntityChildTest>(child);
 
-            const child = new EntityChildTest();
-            child.foo = 'child';
-            child.parentId = entity._id;
-            const response = await manager.save<EntityChildTest>(child);
-            expect(response).toBeInstanceOf(EntityChildTest);
-            expect(response._id).toBeInstanceOf(ObjectId);
-            expect(response.foo).toEqual(child.foo);
-            expect(response.parentId).toBeInstanceOf(ObjectId);
-            expect(response.parentId).toEqual(entity._id);
-        });
+        expect(response).toBeInstanceOf(EntityChildTest);
+        expect(response._id).toBeInstanceOf(ObjectId);
+        expect(response.foo).toEqual(child.foo);
+        expect(response.parentId).toBeInstanceOf(ObjectId);
+        expect(response.parentId).toEqual(entity._id);
+    });
 
-        it('should get a relationship', async () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
+    it('should get a relationship', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
 
-            const entity = new EntityTest();
-            entity.foo = 'bar';
-            entity.bar = 'foo';
-            await manager.save<EntityTest>(entity);
+        const entity = new EntityTest();
+        entity.foo = 'bar';
+        entity.bar = 'foo';
+        await manager.save<EntityTest>(entity);
 
-            const child = new EntityChildTest();
-            child.foo = 'child';
-            child.parentId = entity._id;
-            await manager.save(child);
+        const child = new EntityChildTest();
+        child.foo = 'child';
+        child.parentId = entity._id;
+        await manager.save(child);
 
-            const parent = await manager.getRelationship<EntityTest>(
-                child,
-                'parentId'
-            );
-            expect(parent).toBeInstanceOf(EntityTest);
-            expect(parent._id).toBeInstanceOf(ObjectId);
-            expect(parent._id).toEqual(entity._id);
+        const parent = await manager.getRelationship<EntityTest>(
+            child,
+            'parentId'
+        );
+        expect(parent).toBeInstanceOf(EntityTest);
+        expect(parent._id).toBeInstanceOf(ObjectId);
+        expect(parent._id).toEqual(entity._id);
 
-            const parentCached = child.getCachedRelationship('parentId');
-            expect(parentCached._id).toEqual(parent._id);
+        const parentCached = child.getCachedRelationship('parentId');
+        expect(parentCached._id).toEqual(parent._id);
 
-            // set the parent as a nestedEntity on the child
-            const nested = new EntityNestedTest();
-            nested.parentId = parent._id;
-            child.nestedEntity = nested;
+        // set the parent as a nestedEntity on the child
+        const nested = new EntityNestedTest();
+        nested.parentId = parent._id;
+        child.nestedEntity = nested;
 
-            const entity1 = new EntityRelationship();
-            entity1.foo = 'entity1';
-            await manager.save(entity1);
+        const entity1 = new EntityRelationship();
+        entity1.foo = 'entity1';
+        await manager.save(entity1);
 
-            const entity2 = new EntityRelationship();
-            entity2.foo = 'entity2';
-            await manager.save(entity2);
+        const entity2 = new EntityRelationship();
+        entity2.foo = 'entity2';
+        await manager.save(entity2);
 
-            child.entities = [entity1._id, entity2._id];
-            await manager.save(child);
+        child.entities = [entity1._id, entity2._id];
+        await manager.save(child);
 
-            const relationshipEntities = await manager.getRelationships(
-                child,
-                'entities'
-            );
-            expect(relationshipEntities).toHaveLength(2);
-            expect(relationshipEntities[0]).toBeInstanceOf(EntityRelationship);
-            expect(relationshipEntities[0]._id).toEqual(entity1._id);
+        const relationshipEntities = await manager.getRelationships(
+            child,
+            'entities'
+        );
+        expect(relationshipEntities).toHaveLength(2);
+        expect(relationshipEntities[0]).toBeInstanceOf(EntityRelationship);
+        expect(relationshipEntities[0]._id).toEqual(entity1._id);
 
-            // find the item as it is in db and test that cache is not present
-            const childOBj = await manager
-                .getCollection(EntityChildTest)
-                .findOne({ _id: child._id });
+        // find the item as it is in db and test that cache is not present
+        const childOBj = await manager
+            .getCollection(EntityChildTest)
+            .findOne({ _id: child._id });
 
-            expect(childOBj.nestedEntity).not.toHaveProperty(
-                '__cachedRelationships'
-            );
-            expect(childOBj.entities).toHaveLength(2);
-            expect(childOBj.entities[0]).toEqual(entity1._id);
-            expect(childOBj.entities[1]).toEqual(entity2._id);
-        });
+        expect(childOBj.nestedEntity).not.toHaveProperty(
+            '__cachedRelationships'
+        );
+        expect(childOBj.entities).toHaveLength(2);
+        expect(childOBj.entities[0]).toEqual(entity1._id);
+        expect(childOBj.entities[1]).toEqual(entity2._id);
+    });
 
-        it('should get an inverted relationship', async () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
+    it('should get an inverted relationship', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
 
-            const entity = new EntityTest();
-            entity.foo = 'bar';
-            entity.bar = 'foo';
-            await manager.save<EntityTest>(entity);
+        const entity = new EntityTest();
+        entity.foo = 'bar';
+        entity.bar = 'foo';
+        await manager.save<EntityTest>(entity);
 
-            const child = new EntityChildTest();
-            child.foo = 'childInversed';
-            child.parentId = entity._id;
-            await manager.save(child);
+        const child = new EntityChildTest();
+        child.foo = 'childInversed';
+        child.parentId = entity._id;
+        await manager.save(child);
 
-            const children = await manager.getInversedRelationships(
-                entity,
-                EntityChildTest,
-                'parentId'
-            );
-            expect(children).toHaveLength(1);
-            expect((children[0] as EntityChildTest)._id).toEqual(child._id);
-        });
+        const children = await manager.getInversedRelationships(
+            entity,
+            EntityChildTest,
+            'parentId'
+        );
+        expect(children).toHaveLength(1);
+        expect((children[0] as EntityChildTest)._id).toEqual(child._id);
+    });
 
-        it('should serialize an entity', async () => {
-            const manager = mod.get<MongoManager>(getManagerToken());
+    it('should serialize an entity', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
 
-            const entity = await manager.findOne<EntityTest>(EntityTest, {});
+        const entity = await manager.findOne<EntityTest>(EntityTest, {});
 
-            expect(entity._id).toBeInstanceOf(ObjectId);
+        expect(entity._id).toBeInstanceOf(ObjectId);
 
-            const obj: any = entity.serialize();
-            expect(obj._id).toBeDefined();
-            expect(typeof obj._id).toEqual('string');
+        const obj: any = entity.serialize();
+        expect(obj._id).toBeDefined();
+        expect(typeof obj._id).toEqual('string');
 
-            const reEntity = manager.getRepository(EntityTest).fromPlain(obj);
-            expect(reEntity._id).toBeInstanceOf(ObjectId);
-            expect(reEntity._id).toEqual(entity._id);
+        const reEntity = manager.getRepository(EntityTest).fromPlain(obj);
+        expect(reEntity._id).toBeInstanceOf(ObjectId);
+        expect(reEntity._id).toEqual(entity._id);
 
-            const child = new EntityChildTest();
-            child.parentId = entity._id;
-            const objChild: any = child.serialize();
-            expect(objChild.parentId).toEqual(entity._id.toHexString());
+        const child = new EntityChildTest();
+        child.parentId = entity._id;
+        const objChild: any = child.serialize();
+        expect(objChild.parentId).toEqual(entity._id.toHexString());
 
-            const reChild = manager
-                .getRepository(EntityChildTest)
-                .fromPlain(objChild);
-            expect(reChild.parentId).toBeInstanceOf(ObjectId);
-            expect(reChild.parentId).toEqual(entity._id);
-        });
+        const reChild = manager
+            .getRepository(EntityChildTest)
+            .fromPlain(objChild);
+        expect(reChild.parentId).toBeInstanceOf(ObjectId);
+        expect(reChild.parentId).toEqual(entity._id);
+    });
+});
 
-        it('should use dataloader during the whole request', async () => {
-            const dataloaderService = mod.get<DataloaderService>(
-                DataloaderService
-            );
+describe('Dataloader', () => {
+    let uuid: string;
+    it('should not have a dataloader outside a request', async () => {
+        const em = mod.get<MongoManager>(getManagerToken());
+        // get the dataloader and check that he is empty, outside a request
+        // no loader is used and must bbe created manualy
+        const dataloaderService = mod.get(DataloaderService);
+        let loader = dataloaderService.get('EntityTest');
+        expect(loader).not.toBeDefined();
 
-            const repo = mod.get<MongoRepository<EntityTest>>(
-                getRepositoryToken(EntityTest.name)
-            );
+        const loaderUuid = '12345';
+        loader = dataloaderService.create(EntityTest, em, loaderUuid);
+        expect(loader).toBeDefined();
+        expect(loader.uuid).toEqual(loaderUuid);
+    });
 
-            const dataloader = dataloaderService.get(EntityTest.name);
-            expect(dataloader).toBeDefined();
+    it('should use the same dataloader inside a request', async () => {
+        const repo = mod.get<MongoRepository<EntityTest>>(
+            getRepositoryToken(EntityTest.name)
+        );
 
-            // entity will not be put in the dataloader cache cause no key was passed
-            const entity = new EntityTest();
-            entity.foo = 'test';
-            entity.bar = 'dataloader';
-            await repo.save(entity);
+        const entity = new EntityTest();
+        entity.foo = 'test';
+        entity.bar = 'dataloader';
+        await repo.save(entity);
 
-            // fetch a new entity, this should trigger the dataloader for the first time
-            const entity1 = await repo.findOne({
-                _id: entity._id
+        const ctrl = mod.get(TestController);
+        ctrl.entityTestId = entity._id;
+
+        await request(app.getHttpServer())
+            .get('/test')
+            .expect((res) => {
+                expect(res.body).toBeDefined();
+                expect(res.body.item).toBeDefined();
+                expect(res.body.item._id).toStrictEqual(
+                    entity._id.toHexString()
+                );
+                expect(res.body.uuid).toBeDefined();
+                expect(res.body.reqUuid).toBeDefined();
+                expect(res.body.reqUuid).toEqual(res.body.uuid);
+                uuid = res.body.uuid;
             });
 
-            // entity 1 should come from cache and equals entity
-            expect(entity).toEqual(entity1);
-
-            // fetch a new entity, this should trigger the dataloader for the first time
-            const entity2 = await repo.findOne({
-                _id: entity._id
+        await request(app.getHttpServer())
+            .get('/test')
+            .expect((res) => {
+                expect(res.body).toBeDefined();
+                expect(res.body.item).toBeDefined();
+                expect(res.body.item._id).toStrictEqual(
+                    entity._id.toHexString()
+                );
+                expect(res.body.uuid).toBeDefined();
+                expect(res.body.reqUuid).toBeDefined();
+                expect(res.body.reqUuid).toEqual(res.body.uuid);
+                // should not match previous request
+                expect(res.body.uuid).not.toEqual(uuid);
             });
-
-            // entity 1 should come from cache and equals entity
-            expect(entity).toEqual(entity2);
-
-            // remove item from the cache
-            dataloader.clear(entity._id);
-
-            // call the database should get the real item
-            const entity3 = await repo.findOne({
-                _id: entity._id
-            });
-            expect(entity).toEqual(entity3);
-        });
     });
 });
 

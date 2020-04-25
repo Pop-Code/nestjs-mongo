@@ -3,6 +3,7 @@ import {
     ValidatorConstraintInterface
 } from 'class-validator';
 import { first } from 'lodash';
+
 import { ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
 import {
@@ -61,7 +62,7 @@ export class IsValidRelationshipConstraint
                     relationship.push(innerR);
                 }
                 if (errors.length) {
-                    throw new Error(errors.map(e => e.message).join(', '));
+                    throw new Error(errors.map((e) => e.message).join(', '));
                 }
             } else {
                 relationship = await this.em.getRelationship(

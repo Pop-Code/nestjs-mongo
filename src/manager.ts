@@ -15,6 +15,7 @@ import {
     MongoClient,
     MongoCountPreferences
 } from 'mongodb';
+
 import { DEBUG } from './constants';
 import { DataloaderService } from './dataloader/service';
 import { InjectMongoClient } from './decorators';
@@ -31,6 +32,8 @@ import { MongoRepository } from './repository';
 
 export class MongoManager {
     protected readonly repositories: Map<string, any> = new Map();
+    protected readonly models: Map<string, ClassType<any>> = new Map();
+
     protected log = Debug(DEBUG + ':MongoManager');
     constructor(
         @InjectMongoClient()
@@ -39,12 +42,29 @@ export class MongoManager {
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
-    addRepository<
+    registerModel<Model extends EntityInterface>(
+        name: string,
+        model: ClassType<Model>
+    ): MongoManager {
+        this.log('Add model %s as %s', model.name, name);
+        this.models.set(name, model);
+        return this;
+    }
+
+    getModel(id: string): ClassType<any> {
+        return this.models.get(id);
+    }
+
+    getModels(): Map<string, ClassType<any>> {
+        return this.models;
+    }
+
+    registerRepository<
         Model extends EntityInterface,
         R extends MongoRepository<Model> = MongoRepository<Model>
-    >(token: string, repository: R): MongoManager {
-        this.log('Add respoitory %s %s', token, repository.constructor.name);
-        this.repositories.set(token, repository);
+    >(name: string, repository: R): MongoManager {
+        this.log('Add respoitory %s as %s', repository.constructor.name, name);
+        this.repositories.set(name, repository);
         return this;
     }
 
@@ -65,6 +85,10 @@ export class MongoManager {
 
     getDataloaderService() {
         return this.dataloaderService;
+    }
+
+    getDataloader<Model extends EntityInterface>(id: string) {
+        return this.dataloaderService.get<Model>(id);
     }
 
     getCollectionName<Model>(nameOrInstance: Model | ClassType<Model>): string {
@@ -104,8 +128,9 @@ export class MongoManager {
         entity: Model,
         options: MongoExecutionOptions & { dataloader?: string } = {}
     ): Promise<Model> {
+        const entityName = entity.constructor.name;
         try {
-            this.log('save %s %s', entity.constructor.name);
+            this.log('saving %s', entityName);
             const errors = await validate(entity, {
                 whitelist: true,
                 validationError: { target: true, value: true }
@@ -156,35 +181,24 @@ export class MongoManager {
                 entity._id = insertedId;
             }
 
-            const dataloader = this.getDataloader(options.dataloader);
-            if (dataloader) {
-                this.log(
-                    'Updating dataloader %s %s',
-                    entity.constructor.name,
-                    entity._id
-                );
-                dataloader.clear(entity._id).prime(entity._id, entity);
-            }
+            this.dataloaderService.update(
+                options.dataloader || entityName,
+                entity
+            );
+
             return entity;
         } catch (e) {
-            const dataloader = this.getDataloader(options.dataloader);
-            if (dataloader) {
-                this.log(
-                    'Clearing dataloader %s %s',
-                    entity.constructor.name,
-                    entity._id
+            this.log('error saving %s', entityName);
+
+            if (entity._id) {
+                this.dataloaderService.delete(
+                    options.dataloader || entityName,
+                    entity
                 );
-                dataloader.clear(entity._id);
             }
+
             throw e;
         }
-    }
-
-    getDataloader<Model extends EntityInterface>(id: string) {
-        if (!id) {
-            return;
-        }
-        return this.dataloaderService.get<Model>(id);
     }
 
     async find<Model extends EntityInterface>(
@@ -196,21 +210,15 @@ export class MongoManager {
         const cursor: Cursor<object> = await this.getCollection(classType).find(
             query
         );
-        const dataloader = this.getDataloader(
-            options.dataloader || classType.name
-        );
-        return cursor.map(entity => {
-            const instance = this.fromPlain<Model>(classType, entity);
-            if (dataloader) {
-                this.log(
-                    'Updating dataloader object id %s on %s',
-                    instance._id,
-                    classType.name
-                );
-                dataloader.clear(instance._id).prime(instance._id, instance);
-            }
-            return instance;
+        const cursorMap = cursor.map((data) => {
+            const entity = this.fromPlain<Model>(classType, data);
+            return entity;
         });
+        this.dataloaderService.updateAll(
+            options.dataloader || classType.name,
+            cursorMap
+        );
+        return cursorMap;
     }
 
     async findOne<Model extends EntityInterface>(
@@ -224,7 +232,7 @@ export class MongoManager {
             options.dataloader || classType.name
         );
         if (dataloader && this.isIdQuery(query)) {
-            this.log('findOne delegated to dataloader');
+            this.log('findOne delegated to dataloader %s', dataloader.uuid);
             entity = await dataloader.load(query._id);
         }
         if (!entity) {
@@ -239,7 +247,12 @@ export class MongoManager {
         }
 
         if (dataloader) {
-            this.log('Updating dataloader %s', classType.name);
+            this.log(
+                'Updating dataloader %s %s %s',
+                dataloader.uuid,
+                classType.name,
+                entity._id
+            );
             dataloader.clear(entity._id).prime(entity._id, entity);
         }
 
@@ -271,20 +284,18 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteOne %s %o', classType.name, query);
-        const item = await this.findOne<Model>(classType, query);
-        if (!item) {
+        const entity = await this.findOne<Model>(classType, query);
+        if (!entity) {
             throw new NotFoundException();
         }
         const result = await this.getCollection(classType).deleteOne(
-            { _id: item._id },
+            { _id: entity._id },
             options
         );
-        const dataloader = this.getDataloader<Model>(
-            options.dataloader || classType.name
+        this.dataloaderService.delete(
+            options.dataloader || classType.name,
+            entity
         );
-        if (dataloader) {
-            dataloader.clear(item._id);
-        }
         return result;
     }
 
@@ -299,11 +310,11 @@ export class MongoManager {
             query,
             options
         );
-        const dataloader = this.getDataloader<Model>(
+        const dataloader = await this.getDataloader<Model>(
             options.dataloader || classType.name
         );
         if (dataloader && items.count) {
-            items.forEach(i => dataloader.clear(i._id));
+            items.forEach((i) => dataloader.clear(i._id));
         }
         return result;
     }

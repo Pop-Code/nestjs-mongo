@@ -42,7 +42,7 @@ export class EntityChildTest extends Entity {
     @TypeObjectId(true)
     @IsOptional()
     @Relationship({
-        typeFn: object => EntityRelationship,
+        typeFn: (object) => EntityRelationship,
         isArray: true
     })
     @IsValidRelationship()

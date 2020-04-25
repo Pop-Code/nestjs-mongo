@@ -14,6 +14,5 @@ module.exports = {
     suppressExcessPropertyErrors: true,
     suppressImplicitAnyIndexErrors: true,
     module: 'commonjs',
-    hideGenerator: true,
-    mode: 'modules'
+    hideGenerator: true
 };

@@ -27,11 +27,11 @@ jobs:
                   yarn install
                   yarn run lint
                   yarn run build
-                  # yarn run test:cov
-            # - name: Codecov
-            #   uses: codecov/codecov-action@v1.0.5
-            #   with:
-            #       token: ${{ secrets.CODECOV_TOKEN }}
-            #       file: ./coverage/coverage-final.json
-            #       fail_ci_if_error: true
-            #       CI: true
+                  yarn run test:cov
+            - name: Codecov
+              uses: codecov/codecov-action@v1.0.5
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  file: ./coverage/coverage-final.json
+                  fail_ci_if_error: true
+                  CI: true

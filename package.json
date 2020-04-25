@@ -70,6 +70,24 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
     },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "src",
+        "testRegex": ".spec.ts$",
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "collectCoverageFrom": [
+            "**/*.{js,jsx,ts}",
+            "!index.ts",
+            "!**/test/**"
+        ],
+        "coverageDirectory": "../coverage"
+    },
     "engines": {
         "node": ">=0.10"
     }

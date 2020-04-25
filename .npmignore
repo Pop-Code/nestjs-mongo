@@ -7,14 +7,12 @@ test/
 tsconfig.json
 typedoc.js
 yarn.lock
-jest.config.js
 renovate.json
 lib/test
 renovate.json
 .DS_Store
 .vscode
-tslint.json
 *.tgz
-.eslintrc.js
+.eslintrc
 .github/
 dist/test/

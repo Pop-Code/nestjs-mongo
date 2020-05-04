@@ -1,16 +1,11 @@
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoClient } from 'mongodb';
-import request from 'supertest';
+import * as request from 'supertest';
 
 import { DEFAULT_CONNECTION_NAME, MongoModule } from '..';
 import { DataloaderService } from '../dataloader/service';
-import {
-    getConnectionToken,
-    getManagerToken,
-    getRepositoryToken,
-    ObjectId
-} from '../helpers';
+import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
 import { MongoCoreModule } from '../module.core';
 import { MongoRepository } from '../repository';

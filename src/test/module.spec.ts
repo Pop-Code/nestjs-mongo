@@ -1,7 +1,7 @@
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoClient } from 'mongodb';
-import * as request from 'supertest';
+import request from 'supertest';
 
 import { DEFAULT_CONNECTION_NAME, MongoModule } from '..';
 import { DataloaderService } from '../dataloader/service';

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import * as Debug from 'debug';
+import Debug from 'debug';
 import { camelCase } from 'lodash';
 import { ChangeStream, ObjectId } from 'mongodb';
 

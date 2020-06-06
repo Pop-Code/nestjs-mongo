@@ -1,6 +1,6 @@
 import { registerDecorator } from 'class-validator';
 import { IsUniqueConstraint, IsUniqueOptions } from './constraint';
-import _ from 'lodash';
+import { get } from 'lodash';
 
 export function IsUnique(options?: IsUniqueOptions) {
     return (object: any, propertyName: string) => {
@@ -11,8 +11,8 @@ export function IsUnique(options?: IsUniqueOptions) {
             options: options,
             constraints: [
                 {
-                    keys: _.get(options, 'keys', []),
-                    sparse: _.get(options, 'sparse', false)
+                    keys: get(options, 'keys', []),
+                    sparse: get(options, 'sparse', false)
                 }
             ]
         });

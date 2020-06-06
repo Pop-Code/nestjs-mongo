@@ -1,6 +1,6 @@
 # nestjs-mongo
 
-[NestJS Mongo][doc-link] is a module that provide a little orm. Build with typescript and the nodejs mogodb driver
+[NestJS Mongo][doc-link] is a module that provide a little orm. Build with typescript and the nodejs mongodb driver
 
 ### [Install FROM NPM][npm]
 

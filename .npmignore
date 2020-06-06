@@ -14,5 +14,6 @@ renovate.json
 .vscode
 *.tgz
 .eslintrc
+.eslintignore
 .github/
 dist/test/

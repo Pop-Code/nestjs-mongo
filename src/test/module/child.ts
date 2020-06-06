@@ -10,8 +10,6 @@ import { Entity } from '../../entity';
 import { ObjectId } from '../../helpers';
 import {
     Relationship,
-    WithRelationship,
-    WithRelationshipInterface,
     IsValidRelationship
 } from '../../relationship/decorators';
 import { EntityTest } from './entity';
@@ -20,10 +18,7 @@ import { EntityRelationship } from './entity.relationship';
 
 export const TEST_CHILD_COLLECTION_NAME = 'testchild';
 
-export interface EntityChildTest extends WithRelationshipInterface {}
-
 @Collection(TEST_CHILD_COLLECTION_NAME)
-@WithRelationship()
 export class EntityChildTest extends Entity {
     @IsString()
     foo: string;

@@ -2,23 +2,14 @@ import { IsDefined } from 'class-validator';
 import { Collection, TypeObjectId } from '../../decorators';
 import { Entity } from '../../entity';
 import { ObjectId } from '../../helpers';
-import {
-    Relationship,
-    WithRelationship,
-    WithRelationshipInterface,
-    IsValidRelationship
-} from '../../relationship/decorators';
+import { Relationship } from '../../relationship/decorators';
 import { EntityTest } from './entity';
 export const TEST_CHILD_NESTED_COLLECTION_NAME = 'testnested';
 
-export interface EntityNestedTest extends WithRelationshipInterface {}
-
 @Collection(TEST_CHILD_NESTED_COLLECTION_NAME)
-@WithRelationship()
 export class EntityNestedTest extends Entity {
     @TypeObjectId()
     @Relationship(EntityTest)
-    @IsValidRelationship()
     @IsDefined()
     parentId: ObjectId;
 }

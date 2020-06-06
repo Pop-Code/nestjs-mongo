@@ -2,7 +2,6 @@ import { ClassTransformOptions } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { ChangeStream, Cursor } from 'mongodb';
 
-import { MongoDataloader } from './dataloader/data';
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { MongoManager } from './manager';
@@ -21,8 +20,8 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em;
     }
 
-    save(entity: Model, ...args: any[]): Promise<Model> {
-        return this.em.save(entity, ...args);
+    async save(entity: Model, ...args: any[]): Promise<Model> {
+        return await this.em.save(entity, ...args);
     }
 
     watch(pipes?: any[], options?: any): ChangeStream {
@@ -33,29 +32,33 @@ export class MongoRepository<Model extends EntityInterface> {
         query?: any,
         options: { dataloader?: string } = {}
     ): Promise<Array<Model | Error>> {
-        const dataloader = this.em.getDataloader<Model>(
-            options.dataloader || this.classType.name
-        );
-        if (dataloader && this.em.isIdsQuery(query)) {
-            return dataloader.loadMany(query._id.$in);
+        const dataloaderName =
+            typeof options.dataloader === 'string'
+                ? options.dataloader
+                : this.classType.name;
+        const dataloader = this.em.getDataloader<Model>(dataloaderName);
+        if (dataloader !== undefined && this.em.isIdsQuery(query)) {
+            return await dataloader.loadMany(query._id.$in);
         }
-        return (await this.em.find(this.classType, query, options)).toArray();
+        return await (
+            await this.em.find(this.classType, query, options)
+        ).toArray();
     }
 
     async findPaginated(query?: any, ...args: any[]): Promise<Cursor<Model>> {
         return await this.em.find(this.classType, query, ...args);
     }
 
-    list(query?: any): Promise<Cursor<Model>> {
-        return this.em.find(this.classType, query);
+    async list(query?: any): Promise<Cursor<Model>> {
+        return await this.em.find(this.classType, query);
     }
 
-    count(query?: any, ...args: any[]): Promise<number> {
-        return this.em.count(this.classType, query, ...args);
+    async count(query?: any, ...args: any[]): Promise<number> {
+        return await this.em.count(this.classType, query, ...args);
     }
 
-    findOne(query: any, ...args: any[]): Promise<Model> {
-        return this.em.findOne(this.classType, query, ...args);
+    async findOne(query: any, ...args: any[]): Promise<Model> {
+        return await this.em.findOne(this.classType, query, ...args);
     }
 
     async findById(
@@ -65,19 +68,19 @@ export class MongoRepository<Model extends EntityInterface> {
         return await this.find({ _id: { $in: ids } }, ...args);
     }
 
-    deleteOne(query: any, ...args: any) {
-        return this.em.deleteOne(this.classType, query, ...args);
+    async deleteOne(query: any, ...args: any) {
+        return await this.em.deleteOne(this.classType, query, ...args);
     }
 
-    deleteMany(query: any, ...args: any) {
-        return this.em.deleteMany(this.classType, query, ...args);
+    async deleteMany(query: any, ...args: any) {
+        return await this.em.deleteMany(this.classType, query, ...args);
     }
 
-    getRelationship<E extends EntityInterface>(
+    async getRelationship<E extends EntityInterface>(
         object: Model,
         property: string
     ): Promise<E> {
-        return this.em.getRelationship<E>(object, property);
+        return await this.em.getRelationship<E>(object, property);
     }
 
     fromPlain(data: object, options?: ClassTransformOptions): Model {

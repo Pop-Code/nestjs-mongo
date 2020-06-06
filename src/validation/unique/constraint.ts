@@ -1,10 +1,17 @@
 import {
     ValidatorConstraint,
     ValidatorConstraintInterface,
-    ValidationArguments
+    ValidationArguments,
+    isEmpty,
+    ValidationOptions
 } from 'class-validator';
 import { MongoManager } from '../../manager';
 import { Entity } from '../../entity';
+
+export type IsUniqueOptions = ValidationOptions & {
+    keys?: string[];
+    sparse?: boolean;
+};
 
 @ValidatorConstraint({ name: 'IsUnique', async: true })
 export class IsUniqueConstraint implements ValidatorConstraintInterface {
@@ -21,20 +28,19 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
         const query: any = {
             [args.property]: value
         };
-        const options = args.constraints[0];
-        if (options.keys.length) {
+        const options = args.constraints[0] as IsUniqueOptions;
+        if (options.keys.length > 0) {
             for (const prop of options.keys) {
-                const v = object[prop];
-                if (!v) {
+                if (isEmpty(object[prop])) {
                     if (options.sparse) {
                         query[prop] = { $exists: false };
                     }
                     continue;
                 }
-                query[prop] = v;
+                query[prop] = object[prop];
             }
         }
-        if (id) {
+        if (!isEmpty(id)) {
             query._id = { $ne: id };
         }
         const type: any = object.constructor;

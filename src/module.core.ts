@@ -4,20 +4,17 @@ import {
     Inject,
     Module,
     OnModuleDestroy,
-    OnModuleInit,
     Optional
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { getFromContainer } from 'class-validator';
+import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
 
 import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from './constants';
-import { MongoDataloader } from './dataloader/data';
 import { DataloaderService } from './dataloader/service';
 import {
     getConfigToken,
     getConnectionToken,
-    getDataloaderToken,
     getManagerToken,
     getRepositoryToken
 } from './helpers';
@@ -42,9 +39,10 @@ export class MongoCoreModule implements OnModuleDestroy {
         options: MongoModuleAsyncOptions
     ): Promise<DynamicModule> {
         // define the connection token name
-        const connectionName = options.connectionName
+        const connectionName = !isEmpty(options.connectionName)
             ? options.connectionName
             : DEFAULT_CONNECTION_NAME;
+
         const mongoConnectionToken = getConnectionToken(connectionName);
 
         // The client name provider to be expose on this dynammic module level
@@ -63,14 +61,16 @@ export class MongoCoreModule implements OnModuleDestroy {
         // the mongo client provider
         const mongoClientProvider = {
             provide: mongoConnectionToken,
-            useFactory: (config: MongoModuleOptions): Promise<MongoClient> => {
+            useFactory: async (
+                config: MongoModuleOptions
+            ): Promise<MongoClient> => {
                 const { uri, exceptionFactory, ...mongoOpts } = config;
                 const client = new MongoClient(uri, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
                     ...mongoOpts
                 });
-                return client.connect();
+                return await client.connect();
             },
             inject: [configToken]
         };
@@ -143,7 +143,7 @@ export class MongoCoreModule implements OnModuleDestroy {
             const model = typeof m === 'function' ? m : m.model;
 
             const repoToken = getRepositoryToken(model.name, connectionName);
-            const repoClass =
+            const RepoClass =
                 typeof m === 'function' ? MongoRepository : m.repository;
             providers.push({
                 provide: repoToken,
@@ -153,7 +153,7 @@ export class MongoCoreModule implements OnModuleDestroy {
                     em.registerModel(model.name, model);
 
                     // register repository
-                    const repo = new repoClass(em, model);
+                    const repo = new RepoClass(em, model);
                     em.registerRepository(repoToken, repo);
                     return repo;
                 }

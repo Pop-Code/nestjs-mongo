@@ -1,31 +1,32 @@
 import { EntityInterface } from '../interfaces/entity';
 import { RELATIONSHIP_METADATA_NAME } from '../constants';
 import { ClassType } from 'class-transformer/ClassTransformer';
+import { isEmpty } from 'class-validator';
 
 export type RelationshipTypeDescriptor<
     Relationship extends EntityInterface,
-    Obj = any
-> = (object: Obj) => ClassType<Relationship>;
+    Parent = object
+> = (object: Parent) => ClassType<Relationship>;
 
 export interface RelationshipMetadata<
-    Relationship extends EntityInterface = any,
-    Obj = any
+    R extends EntityInterface = any,
+    P = object
 > {
-    type?: ClassType<Relationship>;
-    typeFn?: RelationshipTypeDescriptor<Relationship, Obj>;
+    type?: ClassType<R>;
+    typeFn?: RelationshipTypeDescriptor<R, P>;
     isArray?: boolean;
     inversedBy?: string;
 }
 
 export function setRelationshipMetadata<
-    Relationship extends EntityInterface = any,
-    Obj = any
+    R extends EntityInterface = any,
+    P = object
 >(
     target: any,
     property: string | symbol,
-    metadata: RelationshipMetadata<Relationship, Obj>
+    metadata: RelationshipMetadata<R, P>
 ) {
-    if (!metadata.type && !metadata.typeFn) {
+    if (isEmpty(metadata.type) && isEmpty(metadata.typeFn)) {
         throw new Error(
             'type or typeFn are required in setRelationshipMetadata'
         );
@@ -40,15 +41,16 @@ export function setRelationshipMetadata<
 }
 
 export function getRelationshipMetadata<
-    Relationship extends EntityInterface = any,
-    Obj = any
->(target: Obj, property: string | symbol) {
-    const metadata: RelationshipMetadata<
-        Relationship,
-        Obj
-    > = Reflect.getMetadata(RELATIONSHIP_METADATA_NAME, target, property);
+    R extends EntityInterface = any,
+    P = object
+>(target: P, property: string | symbol) {
+    const metadata: RelationshipMetadata<R, P> = Reflect.getMetadata(
+        RELATIONSHIP_METADATA_NAME,
+        target,
+        property
+    );
 
-    if (metadata && metadata.typeFn instanceof Function) {
+    if (metadata !== undefined && metadata.typeFn instanceof Function) {
         metadata.type = metadata.typeFn(target);
     }
 

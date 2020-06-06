@@ -1,24 +1,20 @@
-import { registerDecorator, ValidationOptions } from 'class-validator';
-import { IsUniqueConstraint } from './constraint';
+import { registerDecorator } from 'class-validator';
+import { IsUniqueConstraint, IsUniqueOptions } from './constraint';
 import _ from 'lodash';
 
-export function IsUnique(
-    validationOptions?: ValidationOptions & {
-        keys?: string[];
-        sparse?: boolean;
-    }
-) {
+export function IsUnique(options?: IsUniqueOptions) {
     return (object: any, propertyName: string) => {
-        const options = {
-            keys: _.get(validationOptions, 'keys', []),
-            sparse: _.get(validationOptions, 'sparse', false)
-        };
         return registerDecorator({
+            validator: IsUniqueConstraint,
             target: object.constructor,
             propertyName,
-            options: validationOptions,
-            constraints: [options],
-            validator: IsUniqueConstraint
+            options: options,
+            constraints: [
+                {
+                    keys: _.get(options, 'keys', []),
+                    sparse: _.get(options, 'sparse', false)
+                }
+            ]
         });
     };
 }

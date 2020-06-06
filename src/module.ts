@@ -4,6 +4,7 @@ import { MongoFeatureOptions } from './interfaces/feature.options';
 import { MongoCoreModule } from './module.core';
 
 @Module({})
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class MongoModule {
     static forRootAsync(options: MongoModuleAsyncOptions): DynamicModule {
         return {

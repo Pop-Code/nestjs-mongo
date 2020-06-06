@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MongoOptionsFactory | NestJS Mongo</title>
+	<title>PaginatedData | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,24 +56,40 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_interfaces_module_options_factory_.html">&quot;interfaces/module.options.factory&quot;</a>
+					<a href="../modules/_classes_paginated_.html">&quot;classes/paginated&quot;</a>
 				</li>
 				<li>
-					<a href="_interfaces_module_options_factory_.mongooptionsfactory.html">MongoOptionsFactory</a>
+					<a href="_classes_paginated_.paginateddata.html">PaginatedData</a>
 				</li>
 			</ul>
-			<h1>Interface MongoOptionsFactory</h1>
+			<h1>Class PaginatedData&lt;D, D&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>D</h4>
+					</li>
+					<li>
+						<h4>D</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">MongoOptionsFactory</span>
+						<a href="../interfaces/_serializer_.iserializable.html" class="tsd-signature-type">ISerializable</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">PaginatedData</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -84,7 +100,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_module_options_factory_.mongooptionsfactory.html#createmongooptions" class="tsd-kind-icon">create<wbr>Mongo<wbr>Options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_classes_paginated_.paginateddata.html#count" class="tsd-kind-icon">count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_classes_paginated_.paginateddata.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_classes_paginated_.paginateddata.html#serialize" class="tsd-kind-icon">serialize</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,13 +110,34 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="createmongooptions" class="tsd-anchor"></a>
-					<h3>create<wbr>Mongo<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">create<wbr>Mongo<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="count" class="tsd-anchor"></a>
+					<h3>count</h3>
+					<div class="tsd-signature tsd-kind-icon">count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/4910f0e/src/interfaces/module.options.factory.ts#L4">src/interfaces/module.options.factory.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/4910f0e/src/classes/paginated.ts#L9">src/classes/paginated.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="data" class="tsd-anchor"></a>
+					<h3>data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/4910f0e/src/classes/paginated.ts#L11">src/classes/paginated.ts:11</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="serialize" class="tsd-anchor"></a>
+					<h3>serialize</h3>
+					<div class="tsd-signature tsd-kind-icon">serialize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="../interfaces/_serializer_.iserializable.html">ISerializable</a>.<a href="../interfaces/_serializer_.iserializable.html#serialize">serialize</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/4910f0e/src/serializer.ts#L4">src/serializer.ts:4</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -106,11 +145,11 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
 									</li>
 								</ul>
 							</li>
@@ -126,7 +165,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/_interfaces_module_options_factory_.html">&quot;interfaces/module.options.factory&quot;</a>
+						<a href="../modules/_classes_paginated_.html">&quot;classes/paginated&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -134,11 +173,17 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="_interfaces_module_options_factory_.mongooptionsfactory.html" class="tsd-kind-icon">Mongo<wbr>Options<wbr>Factory</a>
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_classes_paginated_.paginateddata.html" class="tsd-kind-icon">Paginated<wbr>Data</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_interfaces_module_options_factory_.mongooptionsfactory.html#createmongooptions" class="tsd-kind-icon">create<wbr>Mongo<wbr>Options</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_classes_paginated_.paginateddata.html#count" class="tsd-kind-icon">count</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_classes_paginated_.paginateddata.html#data" class="tsd-kind-icon">data</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_classes_paginated_.paginateddata.html#serialize" class="tsd-kind-icon">serialize</a>
 							</li>
 						</ul>
 					</li>
@@ -161,13 +206,16 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
 		</div>
 	</div>

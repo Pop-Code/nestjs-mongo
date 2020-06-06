@@ -5,7 +5,12 @@ import * as request from 'supertest';
 
 import { DEFAULT_CONNECTION_NAME, MongoModule } from '..';
 import { DataloaderService } from '../dataloader/service';
-import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
+import {
+    getConnectionToken,
+    getManagerToken,
+    getRepositoryToken,
+    ObjectId
+} from '../helpers';
 import { MongoManager } from '../manager';
 import { MongoCoreModule } from '../module.core';
 import { MongoRepository } from '../repository';
@@ -146,9 +151,6 @@ describe('forFeature', () => {
         expect(parent).toBeInstanceOf(EntityTest);
         expect(parent._id).toBeInstanceOf(ObjectId);
         expect(parent._id).toEqual(entity._id);
-
-        const parentCached = child.getCachedRelationship('parentId');
-        expect(parentCached._id).toEqual(parent._id);
 
         // set the parent as a nestedEntity on the child
         const nested = new EntityNestedTest();

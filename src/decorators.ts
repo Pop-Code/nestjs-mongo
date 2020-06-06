@@ -1,7 +1,7 @@
 import { Inject, applyDecorators } from '@nestjs/common';
 import { Transform, TransformationType, Type } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
-import { Allow } from 'class-validator';
+import { Allow, isEmpty } from 'class-validator';
 import { DEFAULT_CONNECTION_NAME } from './constants';
 import {
     getConnectionToken,
@@ -48,7 +48,7 @@ export function ObjectIdTransformer(
     isArray?: boolean
 ) {
     let newValue: any;
-    if (!value) {
+    if (isEmpty(value)) {
         return;
     }
     if (type === TransformationType.CLASS_TO_CLASS) {

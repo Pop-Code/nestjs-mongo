@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { createNamespace, getNamespace } from 'cls-hooked';
+import { createNamespace } from 'cls-hooked';
 import Debug from 'debug';
 import { Request, Response } from 'express';
 import { v1 as uuid } from 'uuid';

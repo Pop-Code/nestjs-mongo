@@ -9,8 +9,9 @@ import { HistoryAction } from './classes/history.action';
 import { PaginatedData } from './classes/paginated';
 import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
-import { EventCallback } from './interfaces/event';
+import { EventCallback, EventType } from './interfaces/event';
 import { MongoRepository } from './repository';
+import { isEmpty } from 'class-validator';
 
 @Injectable()
 export abstract class EntityService<
@@ -29,11 +30,11 @@ export abstract class EntityService<
         action: string,
         date?: Date
     ) {
-        if (
-            item.hasOwnProperty('history') &&
-            item.history instanceof HistoryActions
-        ) {
-            const historyAction = new HistoryAction(action, date || new Date());
+        if (item.history instanceof HistoryActions) {
+            const historyAction = new HistoryAction(
+                action,
+                date !== undefined ? date : new Date()
+            );
             item.history.add(historyAction);
         }
         return this;
@@ -47,14 +48,14 @@ export abstract class EntityService<
         const item = this.repository.fromPlain(data);
         this.addHistory(item, 'Item created');
         if (save) {
-            return this.repository.save(item, ...rest);
+            return await this.repository.save(item, ...rest);
         }
         return item;
     }
 
     async get(itemId: ObjectId, ...rest: any[]): Promise<Model> {
         const item = await this.repository.findOne({ _id: itemId }, ...rest);
-        if (!item) {
+        if (item === undefined) {
             throw new NotFoundException();
         }
         return item;
@@ -62,21 +63,21 @@ export abstract class EntityService<
 
     async list(
         filter: Filter,
-        responseType: any,
+        ResponseType: any,
         ...rest: any[]
     ): Promise<PaginatedData<Model>> {
         let items = (await this.repository.findPaginated(filter.toQuery()))
             .skip(filter.skip)
             .limit(filter.limit);
 
-        if (filter.orderBy) {
+        if (!isEmpty(filter.orderBy)) {
             items = items.sort(filter.getSort());
         }
 
         const count = await items.count(false);
         const data = await items.toArray();
 
-        const res = new responseType();
+        const res = new ResponseType();
         res.count = count;
         res.data = data;
 
@@ -93,7 +94,7 @@ export abstract class EntityService<
         const item = this.repository.merge(entity, data);
         this.addHistory(item, 'Item updated');
         if (save) {
-            return this.repository.save(item, ...rest);
+            return await this.repository.save(item, ...rest);
         }
         return item;
     }
@@ -116,15 +117,22 @@ export abstract class EntityService<
     subscribe(onData: EventCallback<Model>): ChangeStream {
         return this.repository
             .watch([], { updateLookup: 'fullDocument' })
-            .on('change', (change: any) => this._onData(change, onData));
+            .on('change', (change: any) => {
+                this._onData(change, onData).catch((e) => {
+                    throw e;
+                });
+            });
     }
 
-    private _onData = async (change: any, onData: EventCallback<Model>) => {
+    private readonly _onData = async (
+        change: any,
+        onData: EventCallback<Model>
+    ) => {
         try {
             const em = this.repository.getEm();
             const classType = this.repository.getClassType();
             const { operationType, fullDocument } = change;
-            let operation = operationType;
+            let operation: EventType = operationType;
 
             if (operationType === 'insert') {
                 operation = 'create';
@@ -132,7 +140,7 @@ export abstract class EntityService<
             if (operationType === 'replace') {
                 operation = 'update';
             }
-            if (['create', 'update', 'delete'].indexOf(operation) === -1) {
+            if (!['create', 'update', 'delete'].includes(operation)) {
                 return;
             }
 

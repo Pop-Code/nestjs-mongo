@@ -5,7 +5,7 @@ import {
     plainToClass
 } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
-import { validate } from 'class-validator';
+import { validate, isEmpty } from 'class-validator';
 import Debug from 'debug';
 import {
     ChangeStream,
@@ -13,7 +13,8 @@ import {
     Cursor,
     FindOneOptions,
     MongoClient,
-    MongoCountPreferences
+    MongoCountPreferences,
+    ObjectId
 } from 'mongodb';
 
 import { DEBUG } from './constants';
@@ -23,7 +24,6 @@ import { getRepositoryToken } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
-import { WithRelationshipInterface } from './relationship/decorators';
 import {
     getRelationshipMetadata,
     RelationshipMetadata
@@ -103,12 +103,14 @@ export class MongoManager {
                     ? nameOrInstance.constructor
                     : nameOrInstance
             );
+        } else if (typeof nameOrInstance === 'string') {
+            name = nameOrInstance;
         }
 
-        if (!name) {
+        if (name === undefined) {
             throw new Error(
-                '@Collection decorator is required to use a class as model for:' +
-                    nameOrInstance
+                // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                `@Collection decorator is required to use a class as model for: ${nameOrInstance.toString()}`
             );
         }
 
@@ -129,27 +131,34 @@ export class MongoManager {
         options: MongoExecutionOptions & { dataloader?: string } = {}
     ): Promise<Model> {
         const entityName = entity.constructor.name;
+        const dataloaderName =
+            typeof options.dataloader === 'string'
+                ? options.dataloader
+                : entityName;
         try {
             this.log('saving %s', entityName);
             const errors = await validate(entity, {
                 whitelist: true,
                 validationError: { target: true, value: true }
             });
-            if (errors.length) {
+            if (errors.length > 0) {
                 throw this.exceptionFactory(errors);
             }
 
             const collection = this.getCollection(entity, options.database);
             let operation: any;
-            if (entity._id) {
+            if (!isEmpty(entity._id)) {
                 entity.updatedAt = new Date();
 
                 const $unset: any = {};
                 for (const p in entity) {
-                    if (entity.hasOwnProperty(p)) {
+                    if (
+                        Object.prototype.hasOwnProperty.call(entity, p) === true
+                    ) {
                         const v: any = entity[p];
                         if (v === undefined) {
                             $unset[p] = 1;
+                            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                             delete entity[p];
                         }
                     }
@@ -157,7 +166,7 @@ export class MongoManager {
 
                 const sets: any = { $set: entity };
 
-                if (Object.keys($unset).length) {
+                if (Object.keys($unset).length > 0) {
                     sets.$unset = $unset;
                 }
 
@@ -172,29 +181,23 @@ export class MongoManager {
                 );
             }
             const { result, insertedId } = await operation;
-            if (!result.ok) {
-                throw new Error('Unknow Error during entity save');
+            if (result.ok !== 1) {
+                throw new Error('Unknow Error saving an entity');
             }
 
             // new id
-            if (insertedId) {
+            if (insertedId instanceof ObjectId) {
                 entity._id = insertedId;
             }
 
-            this.dataloaderService.update(
-                options.dataloader || entityName,
-                entity
-            );
+            this.dataloaderService.update(dataloaderName, entity);
 
             return entity;
         } catch (e) {
             this.log('error saving %s', entityName);
 
-            if (entity._id) {
-                this.dataloaderService.delete(
-                    options.dataloader || entityName,
-                    entity
-                );
+            if (entity._id instanceof ObjectId) {
+                this.dataloaderService.delete(dataloaderName, entity);
             }
 
             throw e;
@@ -214,10 +217,11 @@ export class MongoManager {
             const entity = this.fromPlain<Model>(classType, data);
             return entity;
         });
-        this.dataloaderService.updateAll(
-            options.dataloader || classType.name,
-            cursorMap
-        );
+        const dataloaderName =
+            typeof options.dataloader === 'string'
+                ? options.dataloader
+                : classType.name;
+        this.dataloaderService.updateAll(dataloaderName, cursorMap);
         return cursorMap;
     }
 
@@ -228,25 +232,29 @@ export class MongoManager {
     ): Promise<Model> {
         this.log('findOne %s %o', classType.name, query);
         let entity: Model;
-        const dataloader = this.getDataloader<Model>(
-            options.dataloader || classType.name
-        );
-        if (dataloader && this.isIdQuery(query)) {
+        const dataloaderName =
+            typeof options.dataloader === 'string'
+                ? options.dataloader
+                : classType.name;
+        const dataloader = this.getDataloader<Model>(dataloaderName);
+
+        if (dataloader !== undefined && this.isIdQuery(query)) {
             this.log('findOne delegated to dataloader %s', dataloader.uuid);
             entity = await dataloader.load(query._id);
         }
-        if (!entity) {
+
+        if (entity === undefined) {
             const obj = await this.getCollection(classType).findOne<object>(
                 query,
                 options
             );
-            if (!obj) {
-                return null;
+            if (obj === undefined) {
+                return;
             }
             entity = this.fromPlain<Model>(classType, obj);
         }
 
-        if (dataloader) {
+        if (dataloader !== undefined) {
             this.log(
                 'Updating dataloader %s %s %s',
                 dataloader.uuid,
@@ -274,6 +282,7 @@ export class MongoManager {
     isIdQuery(query: any): boolean {
         return Object.keys(query).length === 1 && query._id;
     }
+
     isIdsQuery(query: any): boolean {
         return this.isIdQuery(query) && Array.isArray(query._id.$in);
     }
@@ -285,17 +294,18 @@ export class MongoManager {
     ) {
         this.log('deleteOne %s %o', classType.name, query);
         const entity = await this.findOne<Model>(classType, query);
-        if (!entity) {
+        if (entity === undefined) {
             throw new NotFoundException();
         }
         const result = await this.getCollection(classType).deleteOne(
             { _id: entity._id },
             options
         );
-        this.dataloaderService.delete(
-            options.dataloader || classType.name,
-            entity
-        );
+        const dataloaderName =
+            typeof options.dataloader === 'string'
+                ? options.dataloader
+                : classType.name;
+        this.dataloaderService.delete(dataloaderName, entity);
         return result;
     }
 
@@ -310,11 +320,13 @@ export class MongoManager {
             query,
             options
         );
-        const dataloader = await this.getDataloader<Model>(
-            options.dataloader || classType.name
-        );
-        if (dataloader && items.count) {
-            items.forEach((i) => dataloader.clear(i._id));
+        const dataloaderName =
+            typeof options.dataloader === 'string'
+                ? options.dataloader
+                : classType.name;
+        const dataloader = this.getDataloader<Model>(dataloaderName);
+        if (dataloader !== undefined && result.deletedCount > 0) {
+            await items.forEach((i) => dataloader.clear(i._id));
         }
         return result;
     }
@@ -328,26 +340,20 @@ export class MongoManager {
         return this.getCollection(classType).watch(pipes, options);
     }
 
-    async getRelationship<
-        Relationship extends EntityInterface = any,
-        O extends WithRelationshipInterface = any
-    >(
-        object: O,
+    async getRelationship<R extends EntityInterface = any, P = object>(
+        object: P,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<Relationship, O>;
+            cachedMetadata?: RelationshipMetadata<R, P>;
             dataloader?: string;
         } = {}
-    ): Promise<Relationship> {
+    ): Promise<R> {
         this.log('getRelationship %s on %s', property, object.constructor.name);
 
-        let relationMetadata = options && options.cachedMetadata;
-        if (!relationMetadata) {
-            relationMetadata = getRelationshipMetadata<Relationship, O>(
-                object,
-                property
-            );
-            if (!relationMetadata) {
+        let relationMetadata = options.cachedMetadata;
+        if (isEmpty(relationMetadata)) {
+            relationMetadata = getRelationshipMetadata<R, P>(object, property);
+            if (isEmpty(relationMetadata)) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getRelationship on ${object.constructor.name}`
                 );
@@ -366,39 +372,27 @@ export class MongoManager {
             _id: value
         });
 
-        if (
-            relationship &&
-            typeof object.setCachedRelationship === 'function'
-        ) {
-            object.setCachedRelationship(property, relationship);
-        }
-
         return relationship;
     }
 
-    async getRelationships<
-        Relationship extends EntityInterface = any,
-        O extends WithRelationshipInterface = any
-    >(
-        object: O,
+    async getRelationships<R extends EntityInterface = any, P = object>(
+        object: P,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<Relationship, O>;
+            cachedMetadata?: RelationshipMetadata<R, P>;
             dataloader?: string;
         } = {}
-    ): Promise<Array<Relationship | Error>> {
+    ): Promise<Array<R | Error>> {
         this.log(
             'getRelationships %s on %s',
             property,
             object.constructor.name
         );
-        let relationMetadata = options && options.cachedMetadata;
-        if (!relationMetadata) {
-            relationMetadata = getRelationshipMetadata<Relationship, O>(
-                object,
-                property
-            );
-            if (!relationMetadata) {
+
+        let relationMetadata = options.cachedMetadata;
+        if (isEmpty(relationMetadata)) {
+            relationMetadata = getRelationshipMetadata<R, P>(object, property);
+            if (isEmpty(relationMetadata)) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getRelationships on ${object.constructor.name}`
                 );
@@ -414,12 +408,6 @@ export class MongoManager {
         const repository = this.getRepository(relationMetadata.type);
         const value = object[property];
         const relationships = await repository.findById(value);
-        if (
-            relationships &&
-            typeof object.setCachedRelationship === 'function'
-        ) {
-            object.setCachedRelationship(property, relationships);
-        }
 
         return relationships;
     }
@@ -427,25 +415,26 @@ export class MongoManager {
     async getInversedRelationships<
         P extends EntityInterface = any,
         C extends EntityInterface = any
-    >(parent: P, childType: ClassType<C>, property: string) {
+    >(parent: P, ChildType: ClassType<C>, property: string) {
         let relationMetadata: RelationshipMetadata<P, C>;
-        if (!relationMetadata) {
+        if (isEmpty(relationMetadata)) {
             relationMetadata = getRelationshipMetadata<P, C>(
-                new childType(), // fix typing
+                new ChildType(), // fix typing
                 property
             );
-            if (!relationMetadata) {
+            if (isEmpty(relationMetadata)) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getInversedRelationships of ${parent.constructor.name}`
                 );
             }
         }
 
-        if (!relationMetadata.inversedBy) {
+        if (isEmpty(relationMetadata.inversedBy)) {
             throw new Error(`Can not get inversed metadata`);
         }
 
-        const repository = this.getRepository(childType);
+        const repository = this.getRepository(ChildType);
+
         // todo set metadata for inversed side insted of using implicit _id ? ?
         const children = await repository.find({
             [property]: parent._id

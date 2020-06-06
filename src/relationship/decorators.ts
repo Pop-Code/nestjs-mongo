@@ -34,7 +34,10 @@ export function IsValidRelationship(
     validationOptions?: IsValidRelationshipOptions
 ) {
     const constraints = [];
-    if (validationOptions && validationOptions.with) {
+    if (
+        validationOptions !== undefined &&
+        typeof validationOptions.with === 'function'
+    ) {
         constraints.push(validationOptions.with);
     }
 
@@ -67,19 +70,38 @@ export function Relationship<R extends EntityInterface = any, Model = any>(
     };
 }
 
+/**
+ * @deprecated since v0.9
+ */
 export interface WithRelationshipInterface {
-    getCachedRelationship<T = any>(prop: string): T;
-    setCachedRelationship(prop: string, value: any): WithRelationshipInterface;
+    getCachedRelationship: <T = any>(prop: string) => T;
+    setCachedRelationship: (
+        prop: string,
+        value: any
+    ) => WithRelationshipInterface;
 }
 
+/**
+ * @deprecated since v0.9
+ */
 export function getCachedRelationship<R = any>(prop: string): R {
-    if (!this.__cachedRelationships) {
+    console.warn(
+        'getCachedRelationship function is deprecated since 0.9 and will be remove in next major release'
+    );
+    if (this.__cachedRelationships === undefined) {
         return;
     }
     return this.__cachedRelationships.get(prop);
 }
+
+/**
+ * @deprecated since v0.9
+ */
 export function setCachedRelationship(prop: string, value: any) {
-    if (!this.__cachedRelationships) {
+    console.warn(
+        'getCachedRelationship function is deprecated since 0.9 and will be remove in next major release'
+    );
+    if (this.__cachedRelationships === undefined) {
         Object.defineProperty(this, '__cachedRelationships', {
             writable: true,
             value: new Map(),
@@ -91,7 +113,13 @@ export function setCachedRelationship(prop: string, value: any) {
     return this;
 }
 
+/**
+ * @deprecated since v0.9
+ */
 export function WithRelationship() {
+    console.warn(
+        'WithRelationship decorator is deprecated since 0.9 and will be remove in next major release'
+    );
     return (target: any) => {
         target.prototype.getCachedRelationship = getCachedRelationship;
         target.prototype.setCachedRelationship = setCachedRelationship;

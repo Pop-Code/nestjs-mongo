@@ -1,13 +1,20 @@
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+    ValidatorConstraint,
+    ValidatorConstraintInterface
+} from 'class-validator';
 import { first } from 'lodash';
 
 import { ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
-import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
+import {
+    IsValidRelationshipValidationArguments,
+    WithRelationshipTest
+} from './decorators';
 import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
-export class IsValidRelationshipConstraint implements ValidatorConstraintInterface {
+export class IsValidRelationshipConstraint
+    implements ValidatorConstraintInterface {
     private em: MongoManager;
 
     private message: string;
@@ -30,9 +37,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
 
             if (relationMetadata.isArray) {
                 if (!Array.isArray(value)) {
-                    throw new Error(
-                        `The ${args.property} ${args.value} must be an array`
-                    );
+                    throw new Error(`The ${args.property} must be an array`);
                 }
                 const errors: Error[] = [];
                 relationship = [];
@@ -43,10 +48,12 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
                             _id
                         }
                     );
-                    if (!innerR) {
+                    if (innerR === undefined) {
                         errors.push(
                             new Error(
-                                `The property ${args.property} contains an invalid relationship ${_id} at index ${index}`
+                                `The property ${
+                                    args.property
+                                } contains an invalid relationship ${_id.toHexString()} at index ${index}`
                             )
                         );
                         relationship.push(null);
@@ -54,23 +61,30 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
                     }
                     relationship.push(innerR);
                 }
-                if (errors.length) {
+                if (errors.length > 0) {
                     throw new Error(errors.map((e) => e.message).join(', '));
                 }
             } else {
+                if (Array.isArray(value)) {
+                    throw new Error(
+                        `The ${args.property} must not be an array`
+                    );
+                }
                 relationship = await this.em.getRelationship(
                     args.object as any,
                     args.property
                 );
-                if (!relationship) {
+                if (relationship === undefined) {
                     throw new Error(
-                        `The ${args.property} ${args.value} does not exist`
+                        `The property ${
+                            args.property
+                        } contains an invalid relationship ${value.toHexString()}`
                     );
                 }
             }
 
             const withTestFunction = first(args.constraints);
-            if (withTestFunction) {
+            if (typeof withTestFunction === 'function') {
                 const withTest: WithRelationshipTest = withTestFunction.bind(
                     args.object
                 );

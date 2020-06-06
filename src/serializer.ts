@@ -1,7 +1,7 @@
 import { classToPlain } from 'class-transformer';
 
 export interface ISerializable {
-    serialize(): object;
+    serialize: () => object;
 }
 
 export function serialize() {

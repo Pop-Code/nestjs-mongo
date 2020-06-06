@@ -23,12 +23,12 @@ export class DataloaderService {
         }
         this.log('Retrieving dataloader %s', id);
         const session = this.getSession();
-        if (!session) {
+        if (session === undefined) {
             this.log('Namespace %s does not exist', LOADER_SESSION_NAME);
             return;
         }
         const loader = session.get(id);
-        if (!loader) {
+        if (loader === undefined) {
             this.log('Unable to find dataloader %s in session', id);
         }
         return loader;
@@ -46,7 +46,7 @@ export class DataloaderService {
                 const jobs: Array<Promise<Model | Error | undefined>> = [];
                 for (const key of keys) {
                     jobs.push(
-                        //TODO try to use one query only
+                        // TODO try to use one query only
                         em.findOne(
                             model,
                             { _id: key },
@@ -54,13 +54,15 @@ export class DataloaderService {
                         )
                     );
                 }
-                return await Promise.all(jobs.map((j) => j.catch((e) => e)));
+                return await Promise.all(
+                    jobs.map(async (j) => await j.catch((e) => e))
+                );
             },
             {
                 batch: true,
                 maxBatchSize: 500,
                 cache: true,
-                cacheKeyFn: (key: ObjectId) => key.toString()
+                cacheKeyFn: (key: ObjectId) => key.toHexString()
             }
         );
         loader.uuid = uuid;
@@ -69,7 +71,7 @@ export class DataloaderService {
 
     update<Model extends EntityInterface>(id: string, entity: Model) {
         const loader = this.get(id);
-        if (!loader) {
+        if (loader === undefined) {
             return false;
         }
         this.log(
@@ -86,7 +88,7 @@ export class DataloaderService {
         entities: Cursor<Model>
     ) {
         const loader = this.get(id);
-        if (!loader) {
+        if (loader === undefined) {
             return false;
         }
         entities.map((entity) => {
@@ -102,7 +104,7 @@ export class DataloaderService {
 
     delete<Model extends EntityInterface>(id: string, entity: Model) {
         const loader = this.get(id);
-        if (!loader) {
+        if (loader === undefined) {
             return false;
         }
         this.log(

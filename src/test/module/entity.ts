@@ -11,6 +11,4 @@ export class EntityTest extends Entity {
 
     @IsString()
     bar: string;
-
-    children: any;
 }

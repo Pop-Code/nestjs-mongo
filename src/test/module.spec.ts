@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
-import { DEFAULT_CONNECTION_NAME, MongoModule } from '..';
 import { DataloaderService } from '../dataloader/service';
 import {
     getConnectionToken,
@@ -20,6 +19,9 @@ import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
+import { MongoModule } from '../module';
+import { DEFAULT_CONNECTION_NAME } from '../constants';
+import { getRelationshipMetadata } from '../relationship/metadata';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -236,6 +238,30 @@ describe('forFeature', () => {
             .fromPlain(objChild);
         expect(reChild.parentId).toBeInstanceOf(ObjectId);
         expect(reChild.parentId).toEqual(entity._id);
+    });
+
+    it('Should get/set relationship metadata', async () => {
+        const entityChild = new EntityChildTest();
+        const parentRelation = getRelationshipMetadata(entityChild, 'entities');
+        expect(parentRelation).toBeDefined();
+        expect(parentRelation.type).toBe(EntityRelationship);
+
+        const parent = new EntityRelationship();
+        const childRelation = getRelationshipMetadata(parent, 'child');
+        expect(childRelation).toBeDefined();
+        expect(childRelation.type).toBe(EntityChildTest);
+    });
+
+    it('Should get/set relationship metadata using string reference', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const parent = new EntityRelationship();
+        const childRelationAsRef = getRelationshipMetadata(
+            parent,
+            'relationshipAsReference',
+            manager
+        );
+        expect(childRelationAsRef).toBeDefined();
+        expect(childRelationAsRef.type).toBe(EntityNestedTest);
     });
 });
 

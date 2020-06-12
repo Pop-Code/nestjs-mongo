@@ -9,7 +9,7 @@ export const TEST_CHILD_NESTED_COLLECTION_NAME = 'testnested';
 @Collection(TEST_CHILD_NESTED_COLLECTION_NAME)
 export class EntityNestedTest extends Entity {
     @TypeObjectId()
-    @Relationship(EntityTest)
+    @Relationship(() => EntityTest)
     @IsDefined()
     parentId: ObjectId;
 }

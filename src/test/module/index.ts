@@ -8,11 +8,17 @@ import { EntityChildTest } from './child';
 import { TestController } from './controller';
 import { EntityTest } from './entity';
 import { EntityRelationship } from './entity.relationship';
+import { EntityNestedTest } from './entity.nested';
 
 @Module({
     imports: [
         MongoModule.forFeature({
-            models: [EntityTest, EntityChildTest, EntityRelationship]
+            models: [
+                EntityTest,
+                EntityChildTest,
+                EntityRelationship,
+                EntityNestedTest
+            ]
         })
     ],
     controllers: [TestController]

@@ -24,7 +24,7 @@ export class EntityChildTest extends Entity {
     foo: string;
 
     @TypeObjectId()
-    @Relationship({ type: EntityTest, inversedBy: 'children' })
+    @Relationship({ type: () => EntityTest, inversedBy: 'children' })
     @IsValidRelationship()
     @IsDefined()
     parentId: ObjectId;
@@ -37,7 +37,7 @@ export class EntityChildTest extends Entity {
     @TypeObjectId(true)
     @IsOptional()
     @Relationship({
-        typeFn: (object) => EntityRelationship,
+        type: () => EntityRelationship,
         isArray: true
     })
     @IsValidRelationship()

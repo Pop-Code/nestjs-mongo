@@ -6,26 +6,25 @@ import { isClass } from '../helpers';
 import { MongoManager } from '../manager';
 
 export type RelationshipTypeDescriptor<
-    Relationship extends EntityInterface,
-    Parent = object
-> = (object: Parent) => ClassType<Relationship>;
+    Relationship extends EntityInterface
+> = () => ClassType<Relationship>;
 
-export interface RelationshipMetadata<
-    R extends EntityInterface = any,
-    P = object
-> {
-    type: ClassType<R> | RelationshipTypeDescriptor<R, P> | string;
+export interface RelationshipMetadataOptions<R extends EntityInterface> {
+    type: RelationshipTypeDescriptor<R> | ClassType<R> | string;
     isArray?: boolean;
     inversedBy?: string;
 }
 
-export function setRelationshipMetadata<
-    R extends EntityInterface = any,
-    P = object
->(
+export interface RelationshipMetadata<R extends EntityInterface> {
+    type: ClassType<R>;
+    isArray?: boolean;
+    inversedBy?: string;
+}
+
+export function setRelationshipMetadata<R extends EntityInterface = any>(
     target: any,
     property: string | symbol,
-    metadata: RelationshipMetadata<R, P>
+    metadata: RelationshipMetadataOptions<R>
 ) {
     if (isEmpty(metadata.type)) {
         throw new Error('type is required in setRelationshipMetadata');
@@ -46,12 +45,18 @@ export function setRelationshipMetadata<
 export function getRelationshipMetadata<
     R extends EntityInterface = any,
     P = object
->(target: P, property: string | symbol, em?: MongoManager) {
-    const metadata: RelationshipMetadata<R, P> = Reflect.getMetadata(
+>(
+    target: P,
+    property: string | symbol,
+    em?: MongoManager
+): RelationshipMetadata<R> {
+    const metadata: RelationshipMetadataOptions<R> = Reflect.getMetadata(
         RELATIONSHIP_METADATA_NAME,
         target,
         property
     );
+
+    const metadataDefinition = metadata as RelationshipMetadata<R>;
 
     if (metadata === undefined) {
         throw new Error(
@@ -62,8 +67,8 @@ export function getRelationshipMetadata<
     }
 
     if (!isClass(metadata.type) && typeof metadata.type === 'function') {
-        const type = metadata.type as RelationshipTypeDescriptor<R, P>;
-        metadata.type = type(target);
+        const type = metadata.type as RelationshipTypeDescriptor<R>;
+        metadataDefinition.type = type();
     }
 
     if (typeof metadata.type === 'string') {
@@ -74,8 +79,8 @@ export function getRelationshipMetadata<
                 }`
             );
         }
-        metadata.type = em.getModel(metadata.type);
+        metadataDefinition.type = em.getModel(metadata.type);
     }
 
-    return metadata;
+    return metadataDefinition;
 }

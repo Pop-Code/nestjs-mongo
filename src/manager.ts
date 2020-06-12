@@ -344,7 +344,7 @@ export class MongoManager {
         object: P,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<R, P>;
+            cachedMetadata?: RelationshipMetadata<R>;
             dataloader?: string;
         } = {}
     ): Promise<R> {
@@ -379,7 +379,7 @@ export class MongoManager {
         object: P,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<R, P>;
+            cachedMetadata?: RelationshipMetadata<R>;
             dataloader?: string;
         } = {}
     ): Promise<Array<R | Error>> {
@@ -416,7 +416,7 @@ export class MongoManager {
         P extends EntityInterface = any,
         C extends EntityInterface = any
     >(parent: P, ChildType: ClassType<C>, property: string) {
-        let relationMetadata: RelationshipMetadata<P, C>;
+        let relationMetadata: RelationshipMetadata<P>;
         if (isEmpty(relationMetadata)) {
             relationMetadata = getRelationshipMetadata<P, C>(
                 new ChildType(), // fix typing

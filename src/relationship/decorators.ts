@@ -9,7 +9,7 @@ import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { IsValidRelationshipConstraint } from './constraint';
 import {
-    RelationshipMetadata,
+    RelationshipMetadataOptions,
     setRelationshipMetadata,
     RelationshipTypeDescriptor
 } from './metadata';
@@ -56,19 +56,19 @@ export function IsValidRelationship(
 
 export function Relationship<R extends EntityInterface = any, Model = any>(
     options:
-        | RelationshipMetadata<R, Model>
-        | RelationshipTypeDescriptor<R, Model>
+        | RelationshipMetadataOptions<R>
+        | RelationshipTypeDescriptor<R>
         | string
 ) {
     const debug = Debug(DEBUG + ':Relationship');
     return (target: Model, property: string) => {
         debug('Register relationship metadata %o', options);
         if (typeof options === 'function' || typeof options === 'string') {
-            setRelationshipMetadata<R, Model>(target, property, {
+            setRelationshipMetadata<R>(target, property, {
                 type: options
             });
         } else {
-            setRelationshipMetadata<R, Model>(target, property, options);
+            setRelationshipMetadata<R>(target, property, options);
         }
     };
 }

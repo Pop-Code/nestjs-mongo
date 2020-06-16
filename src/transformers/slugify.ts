@@ -1,7 +1,7 @@
+import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
 import { Transform } from 'class-transformer';
 import { isNotEmpty } from 'class-validator';
 import slugify from 'slugify';
-import { BadRequestException } from '@nestjs/common';
 
 type KeysOfType<T, V> = { [K in keyof T]: T[K] extends V ? K : never }[keyof T];
 
@@ -21,7 +21,7 @@ export function SlugTransformer(obj: any, options: ISlugifyOptions) {
                 .filter(Boolean)
                 .reduce((str, key) => `${str} ${obj[key] as string}`, '');
 
-        throw new BadRequestException('Unable to slugify');
+        throw new RuntimeException('Unable to slugify');
     })();
 
     return slugify(seed);

@@ -8,7 +8,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [10.x, 11.x, 12.x, 13.x]
+                node-version: [10.x, 12.x, 13.x, 14.x]
                 mongodb-version: [4.0, 4.2]
 
         steps:
@@ -34,4 +34,3 @@ jobs:
                   token: ${{ secrets.CODECOV_TOKEN }}
                   file: ./coverage/coverage-final.json
                   fail_ci_if_error: true
-                  CI: true

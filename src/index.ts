@@ -26,6 +26,7 @@ export * from './relationship/metadata';
 export * from './repository';
 export * from './serializer';
 export * from './transformers/objectid';
+export * from './transformers/utils';
 export * from './validation/pipes/relationship';
 export * from './validation/pipes/required.relationship';
 export * from './validation/unique/constraint';

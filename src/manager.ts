@@ -1,9 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import {
-    classToClassFromExist,
-    ClassTransformOptions,
-    plainToClass
-} from 'class-transformer';
+import { ClassTransformOptions } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { validate, isEmpty } from 'class-validator';
 import Debug from 'debug';
@@ -29,6 +25,7 @@ import {
     RelationshipMetadata
 } from './relationship/metadata';
 import { MongoRepository } from './repository';
+import { fromPlain, merge } from './transformers/utils';
 
 export class MongoManager {
     protected readonly repositories: Map<string, any> = new Map();
@@ -449,10 +446,7 @@ export class MongoManager {
         options?: ClassTransformOptions
     ): Model {
         this.log('transform fromPlain %s', classType.name);
-        return plainToClass(classType, data, {
-            ...options,
-            excludePrefixes: ['__']
-        });
+        return fromPlain(classType, data, options);
     }
 
     merge<Model extends EntityInterface>(
@@ -461,9 +455,6 @@ export class MongoManager {
         options?: ClassTransformOptions
     ): Model {
         this.log('%s transform merge', entity.constructor.name);
-        return classToClassFromExist(data, entity, {
-            ...options,
-            excludePrefixes: ['__']
-        });
+        return merge(entity, data, options);
     }
 }

@@ -6,7 +6,7 @@ export interface ISerializable {
 }
 
 export function serialize() {
-    return classToPlain(this);
+    return classToPlain(this, { excludePrefixes: ['__'] });
 }
 
 export function Serializable() {
@@ -17,17 +17,21 @@ export function Serializable() {
         target.prototype.toJSON = function overrideToJSON() {
             const proto = Object.getPrototypeOf(this);
 
-            return Object.entries(Object.getOwnPropertyDescriptors(proto))
+            const json = Object.entries(Object.getOwnPropertyDescriptors(proto))
                 .filter(
                     ([_, descriptor]) => typeof descriptor.get === 'function'
                 )
                 .reduce(
-                    (json, [key, descriptor]) => ({
+                    (json, [key]) => ({
                         ...json,
                         [key]: this[key]
                     }),
                     { ...this }
                 );
+
+            return Object.keys(json)
+                .filter((k) => !k.startsWith('__'))
+                .reduce((obj, key) => ({ ...obj, [key]: json[key] }), {});
         };
     };
 }

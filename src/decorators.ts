@@ -105,9 +105,11 @@ export function SlugDecorator<T>(
     key: string,
     config: ISlugifyOptions<T>
 ) {
+    const refKey = `__${key}`;
+
     Object.defineProperty(target, key, {
         get() {
-            if (this[`__${key}`] !== undefined) return this[`__${key}`];
+            if (this[refKey] !== undefined) return this[refKey];
 
             const seed = (() => {
                 if (typeof config.generate === 'function')
@@ -127,7 +129,7 @@ export function SlugDecorator<T>(
             return slugify(seed, config.options);
         },
         set(value: string) {
-            this[`__${key}`] = value;
+            this[refKey] = value;
         }
     });
 }

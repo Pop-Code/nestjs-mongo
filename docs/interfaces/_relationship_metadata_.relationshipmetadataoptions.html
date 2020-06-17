@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ISerializable | NestJS Mongo</title>
+	<title>RelationshipMetadataOptions | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,38 +56,32 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_serializer_.html">&quot;serializer&quot;</a>
+					<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
 				</li>
 				<li>
-					<a href="_serializer_.iserializable.html">ISerializable</a>
+					<a href="_relationship_metadata_.relationshipmetadataoptions.html">RelationshipMetadataOptions</a>
 				</li>
 			</ul>
-			<h1>Interface ISerializable</h1>
+			<h1>Interface RelationshipMetadataOptions&lt;R&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>R<span class="tsd-signature-symbol">: </span><a href="_interfaces_entity_.entityinterface.html" class="tsd-signature-type">EntityInterface</a></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ISerializable</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="_interfaces_entity_.entityinterface.html" class="tsd-signature-type">EntityInterface</a>
-							</li>
-							<li>
-								<a href="../classes/_classes_filter_.filter.html" class="tsd-signature-type">Filter</a>
-							</li>
-							<li>
-								<a href="../classes/_classes_paginated_.paginateddata.html" class="tsd-signature-type">PaginatedData</a>
-							</li>
-							<li>
-								<a href="../classes/_entity_.entity.html" class="tsd-signature-type">Entity</a>
-							</li>
-						</ul>
+						<span class="target">RelationshipMetadataOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -98,8 +92,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_serializer_.iserializable.html#serialize" class="tsd-kind-icon">serialize</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_serializer_.iserializable.html#tojson" class="tsd-kind-icon">toJSON</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadataoptions.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadataoptions.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadataoptions.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,54 +103,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="serialize" class="tsd-anchor"></a>
-					<h3>serialize</h3>
-					<div class="tsd-signature tsd-kind-icon">serialize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">object</span></div>
+					<a name="inversedby" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> inversed<wbr>By</h3>
+					<div class="tsd-signature tsd-kind-icon">inversed<wbr>By<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/d683507/src/serializer.ts#L5">src/serializer.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/d683507/src/relationship/metadata.ts#L15">src/relationship/metadata.ts:15</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="tojson" class="tsd-anchor"></a>
-					<h3>toJSON</h3>
-					<div class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">object</span></div>
+					<a name="isarray" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Array</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/d683507/src/serializer.ts#L6">src/serializer.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/d683507/src/relationship/metadata.ts#L14">src/relationship/metadata.ts:14</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-									</li>
-								</ul>
-							</li>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-signature-type">RelationshipTypeDescriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/d683507/src/relationship/metadata.ts#L13">src/relationship/metadata.ts:13</a></li>
 						</ul>
-					</div>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -166,32 +141,41 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/_serializer_.html">&quot;serializer&quot;</a>
+						<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="_serializer_.iserializable.html" class="tsd-kind-icon">ISerializable</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipmetadataoptions.html" class="tsd-kind-icon">Relationship<wbr>Metadata<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_serializer_.iserializable.html#serialize" class="tsd-kind-icon">serialize</a>
+								<a href="_relationship_metadata_.relationshipmetadataoptions.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_serializer_.iserializable.html#tojson" class="tsd-kind-icon">toJSON</a>
+								<a href="_relationship_metadata_.relationshipmetadataoptions.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_relationship_metadata_.relationshipmetadataoptions.html#type" class="tsd-kind-icon">type</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/_serializer_.html#serializable" class="tsd-kind-icon">Serializable</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/_serializer_.html#serialize" class="tsd-kind-icon">serialize</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipmetadata" class="tsd-kind-icon">set<wbr>Relationship<wbr>Metadata</a>
 					</li>
 				</ul>
 			</nav>

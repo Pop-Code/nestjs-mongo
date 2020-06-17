@@ -19,12 +19,10 @@ export function Serializable() {
             const proto = Object.getPrototypeOf(this);
 
             const json = Object.entries(Object.getOwnPropertyDescriptors(proto))
-                .filter(
-                    ([_, descriptor]) => typeof descriptor.get === 'function'
-                )
+                .filter(([_, { get }]) => typeof get === 'function')
                 .reduce(
-                    (json, [key]) => ({
-                        ...json,
+                    (obj, [key]) => ({
+                        ...obj,
                         [key]: this[key]
                     }),
                     { ...this }
@@ -37,7 +35,16 @@ export function Serializable() {
                             k.startsWith(prefix)
                         )
                 )
-                .reduce((obj, key) => ({ ...obj, [key]: json[key] }), {});
+                .reduce(
+                    (obj, key) => ({
+                        ...obj,
+                        [key]:
+                            typeof json[key]?.toJSON === 'function'
+                                ? json[key]?.toJSON()
+                                : json[key]
+                    }),
+                    {}
+                );
         };
     };
 }

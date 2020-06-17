@@ -239,6 +239,11 @@ describe('forFeature', () => {
             .fromPlain(objChild);
         expect(reChild.parentId).toBeInstanceOf(ObjectId);
         expect(reChild.parentId).toEqual(entity._id);
+
+        /* nested toJSON */
+        const nested = new EntityNestedTest();
+        const objNested: any = nested.toJSON();
+        expect(objNested.nestedPropTest).toEqual('nested-prop-test');
     });
 
     it('Should get/set relationship metadata', async () => {

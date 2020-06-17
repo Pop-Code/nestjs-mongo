@@ -12,4 +12,10 @@ export class EntityNestedTest extends Entity {
     @Relationship(() => EntityTest)
     @IsDefined()
     parentId: ObjectId;
+
+    nestedPropTest = {
+        toJSON() {
+            return 'nested-prop-test';
+        }
+    };
 }

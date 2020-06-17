@@ -1,5 +1,5 @@
 import { Inject, applyDecorators } from '@nestjs/common';
-import { Transform, TransformationType, Type } from 'class-transformer';
+import { Transform, TransformationType, Type, Expose } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { Allow, isEmpty } from 'class-validator';
 import { DEFAULT_CONNECTION_NAME } from './constants';
@@ -9,6 +9,8 @@ import {
     getRepositoryToken,
     ObjectId
 } from './helpers';
+import slugify from 'slugify';
+import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
 
 export function InjectMongoClient(
     connectionName: string = DEFAULT_CONNECTION_NAME
@@ -79,4 +81,64 @@ export function TypeObjectId(isArray?: boolean) {
 export function Collection(name: string) {
     return (target: any) =>
         Reflect.defineMetadata('mongo:collectionName', name, target);
+}
+
+type KeysOfType<T, V> = { [K in keyof T]: T[K] extends V ? K : never }[keyof T];
+
+interface ISlugifyOptions<T = any> {
+    /* enforce "slugify-able" keys to reference only string values */
+    keys?: Array<KeysOfType<T, string>>;
+    generate?: (obj: T) => string;
+    expose?: boolean;
+    options?:
+        | {
+              replacement?: string;
+              remove?: RegExp;
+              lower?: boolean;
+              strict?: boolean;
+          }
+        | string;
+}
+
+export function SlugDecorator<T>(
+    target: any,
+    key: string,
+    config: ISlugifyOptions<T>
+) {
+    const refKey = `__${key}`;
+
+    Object.defineProperty(target, key, {
+        get() {
+            if (this[refKey] !== undefined) return this[refKey];
+
+            const seed = (() => {
+                if (typeof config.generate === 'function')
+                    return config.generate(this);
+
+                if (config.keys?.length > 0)
+                    return config.keys
+                        .filter(Boolean)
+                        .reduce(
+                            (str, key) => `${str} ${this[key] as string}`,
+                            ''
+                        );
+
+                throw new RuntimeException('Unable to slugify');
+            })();
+
+            return slugify(seed, config.options);
+        },
+        set(value: string) {
+            this[refKey] = value;
+        }
+    });
+}
+
+export function Slugify<T = any>(config: ISlugifyOptions<T>) {
+    return applyDecorators(
+        ...[
+            ...(config.expose ? [Expose()] : []),
+            (target: any, key: string) => SlugDecorator<T>(target, key, config)
+        ]
+    );
 }

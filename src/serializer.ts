@@ -1,4 +1,5 @@
 import { classToPlain } from 'class-transformer';
+import { EXCLUDED_PREFIXES } from './transformers/utils';
 
 export interface ISerializable {
     serialize: () => object;
@@ -6,7 +7,7 @@ export interface ISerializable {
 }
 
 export function serialize() {
-    return classToPlain(this, { excludePrefixes: ['__'] });
+    return classToPlain(this, { excludePrefixes: EXCLUDED_PREFIXES });
 }
 
 export function Serializable() {
@@ -30,7 +31,12 @@ export function Serializable() {
                 );
 
             return Object.keys(json)
-                .filter((k) => !k.startsWith('__'))
+                .filter(
+                    (k) =>
+                        !EXCLUDED_PREFIXES.some((prefix) =>
+                            k.startsWith(prefix)
+                        )
+                )
                 .reduce((obj, key) => ({ ...obj, [key]: json[key] }), {});
         };
     };

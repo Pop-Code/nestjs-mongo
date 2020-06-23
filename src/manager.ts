@@ -349,7 +349,11 @@ export class MongoManager {
 
         let relationMetadata = options.cachedMetadata;
         if (isEmpty(relationMetadata)) {
-            relationMetadata = getRelationshipMetadata<R, P>(object, property);
+            relationMetadata = getRelationshipMetadata<R, P>(
+                object,
+                property,
+                this
+            );
             if (isEmpty(relationMetadata)) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getRelationship on ${object.constructor.name}`
@@ -388,7 +392,11 @@ export class MongoManager {
 
         let relationMetadata = options.cachedMetadata;
         if (isEmpty(relationMetadata)) {
-            relationMetadata = getRelationshipMetadata<R, P>(object, property);
+            relationMetadata = getRelationshipMetadata<R, P>(
+                object,
+                property,
+                this
+            );
             if (isEmpty(relationMetadata)) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getRelationships on ${object.constructor.name}`
@@ -417,7 +425,8 @@ export class MongoManager {
         if (isEmpty(relationMetadata)) {
             relationMetadata = getRelationshipMetadata<P, C>(
                 new ChildType(), // fix typing
-                property
+                property,
+                this
             );
             if (isEmpty(relationMetadata)) {
                 throw new Error(

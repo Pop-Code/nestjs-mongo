@@ -31,7 +31,8 @@ export class IsValidRelationshipConstraint
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
                 obj,
-                args.property
+                args.property,
+                this.em
             );
             let relationship: any;
 

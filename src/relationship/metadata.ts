@@ -1,13 +1,14 @@
-import { EntityInterface } from '../interfaces/entity';
-import { RELATIONSHIP_METADATA_NAME } from '../constants';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { isEmpty } from 'class-validator';
+
+import { RELATIONSHIP_METADATA_NAME } from '../constants';
 import { isClass } from '../helpers';
+import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 
-export type RelationshipTypeDescriptor<
-    Relationship extends EntityInterface
-> = () => ClassType<Relationship>;
+export type RelationshipTypeDescriptor<Relationship extends EntityInterface> = (
+    obj: unknown
+) => ClassType<Relationship>;
 
 export interface RelationshipMetadataOptions<R extends EntityInterface> {
     type: RelationshipTypeDescriptor<R> | ClassType<R> | string;
@@ -68,7 +69,7 @@ export function getRelationshipMetadata<
 
     if (!isClass(metadata.type) && typeof metadata.type === 'function') {
         const type = metadata.type as RelationshipTypeDescriptor<R>;
-        metadataDefinition.type = type();
+        metadataDefinition.type = type(target);
     }
 
     if (typeof metadata.type === 'string') {

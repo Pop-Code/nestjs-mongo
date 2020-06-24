@@ -30,7 +30,7 @@ export function setRelationshipMetadata<R extends EntityInterface = any>(
         throw new Error('type is required in setRelationshipMetadata');
     }
 
-    if (metadata.isArray === undefined || metadata.isArray === null) {
+    if (isEmpty(metadata.isArray)) {
         metadata.isArray = false;
     }
 

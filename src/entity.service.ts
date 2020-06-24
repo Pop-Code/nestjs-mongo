@@ -46,7 +46,6 @@ export abstract class EntityService<
 
     async create(data: any, save = false, ...rest: any[]): Promise<Model> {
         const item = this.repository.fromPlain(data);
-        this.addHistory(item, 'Item created');
         if (save) {
             return await this.repository.save(item, ...rest);
         }
@@ -92,7 +91,6 @@ export abstract class EntityService<
     ): Promise<Model> {
         const entity = await this.get(itemId);
         const item = this.repository.merge(entity, data);
-        this.addHistory(item, 'Item updated');
         if (save) {
             return await this.repository.save(item, ...rest);
         }

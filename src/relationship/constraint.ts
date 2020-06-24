@@ -2,7 +2,7 @@ import {
     ValidatorConstraint,
     ValidatorConstraintInterface
 } from 'class-validator';
-import { first } from 'lodash';
+import { first, isEmpty } from 'lodash';
 
 import { ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
@@ -31,7 +31,8 @@ export class IsValidRelationshipConstraint
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
                 obj,
-                args.property
+                args.property,
+                this.em
             );
             let relationship: any;
 
@@ -48,7 +49,7 @@ export class IsValidRelationshipConstraint
                             _id
                         }
                     );
-                    if (innerR === undefined) {
+                    if (isEmpty(innerR)) {
                         errors.push(
                             new Error(
                                 `The property ${
@@ -74,7 +75,7 @@ export class IsValidRelationshipConstraint
                     args.object as any,
                     args.property
                 );
-                if (relationship === undefined) {
+                if (isEmpty(relationship)) {
                     throw new Error(
                         `The property ${
                             args.property

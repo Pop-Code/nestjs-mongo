@@ -26,7 +26,7 @@
         "dataloader": "2.0.0",
         "debug": "4.1.1",
         "global": "4.4.0",
-        "lodash": "4.17.15",
+        "lodash": "4.17.20",
         "mongodb": "3.5.9",
         "slugify": "^1.4.0",
         "uuid": "8.2.0"

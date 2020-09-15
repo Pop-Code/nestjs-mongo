@@ -81,7 +81,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RelationshipMetadataOptions</span>
+						<a href="_relationship_metadata_.baserelationshipmetadata.html" class="tsd-signature-type">BaseRelationshipMetadata</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">RelationshipMetadataOptions</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -92,8 +97,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadataoptions.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadataoptions.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_metadata_.relationshipmetadataoptions.html#cascade" class="tsd-kind-icon">cascade</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_metadata_.relationshipmetadataoptions.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_relationship_metadata_.relationshipmetadataoptions.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.relationshipmetadataoptions.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
@@ -102,23 +108,36 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="inversedby" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> inversed<wbr>By</h3>
-					<div class="tsd-signature tsd-kind-icon">inversed<wbr>By<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="cascade" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cascade</h3>
+					<div class="tsd-signature tsd-kind-icon">cascade<span class="tsd-signature-symbol">:</span> <a href="../enums/_relationship_metadata_.cascadetype.html" class="tsd-signature-type">CascadeType</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="_relationship_metadata_.baserelationshipmetadata.html">BaseRelationshipMetadata</a>.<a href="_relationship_metadata_.baserelationshipmetadata.html#cascade">cascade</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/1f5917d/src/relationship/metadata.ts#L16">src/relationship/metadata.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L28">src/relationship/metadata.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="inversedby" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> inversed<wbr>By</h3>
+					<div class="tsd-signature tsd-kind-icon">inversed<wbr>By<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_relationship_metadata_.baserelationshipmetadata.html">BaseRelationshipMetadata</a>.<a href="_relationship_metadata_.baserelationshipmetadata.html#inversedby">inversedBy</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L27">src/relationship/metadata.ts:27</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="isarray" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Array</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="_relationship_metadata_.baserelationshipmetadata.html">BaseRelationshipMetadata</a>.<a href="_relationship_metadata_.baserelationshipmetadata.html#isarray">isArray</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/1f5917d/src/relationship/metadata.ts#L15">src/relationship/metadata.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L26">src/relationship/metadata.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -128,7 +147,7 @@
 					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-signature-type">RelationshipTypeDescriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/1f5917d/src/relationship/metadata.ts#L14">src/relationship/metadata.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L33">src/relationship/metadata.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -147,6 +166,15 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_relationship_metadata_.cascadetype.html" class="tsd-kind-icon">Cascade<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="_relationship_metadata_.baserelationshipmetadata.html" class="tsd-kind-icon">Base<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipcascade.html" class="tsd-kind-icon">Relationship<wbr>Cascade</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="_relationship_metadata_.relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
 					</li>
@@ -155,10 +183,13 @@
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="_relationship_metadata_.relationshipmetadataoptions.html" class="tsd-kind-icon">Relationship<wbr>Metadata<wbr>Options</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_relationship_metadata_.relationshipmetadataoptions.html#cascade" class="tsd-kind-icon">cascade</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="_relationship_metadata_.relationshipmetadataoptions.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="_relationship_metadata_.relationshipmetadataoptions.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -172,10 +203,19 @@
 						<a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipcascadesmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Cascades<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_relationship_metadata_.html#getrelationshipmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Metadata</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipscascadesmetadata" class="tsd-kind-icon">get<wbr>Relationships<wbr>Cascades<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/_relationship_metadata_.html#setrelationshipmetadata" class="tsd-kind-icon">set<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipscascadesmetadata" class="tsd-kind-icon">set<wbr>Relationships<wbr>Cascades<wbr>Metadata</a>
 					</li>
 				</ul>
 			</nav>
@@ -202,11 +242,13 @@
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

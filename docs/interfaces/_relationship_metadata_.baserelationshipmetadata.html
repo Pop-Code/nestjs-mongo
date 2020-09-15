@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MongoModuleAsyncOptions | NestJS Mongo</title>
+	<title>BaseRelationshipMetadata | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_interfaces_async_options_.html">&quot;interfaces/async.options&quot;</a>
+					<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
 				</li>
 				<li>
-					<a href="_interfaces_async_options_.mongomoduleasyncoptions.html">MongoModuleAsyncOptions</a>
+					<a href="_relationship_metadata_.baserelationshipmetadata.html">BaseRelationshipMetadata</a>
 				</li>
 			</ul>
-			<h1>Interface MongoModuleAsyncOptions</h1>
+			<h1>Interface BaseRelationshipMetadata</h1>
 		</div>
 	</div>
 </header>
@@ -73,10 +73,13 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-symbol">{}</span>
+						<span class="target">BaseRelationshipMetadata</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">MongoModuleAsyncOptions</span>
+								<a href="_relationship_metadata_.relationshipmetadataoptions.html" class="tsd-signature-type">RelationshipMetadataOptions</a>
+							</li>
+							<li>
+								<a href="_relationship_metadata_.relationshipmetadata.html" class="tsd-signature-type">RelationshipMetadata</a>
 							</li>
 						</ul>
 					</li>
@@ -89,9 +92,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_async_options_.mongomoduleasyncoptions.html#connectionname" class="tsd-kind-icon">connection<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_async_options_.mongomoduleasyncoptions.html#inject" class="tsd-kind-icon">inject</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_async_options_.mongomoduleasyncoptions.html#usefactory" class="tsd-kind-icon">use<wbr>Factory</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.baserelationshipmetadata.html#cascade" class="tsd-kind-icon">cascade</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.baserelationshipmetadata.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_relationship_metadata_.baserelationshipmetadata.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,55 +103,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="connectionname" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> connection<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">connection<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="cascade" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cascade</h3>
+					<div class="tsd-signature tsd-kind-icon">cascade<span class="tsd-signature-symbol">:</span> <a href="../enums/_relationship_metadata_.cascadetype.html" class="tsd-signature-type">CascadeType</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/interfaces/async.options.ts#L6">src/interfaces/async.options.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L28">src/relationship/metadata.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="inject" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> inject</h3>
-					<div class="tsd-signature tsd-kind-icon">inject<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="inversedby" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> inversed<wbr>By</h3>
+					<div class="tsd-signature tsd-kind-icon">inversed<wbr>By<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/interfaces/async.options.ts#L10">src/interfaces/async.options.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L27">src/relationship/metadata.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="usefactory" class="tsd-anchor"></a>
-					<h3>use<wbr>Factory</h3>
-					<div class="tsd-signature tsd-kind-icon">use<wbr>Factory<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a></div>
+					<a name="isarray" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Array</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/interfaces/async.options.ts#L7">src/interfaces/async.options.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L26">src/relationship/metadata.ts:26</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_interfaces_module_options_.mongomoduleoptions.html" class="tsd-signature-type">MongoModuleOptions</a></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -159,30 +141,60 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/_interfaces_async_options_.html">&quot;interfaces/async.options&quot;</a>
+						<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_relationship_metadata_.cascadetype.html" class="tsd-kind-icon">Cascade<wbr>Type</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="_interfaces_async_options_.mongomoduleasyncoptions.html" class="tsd-kind-icon">Mongo<wbr>Module<wbr>Async<wbr>Options</a>
+						<a href="_relationship_metadata_.baserelationshipmetadata.html" class="tsd-kind-icon">Base<wbr>Relationship<wbr>Metadata</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_interfaces_async_options_.mongomoduleasyncoptions.html#connectionname" class="tsd-kind-icon">connection<wbr>Name</a>
+								<a href="_relationship_metadata_.baserelationshipmetadata.html#cascade" class="tsd-kind-icon">cascade</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_interfaces_async_options_.mongomoduleasyncoptions.html#inject" class="tsd-kind-icon">inject</a>
+								<a href="_relationship_metadata_.baserelationshipmetadata.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_interfaces_async_options_.mongomoduleasyncoptions.html#usefactory" class="tsd-kind-icon">use<wbr>Factory</a>
+								<a href="_relationship_metadata_.baserelationshipmetadata.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipcascade.html" class="tsd-kind-icon">Relationship<wbr>Cascade</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_relationship_metadata_.relationshipmetadataoptions.html" class="tsd-kind-icon">Relationship<wbr>Metadata<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipcascadesmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Cascades<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipscascadesmetadata" class="tsd-kind-icon">get<wbr>Relationships<wbr>Cascades<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipmetadata" class="tsd-kind-icon">set<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipscascadesmetadata" class="tsd-kind-icon">set<wbr>Relationships<wbr>Cascades<wbr>Metadata</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

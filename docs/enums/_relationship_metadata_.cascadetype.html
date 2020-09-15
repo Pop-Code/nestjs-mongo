@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;manager&quot; | NestJS Mongo</title>
+	<title>CascadeType | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_manager_.html">&quot;manager&quot;</a>
+					<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
+				</li>
+				<li>
+					<a href="_relationship_metadata_.cascadetype.html">CascadeType</a>
 				</li>
 			</ul>
-			<h1>Module &quot;manager&quot;</h1>
+			<h1>Enumeration CascadeType</h1>
 		</div>
 	</div>
 </header>
@@ -71,12 +74,25 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_manager_.mongomanager.html" class="tsd-kind-icon">Mongo<wbr>Manager</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_relationship_metadata_.cascadetype.html#delete" class="tsd-kind-icon">DELETE</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="delete" class="tsd-anchor"></a>
+					<h3>DELETE</h3>
+					<div class="tsd-signature tsd-kind-icon">DELETE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;DELETE&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/edda96a/src/relationship/metadata.ts#L11">src/relationship/metadata.ts:11</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -87,14 +103,53 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="_manager_.html">&quot;manager&quot;</a>
+						<a href="../modules/_relationship_metadata_.html">&quot;relationship/metadata&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_manager_.mongomanager.html" class="tsd-kind-icon">Mongo<wbr>Manager</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-module">
+						<a href="_relationship_metadata_.cascadetype.html" class="tsd-kind-icon">Cascade<wbr>Type</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="_relationship_metadata_.cascadetype.html#delete" class="tsd-kind-icon">DELETE</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_relationship_metadata_.baserelationshipmetadata.html" class="tsd-kind-icon">Base<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/_relationship_metadata_.relationshipcascade.html" class="tsd-kind-icon">Relationship<wbr>Cascade</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/_relationship_metadata_.relationshipmetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/_relationship_metadata_.relationshipmetadataoptions.html" class="tsd-kind-icon">Relationship<wbr>Metadata<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#relationshiptypedescriptor" class="tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipcascadesmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Cascades<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipmetadata" class="tsd-kind-icon">get<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#getrelationshipscascadesmetadata" class="tsd-kind-icon">get<wbr>Relationships<wbr>Cascades<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipmetadata" class="tsd-kind-icon">set<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_relationship_metadata_.html#setrelationshipscascadesmetadata" class="tsd-kind-icon">set<wbr>Relationships<wbr>Cascades<wbr>Metadata</a>
 					</li>
 				</ul>
 			</nav>

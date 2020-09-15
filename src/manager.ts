@@ -219,7 +219,7 @@ export class MongoManager {
     async findOne<Model extends EntityInterface>(
         classType: ClassType<Model>,
         query: any,
-        options: FindOneOptions & { dataloader?: string } = {}
+        options: FindOneOptions<Model> & { dataloader?: string } = {}
     ): Promise<Model> {
         this.log('findOne %s %o', classType.name, query);
         let entity: Model;

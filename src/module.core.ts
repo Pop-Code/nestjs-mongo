@@ -1,39 +1,44 @@
-import {
-    DynamicModule,
-    Global,
-    Inject,
-    Module,
-    OnModuleDestroy,
-    Optional
-} from '@nestjs/common';
+import { DynamicModule, Global, Inject, Module, OnModuleDestroy, OnModuleInit, Optional } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
 
 import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from './constants';
 import { DataloaderService } from './dataloader/service';
-import {
-    getConfigToken,
-    getConnectionToken,
-    getManagerToken,
-    getRepositoryToken
-} from './helpers';
+import { getConfigToken, getConnectionToken, getManagerToken, getRepositoryToken } from './helpers';
 import { MongoModuleAsyncOptions } from './interfaces/async.options';
 import { MongoModuleOptions } from './interfaces/module.options';
 import { MongoManager } from './manager';
 import { IsValidRelationshipConstraint } from './relationship/constraint';
+import { setRelationshipsCascadesMetadata } from './relationship/metadata';
 import { MongoRepository } from './repository';
 import { IsUniqueConstraint } from './validation/unique/constraint';
 
 @Global()
 @Module({})
-export class MongoCoreModule implements OnModuleDestroy {
+export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
     constructor(
         private readonly moduleRef: ModuleRef,
         @Optional()
         @Inject(NAMED_CONNECTION_TOKEN)
         public readonly namedConnectionToken: string
     ) {}
+
+    async onModuleDestroy() {
+        const connection = this.moduleRef.get<MongoClient>(
+            this.namedConnectionToken
+        );
+        await connection.close(true);
+    }
+
+    async onModuleInit() {
+        const managerToken = getManagerToken(DEFAULT_CONNECTION_NAME);
+        const manager = this.moduleRef.get<MongoManager>(managerToken);
+        const models = manager.getModels();
+        for (const [, Model] of models.entries()) {
+            setRelationshipsCascadesMetadata(Model, manager);
+        }
+    }
 
     static async forRootAsync(
         options: MongoModuleAsyncOptions
@@ -125,23 +130,14 @@ export class MongoCoreModule implements OnModuleDestroy {
         };
     }
 
-    async onModuleDestroy() {
-        const connection = this.moduleRef.get<MongoClient>(
-            this.namedConnectionToken
-        );
-        await connection.close(true);
-    }
-
     public static createProviders(
         models: any[] = [],
         connectionName: string = DEFAULT_CONNECTION_NAME
     ) {
         const providers: any = [];
-
+        const managerToken = getManagerToken(connectionName);
         for (const m of models) {
-            const managerToken = getManagerToken(connectionName);
             const model = typeof m === 'function' ? m : m.model;
-
             const repoToken = getRepositoryToken(model.name, connectionName);
             const RepoClass =
                 typeof m === 'function' ? MongoRepository : m.repository;

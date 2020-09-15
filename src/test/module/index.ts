@@ -4,11 +4,15 @@ import { DataLooaderMiddleware } from '../../dataloader/middleware';
 import { InjectRepository } from '../../decorators';
 import { MongoModule } from '../../module';
 import { MongoRepository } from '../../repository';
+import { RelationshipEntityLevel1Test } from './cascade/level1';
+import { RelationshipEntityLevel1WithChildrenTest } from './cascade/level1WithChildren';
+import { RelationshipEntityLevel2Test } from './cascade/level2';
+import { RelationshipEntityLevel3Test } from './cascade/level3';
 import { EntityChildTest } from './child';
 import { TestController } from './controller';
 import { EntityTest } from './entity';
-import { EntityRelationship } from './entity.relationship';
 import { EntityNestedTest } from './entity.nested';
+import { EntityRelationship } from './entity.relationship';
 
 @Module({
     imports: [
@@ -17,7 +21,11 @@ import { EntityNestedTest } from './entity.nested';
                 EntityTest,
                 EntityChildTest,
                 EntityRelationship,
-                EntityNestedTest
+                EntityNestedTest,
+                RelationshipEntityLevel1Test,
+                RelationshipEntityLevel2Test,
+                RelationshipEntityLevel3Test,
+                RelationshipEntityLevel1WithChildrenTest
             ]
         })
     ],

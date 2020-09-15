@@ -3,25 +3,29 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MongoClient, ObjectID } from 'mongodb';
 import request from 'supertest';
 
+import { DEFAULT_CONNECTION_NAME } from '../constants';
 import { DataloaderService } from '../dataloader/service';
-import {
-    getConnectionToken,
-    getManagerToken,
-    getRepositoryToken,
-    ObjectId
-} from '../helpers';
+import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
+import { MongoModule } from '../module';
 import { MongoCoreModule } from '../module.core';
+import {
+    CascadeType,
+    getRelationshipCascadesMetadata,
+    getRelationshipMetadata,
+    getRelationshipsCascadesMetadata,
+} from '../relationship/metadata';
 import { MongoRepository } from '../repository';
 import { MongoDbModuleTest } from './module';
+import { RelationshipEntityLevel1Test } from './module/cascade/level1';
+import { RelationshipEntityLevel1WithChildrenTest } from './module/cascade/level1WithChildren';
+import { RelationshipEntityLevel2Test } from './module/cascade/level2';
+import { RelationshipEntityLevel3Test } from './module/cascade/level3';
 import { EntityChildTest } from './module/child';
 import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
-import { MongoModule } from '../module';
-import { DEFAULT_CONNECTION_NAME } from '../constants';
-import { getRelationshipMetadata } from '../relationship/metadata';
 import { EntitySlugTest } from './module/entity.slug';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
@@ -331,6 +335,92 @@ describe('Dataloader', () => {
     });
 });
 
+describe('Relationships cascades', () => {
+    it('should have relationships cascades', () => {
+        const relsCascadesMetadata = getRelationshipsCascadesMetadata(
+            RelationshipEntityLevel1Test
+        );
+        expect(relsCascadesMetadata).toBeInstanceOf(Array);
+        expect(relsCascadesMetadata).toHaveLength(1);
+        expect(relsCascadesMetadata[0].model).toBe(
+            RelationshipEntityLevel2Test
+        );
+        expect(relsCascadesMetadata[0].cascade).toHaveLength(1);
+        expect(relsCascadesMetadata[0].cascade[0]).toBe(CascadeType.DELETE);
+        const relCascades = getRelationshipCascadesMetadata(
+            RelationshipEntityLevel1Test,
+            RelationshipEntityLevel2Test
+        );
+        expect(relCascades.model).toBe(RelationshipEntityLevel2Test);
+        expect(relCascades.property).toBe('parentId');
+        expect(relCascades.cascade).toHaveLength(1);
+        expect(relCascades.cascade[0]).toBe(CascadeType.DELETE);
+    });
+
+    it('should execute relationships cascades', async () => {
+        const em = mod.get<MongoManager>(getManagerToken());
+
+        // create a first level
+        const level1 = new RelationshipEntityLevel1Test();
+        await em.save(level1);
+
+        // create two entity as child
+        const level2 = new RelationshipEntityLevel2Test();
+        level2.parentId = level1._id;
+        await em.save(level2);
+
+        const level3 = new RelationshipEntityLevel3Test();
+        level3.parentId = level2._id;
+        await em.save(level3);
+
+        // now we delete the parent
+        await em.deleteOne(RelationshipEntityLevel1Test, level1);
+
+        // level1 and level2 and level3 should be deleted
+        const searchLevel1 = await em.findOne(RelationshipEntityLevel1Test, {
+            _id: level1._id
+        });
+        expect(searchLevel1).toBeUndefined();
+
+        const searchLevel2 = await em.findOne(RelationshipEntityLevel2Test, {
+            _id: level2._id
+        });
+        expect(searchLevel2).toBeUndefined();
+
+        const searchLevel3 = await em.findOne(RelationshipEntityLevel3Test, {
+            _id: level3._id
+        });
+        expect(searchLevel3).toBeUndefined();
+    });
+
+    it('should execute relationships cascades for a array relationship', async () => {
+        const em = mod.get<MongoManager>(getManagerToken());
+
+        const child1 = new EntityTest();
+        child1.foo = 'bar';
+        child1.bar = 'foo';
+        await em.save(child1);
+
+        const child2 = new EntityTest();
+        child2.foo = 'bar';
+        child2.bar = 'foo';
+        await em.save(child2);
+
+        const childrenIds = [child1._id, child2._id];
+        const parent = new RelationshipEntityLevel1WithChildrenTest();
+        parent.children = childrenIds;
+        await em.save(parent);
+
+        await em.deleteOne(RelationshipEntityLevel1WithChildrenTest, parent);
+
+        const searchChildren = await em.find(EntityTest, {
+            _id: { $in: childrenIds }
+        });
+        const emptyChildren = await searchChildren.toArray();
+        expect(emptyChildren).toHaveLength(0);
+    });
+});
+
 describe('Slugged entities', () => {
     test("Should slugify an entity's property correctly", () => {
         const entity = new EntitySlugTest('John', 'Smith');
@@ -360,8 +450,22 @@ describe('Slugged entities', () => {
 afterAll(async () => {
     try {
         const em = mod.get<MongoManager>(getManagerToken());
-        await em.getCollection(EntityTest).drop();
-        await em.getCollection(EntityChildTest).drop();
+        const entities = [
+            EntityTest,
+            EntityChildTest,
+            EntityRelationship,
+            // EntityNestedTest,
+            RelationshipEntityLevel1Test,
+            RelationshipEntityLevel2Test,
+            RelationshipEntityLevel3Test,
+            RelationshipEntityLevel1WithChildrenTest
+        ];
+
+        for (const entity of entities) {
+            // console.log('Cleaning', em.getCollection(entity));
+            await em.getCollection(entity).drop();
+        }
+
         await em.getClient().close();
         await mod.close();
     } catch (e) {

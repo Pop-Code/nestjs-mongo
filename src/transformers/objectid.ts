@@ -1,9 +1,4 @@
-import {
-    ArgumentMetadata,
-    BadRequestException,
-    Injectable,
-    PipeTransform
-} from '@nestjs/common';
+import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { isMongoId } from 'class-validator';
 
 import { ObjectId } from '../helpers';
@@ -12,7 +7,9 @@ import { ObjectId } from '../helpers';
 export class ObjectIdPipe implements PipeTransform {
     async transform(value: any, metadata: ArgumentMetadata) {
         if (!isMongoId(value)) {
-            throw new BadRequestException(`The ${metadata.data} is malformed`);
+            throw new BadRequestException(
+                `The ${metadata.data ?? 'objectId'} is malformed`
+            );
         }
         return new ObjectId(value);
     }

@@ -19,6 +19,9 @@ export class TestController {
             _id: this.entityTestId
         });
         const loader = this.em.getDataloader('EntityTest');
+        if (loader === undefined) {
+            throw new Error('Dataloader do not exist');
+        }
         return {
             item,
             uuid: loader.uuid,

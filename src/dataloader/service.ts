@@ -17,7 +17,9 @@ export class DataloaderService {
         return getNamespace(LOADER_SESSION_NAME);
     }
 
-    get<Model extends EntityInterface>(id: string): MongoDataloader<Model> {
+    get<Model extends EntityInterface>(
+        id: string
+    ): MongoDataloader<Model> | undefined {
         if (id === '__ignore__') {
             return;
         }

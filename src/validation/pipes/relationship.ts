@@ -1,9 +1,4 @@
-import {
-    ArgumentMetadata,
-    BadRequestException,
-    Injectable,
-    PipeTransform
-} from '@nestjs/common';
+import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { isMongoId } from 'class-validator';
 
 import { InjectManager } from '../../decorators';
@@ -16,7 +11,9 @@ export class RelationshipPipe implements PipeTransform {
 
     async transform(value: any, metadata: ArgumentMetadata) {
         if (!isMongoId(value)) {
-            throw new BadRequestException(`The ${metadata.data} is malformed`);
+            throw new BadRequestException(
+                `The ${metadata.data ?? 'objectId'} is malformed`
+            );
         }
         return await this.em.findOne(metadata.metatype as any, {
             _id: new ObjectId(value)

@@ -7,12 +7,14 @@ import { MongoManager } from '../manager';
 import { IsValidRelationshipConstraint } from './constraint';
 import { RelationshipMetadataOptions, RelationshipTypeDescriptor, setRelationshipMetadata } from './metadata';
 
+export type WithValidRelationship = (
+    object: any,
+    relationship: any,
+    em: MongoManager
+) => Promise<string | true>;
+
 export interface IsValidRelationshipOptions extends ValidationOptions {
-    with?: (
-        object: any,
-        relationship: any,
-        em: MongoManager
-    ) => Promise<string | true>;
+    with?: WithValidRelationship;
 }
 export type WithRelationshipTest = (
     object: any,
@@ -28,7 +30,7 @@ export interface IsValidRelationshipValidationArguments
 export function IsValidRelationship(
     validationOptions?: IsValidRelationshipOptions
 ) {
-    const constraints = [];
+    const constraints: WithValidRelationship[] = [];
     if (
         validationOptions !== undefined &&
         typeof validationOptions.with === 'function'

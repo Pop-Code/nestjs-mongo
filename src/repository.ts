@@ -57,7 +57,7 @@ export class MongoRepository<Model extends EntityInterface> {
         return await this.em.count(this.classType, query, ...args);
     }
 
-    async findOne(query: any, ...args: any[]): Promise<Model> {
+    async findOne(query: any, ...args: any[]): Promise<Model | undefined> {
         return await this.em.findOne(this.classType, query, ...args);
     }
 
@@ -79,7 +79,7 @@ export class MongoRepository<Model extends EntityInterface> {
     async getRelationship<E extends EntityInterface>(
         object: Model,
         property: string
-    ): Promise<E> {
+    ): Promise<E | undefined> {
         return await this.em.getRelationship<E>(object, property);
     }
 

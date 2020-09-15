@@ -351,10 +351,10 @@ describe('Relationships cascades', () => {
             RelationshipEntityLevel1Test,
             RelationshipEntityLevel2Test
         );
-        expect(relCascades.model).toBe(RelationshipEntityLevel2Test);
-        expect(relCascades.property).toBe('parentId');
-        expect(relCascades.cascade).toHaveLength(1);
-        expect(relCascades.cascade[0]).toBe(CascadeType.DELETE);
+        expect(relCascades?.model).toBe(RelationshipEntityLevel2Test);
+        expect(relCascades?.property).toBe('parentId');
+        expect(relCascades?.cascade).toHaveLength(1);
+        expect(relCascades?.cascade[0]).toBe(CascadeType.DELETE);
     });
 
     it('should execute relationships cascades', async () => {

@@ -1,16 +1,12 @@
-import { Inject, applyDecorators } from '@nestjs/common';
-import { Transform, TransformationType, Type, Expose } from 'class-transformer';
+import { applyDecorators, Inject } from '@nestjs/common';
+import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
+import { Expose, Transform, TransformationType, Type } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { Allow, isEmpty } from 'class-validator';
-import { DEFAULT_CONNECTION_NAME } from './constants';
-import {
-    getConnectionToken,
-    getManagerToken,
-    getRepositoryToken,
-    ObjectId
-} from './helpers';
 import slugify from 'slugify';
-import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
+
+import { DEFAULT_CONNECTION_NAME } from './constants';
+import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from './helpers';
 
 export function InjectMongoClient(
     connectionName: string = DEFAULT_CONNECTION_NAME
@@ -49,6 +45,7 @@ export function ObjectIdTransformer(
     type: TransformationType,
     isArray?: boolean
 ) {
+    if (isArray === undefined) isArray = false;
     let newValue: any;
     if (isEmpty(value)) {
         return;
@@ -115,7 +112,10 @@ export function SlugDecorator<T>(
                 if (typeof config.generate === 'function')
                     return config.generate(this);
 
-                if (config.keys?.length > 0)
+                if (
+                    config.keys?.length !== undefined &&
+                    config.keys?.length > 0
+                )
                     return config.keys
                         .filter(Boolean)
                         .reduce(
@@ -137,7 +137,7 @@ export function SlugDecorator<T>(
 export function Slugify<T = any>(config: ISlugifyOptions<T>) {
     return applyDecorators(
         ...[
-            ...(config.expose ? [Expose()] : []),
+            ...(config.expose !== undefined && config.expose ? [Expose()] : []),
             (target: any, key: string) => SlugDecorator<T>(target, key, config)
         ]
     );

@@ -35,3 +35,7 @@ export function getManagerToken(
 ) {
     return `${connectionName}_MongoManager`;
 }
+
+export function getObjectName(o: Object): string {
+    return o.constructor.name;
+}

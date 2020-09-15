@@ -8,7 +8,7 @@ import { ChangeStream, CommonOptions, Cursor, FindOneOptions, MongoClient, Mongo
 import { DEBUG } from './constants';
 import { DataloaderService } from './dataloader/service';
 import { InjectMongoClient } from './decorators';
-import { getRepositoryToken } from './helpers';
+import { getObjectName, getRepositoryToken } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
@@ -42,7 +42,7 @@ export class MongoManager {
         return this;
     }
 
-    getModel(id: string): ClassType<any> {
+    getModel(id: string): ClassType<any> | undefined {
         return this.models.get(id);
     }
 
@@ -83,7 +83,7 @@ export class MongoManager {
     }
 
     getCollectionName<Model>(nameOrInstance: Model | ClassType<Model>): string {
-        let name: string;
+        let name: string | undefined;
         if (
             typeof nameOrInstance === 'object' ||
             typeof nameOrInstance === 'function'
@@ -91,7 +91,7 @@ export class MongoManager {
             name = Reflect.getMetadata(
                 'mongo:collectionName',
                 typeof nameOrInstance === 'object'
-                    ? nameOrInstance.constructor
+                    ? (nameOrInstance as any).constructor
                     : nameOrInstance
             );
         } else if (typeof nameOrInstance === 'string') {
@@ -101,7 +101,9 @@ export class MongoManager {
         if (name === undefined) {
             throw new Error(
                 // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                `@Collection decorator is required to use a class as model for: ${nameOrInstance.toString()}`
+                `@Collection decorator is required to use a class as model for: ${
+                    (nameOrInstance as any).toString() as string
+                }`
             );
         }
 
@@ -220,9 +222,9 @@ export class MongoManager {
         classType: ClassType<Model>,
         query: any,
         options: FindOneOptions<Model> & { dataloader?: string } = {}
-    ): Promise<Model> {
+    ): Promise<Model | undefined> {
         this.log('findOne %s %o', classType.name, query);
-        let entity: Model;
+        let entity: Model | undefined;
         const dataloaderName =
             typeof options.dataloader === 'string'
                 ? options.dataloader
@@ -293,7 +295,10 @@ export class MongoManager {
             if (!relationshipCascades.cascade.includes(CascadeType.DELETE)) {
                 continue;
             }
-            if (!relationshipCascades.isArray) {
+            if (
+                relationshipCascades.isArray !== undefined &&
+                !relationshipCascades.isArray
+            ) {
                 await this.deleteMany(relationshipCascades.model, {
                     [relationshipCascades.property]: entity._id
                 });
@@ -355,7 +360,11 @@ export class MongoManager {
 
         for (const entity of entities) {
             await this.deleteCascade(classType, entity);
-            if (dataloader !== undefined && result.deletedCount > 0) {
+            if (
+                dataloader !== undefined &&
+                result.deletedCount !== undefined &&
+                result.deletedCount > 0
+            ) {
                 dataloader.clear(entity._id);
             }
         }
@@ -372,38 +381,43 @@ export class MongoManager {
         return this.getCollection(classType).watch(pipes, options);
     }
 
-    async getRelationship<R extends EntityInterface = any, P = object>(
-        object: P,
+    async getRelationship<R extends EntityInterface = any, P = Object>(
+        obj: P,
         property: string,
         options: {
             cachedMetadata?: RelationshipMetadata<R>;
             dataloader?: string;
         } = {}
-    ): Promise<R> {
-        this.log('getRelationship %s on %s', property, object.constructor.name);
+    ): Promise<R | undefined> {
+        this.log('getRelationship %s on %s', property, obj);
 
         let relationMetadata = options.cachedMetadata;
-        if (isEmpty(relationMetadata)) {
+        if (isEmpty(relationMetadata) || relationMetadata === undefined) {
             relationMetadata = getRelationshipMetadata<R, P>(
-                object,
+                obj,
                 property,
                 this
             );
             if (isEmpty(relationMetadata)) {
                 throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getRelationship on ${object.constructor.name}`
+                    `The property ${property} metadata @Relationship must be set to call getRelationship on ${getObjectName(
+                        obj
+                    )}`
                 );
             }
         }
 
-        if (relationMetadata.isArray) {
+        if (
+            relationMetadata.isArray !== undefined &&
+            relationMetadata.isArray
+        ) {
             throw new Error(
                 `The property ${property} is defined as an array, please use getRelationships instead of getRelationship`
             );
         }
 
         const repository = this.getRepository(relationMetadata.type);
-        const value = object[property];
+        const value = obj[property];
         const relationship = await repository.findOne({
             _id: value
         });
@@ -411,42 +425,45 @@ export class MongoManager {
         return relationship;
     }
 
-    async getRelationships<R extends EntityInterface = any, P = object>(
-        object: P,
+    async getRelationships<R extends EntityInterface = any, P = Object>(
+        obj: P,
         property: string,
         options: {
             cachedMetadata?: RelationshipMetadata<R>;
             dataloader?: string;
         } = {}
     ): Promise<Array<R | Error>> {
-        this.log(
-            'getRelationships %s on %s',
-            property,
-            object.constructor.name
-        );
+        this.log('getRelationships %s on %s', property, obj);
 
         let relationMetadata = options.cachedMetadata;
-        if (isEmpty(relationMetadata)) {
+        if (isEmpty(relationMetadata) || relationMetadata === undefined) {
             relationMetadata = getRelationshipMetadata<R, P>(
-                object,
+                obj,
                 property,
                 this
             );
-            if (isEmpty(relationMetadata)) {
+            if (isEmpty(relationMetadata) || relationMetadata === undefined) {
                 throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getRelationships on ${object.constructor.name}`
+                    `The property ${property} metadata @Relationship must be set to call getRelationships on ${getObjectName(
+                        obj
+                    )}`
                 );
             }
         }
 
-        if (!relationMetadata.isArray) {
+        if (
+            relationMetadata?.isArray !== undefined &&
+            !relationMetadata?.isArray
+        ) {
             throw new Error(
-                `The property ${property} is not defined as an array, please use getRelationship instead of getRelationships in ${object.constructor.name}`
+                `The property ${property} is not defined as an array, please use getRelationship instead of getRelationships in ${getObjectName(
+                    obj
+                )}`
             );
         }
 
         const repository = this.getRepository(relationMetadata.type);
-        const value = object[property];
+        const value = obj[property];
         const relationships = await repository.findById(value);
 
         return relationships;
@@ -456,7 +473,7 @@ export class MongoManager {
         P extends EntityInterface = any,
         C extends EntityInterface = any
     >(parent: P, ChildType: ClassType<C>, property: string) {
-        let relationMetadata: RelationshipMetadata<P>;
+        let relationMetadata: RelationshipMetadata<P> | undefined;
         if (isEmpty(relationMetadata)) {
             relationMetadata = getRelationshipMetadata<P, C>(
                 new ChildType(), // fix typing
@@ -465,12 +482,14 @@ export class MongoManager {
             );
             if (isEmpty(relationMetadata)) {
                 throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getInversedRelationships of ${parent.constructor.name}`
+                    `The property ${property} metadata @Relationship must be set to call getInversedRelationships of ${getObjectName(
+                        parent
+                    )}`
                 );
             }
         }
 
-        if (isEmpty(relationMetadata.inversedBy)) {
+        if (isEmpty(relationMetadata?.inversedBy)) {
             throw new Error(`Can not get inversed metadata`);
         }
 
@@ -498,7 +517,7 @@ export class MongoManager {
         data: any,
         options?: ClassTransformOptions
     ): Model {
-        this.log('%s transform merge', entity.constructor.name);
+        this.log('%s transform merge', getObjectName(entity));
         return merge(entity, data, options);
     }
 }

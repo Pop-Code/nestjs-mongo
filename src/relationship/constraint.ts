@@ -1,15 +1,9 @@
-import {
-    ValidatorConstraint,
-    ValidatorConstraintInterface
-} from 'class-validator';
+import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { first, isEmpty } from 'lodash';
 
 import { ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
-import {
-    IsValidRelationshipValidationArguments,
-    WithRelationshipTest
-} from './decorators';
+import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
 import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
@@ -36,7 +30,10 @@ export class IsValidRelationshipConstraint
             );
             let relationship: any;
 
-            if (relationMetadata.isArray) {
+            if (
+                relationMetadata.isArray !== undefined &&
+                relationMetadata.isArray
+            ) {
                 if (!Array.isArray(value)) {
                     throw new Error(`The ${args.property} must be an array`);
                 }

@@ -83,7 +83,7 @@ export function setRelationshipsCascadesMetadata<
             if (Array.isArray(rel.cascade)) {
                 let owner = rel.type;
                 let target = child;
-                if (rel.isArray) {
+                if (rel.isArray !== undefined && rel.isArray) {
                     owner = child;
                     target = rel.type;
                 }
@@ -121,7 +121,7 @@ export function getRelationshipCascadesMetadata<
 >(
     parent: ClassType<Parent>,
     relationshipType: ClassType<Child>
-): RelationshipCascade<Child> {
+): RelationshipCascade<Child> | undefined {
     const relCascades = getRelationshipsCascadesMetadata<Parent>(parent);
     return find(relCascades, (cs) => {
         return cs.model === relationshipType;
@@ -130,14 +130,14 @@ export function getRelationshipCascadesMetadata<
 
 export function getRelationshipMetadata<
     R extends EntityInterface = any,
-    P = object
+    P = Object
 >(
     target: P,
     property: string | symbol,
     em?: MongoManager
 ): RelationshipMetadata<R> {
     const finalTarget =
-        typeof target === 'function' ? target : target.constructor;
+        typeof target === 'function' ? target : (target as any).constructor;
 
     const metadata: RelationshipMetadataOptions<R> = Reflect.getMetadata(
         RELATIONSHIP_METADATA_NAME,
@@ -150,7 +150,7 @@ export function getRelationshipMetadata<
     if (metadata === undefined) {
         throw new Error(
             `undefined relationship metadata for property ${property.toString()} in object ${
-                finalTarget.name
+                finalTarget.name as string
             }`
         );
     }
@@ -164,11 +164,15 @@ export function getRelationshipMetadata<
         if (em === undefined) {
             throw new Error(
                 `MongoManager parameter is required to get relationship metadata for property ${property.toString()} in object ${
-                    finalTarget.name
+                    finalTarget.name as string
                 }`
             );
         }
-        metadataDefinition.type = em.getModel(metadata.type);
+        const model = em.getModel(metadata.type);
+        if (model === undefined) {
+            throw new Error(`Can not get model ${metadata.type}`);
+        }
+        metadataDefinition.type = model;
     }
 
     return metadataDefinition;

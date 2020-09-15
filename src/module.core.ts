@@ -1,5 +1,6 @@
 import { DynamicModule, Global, Inject, Module, OnModuleDestroy, OnModuleInit, Optional } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
+import { ClassType } from 'class-transformer/ClassTransformer';
 import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
 
@@ -7,6 +8,7 @@ import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from './constants';
 import { DataloaderService } from './dataloader/service';
 import { getConfigToken, getConnectionToken, getManagerToken, getRepositoryToken } from './helpers';
 import { MongoModuleAsyncOptions } from './interfaces/async.options';
+import { EntityInterface } from './interfaces/entity';
 import { MongoModuleOptions } from './interfaces/module.options';
 import { MongoManager } from './manager';
 import { IsValidRelationshipConstraint } from './relationship/constraint';
@@ -39,6 +41,10 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
             setRelationshipsCascadesMetadata(Model, manager);
         }
     }
+
+    protected async createIndexes<Model extends EntityInterface>(
+        model: ClassType<Model>
+    ) {}
 
     static async forRootAsync(
         options: MongoModuleAsyncOptions

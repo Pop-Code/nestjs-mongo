@@ -1,4 +1,5 @@
-import { Module, DynamicModule } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
+
 import { MongoModuleAsyncOptions } from './interfaces/async.options';
 import { MongoFeatureOptions } from './interfaces/feature.options';
 import { MongoCoreModule } from './module.core';

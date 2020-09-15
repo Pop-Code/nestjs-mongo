@@ -1,18 +1,11 @@
-import {
-    registerDecorator,
-    ValidationArguments,
-    ValidationOptions
-} from 'class-validator';
+import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 import Debug from 'debug';
+
 import { DEBUG } from '../constants';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { IsValidRelationshipConstraint } from './constraint';
-import {
-    RelationshipMetadataOptions,
-    setRelationshipMetadata,
-    RelationshipTypeDescriptor
-} from './metadata';
+import { RelationshipMetadataOptions, RelationshipTypeDescriptor, setRelationshipMetadata } from './metadata';
 
 export interface IsValidRelationshipOptions extends ValidationOptions {
     with?: (

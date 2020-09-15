@@ -1,9 +1,10 @@
-import { Entity } from '../../entity';
 import { IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
+
 import { Collection } from '../../decorators';
+import { Entity } from '../../entity';
 import { Relationship } from '../../relationship/decorators';
 import { EntityChildTest } from './child';
-import { ObjectId } from 'mongodb';
 
 export const TEST_COLLECTION_NAME = 'testrelationship';
 
@@ -12,7 +13,9 @@ export class EntityRelationship extends Entity {
     @IsString()
     foo: string;
 
-    @Relationship(() => EntityChildTest)
+    @Relationship({
+        type: () => EntityChildTest
+    })
     child?: ObjectId;
 
     @Relationship('EntityNestedTest')

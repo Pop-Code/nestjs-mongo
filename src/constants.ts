@@ -5,3 +5,6 @@ export const RELATIONSHIP_METADATA_NAME = 'nestjs-mongo:relationship';
 export const INVERSED_RELATIONSHIP_METADATA_NAME =
     'nestjs-mongo:inversed_relationship';
 export const LOADER_SESSION_NAME = 'nestjs-mongo:loaders_session';
+export const RELATIONSHIPS_CASCADES_METADATA_NAME =
+    'nestjs-mongo:relationships_cascades';
+export const CHILD_RELATIONSHIPS = 'nestjs-mongo:child_relationships';

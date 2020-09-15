@@ -1,17 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 import { ClassTransformOptions } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
-import { validate, isEmpty } from 'class-validator';
+import { isEmpty, validate } from 'class-validator';
 import Debug from 'debug';
-import {
-    ChangeStream,
-    CommonOptions,
-    Cursor,
-    FindOneOptions,
-    MongoClient,
-    MongoCountPreferences,
-    ObjectId
-} from 'mongodb';
+import { ChangeStream, CommonOptions, Cursor, FindOneOptions, MongoClient, MongoCountPreferences, ObjectId } from 'mongodb';
 
 import { DEBUG } from './constants';
 import { DataloaderService } from './dataloader/service';
@@ -21,8 +13,10 @@ import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
 import {
+    CascadeType,
     getRelationshipMetadata,
-    RelationshipMetadata
+    getRelationshipsCascadesMetadata,
+    RelationshipMetadata,
 } from './relationship/metadata';
 import { MongoRepository } from './repository';
 import { fromPlain, merge } from './transformers/utils';
@@ -245,7 +239,7 @@ export class MongoManager {
                 query,
                 options
             );
-            if (obj === undefined) {
+            if (obj === undefined || obj === null) {
                 return;
             }
             entity = this.fromPlain<Model>(classType, obj);
@@ -284,6 +278,33 @@ export class MongoManager {
         return this.isIdQuery(query) && Array.isArray(query._id.$in);
     }
 
+    protected async deleteCascade<Model extends EntityInterface>(
+        classType: ClassType<Model>,
+        entity: Model
+    ) {
+        const relationshipsCascades = getRelationshipsCascadesMetadata(
+            classType
+        );
+
+        if (!Array.isArray(relationshipsCascades)) {
+            return;
+        }
+        for (const relationshipCascades of relationshipsCascades) {
+            if (!relationshipCascades.cascade.includes(CascadeType.DELETE)) {
+                continue;
+            }
+            if (!relationshipCascades.isArray) {
+                await this.deleteMany(relationshipCascades.model, {
+                    [relationshipCascades.property]: entity._id
+                });
+            } else {
+                await this.deleteMany(relationshipCascades.model, {
+                    _id: { $in: entity[relationshipCascades.property] }
+                });
+            }
+        }
+    }
+
     async deleteOne<Model extends EntityInterface>(
         classType: ClassType<Model>,
         query: any,
@@ -291,9 +312,11 @@ export class MongoManager {
     ) {
         this.log('deleteOne %s %o', classType.name, query);
         const entity = await this.findOne<Model>(classType, query);
+
         if (entity === undefined) {
             throw new NotFoundException();
         }
+
         const result = await this.getCollection(classType).deleteOne(
             { _id: entity._id },
             options
@@ -303,6 +326,9 @@ export class MongoManager {
                 ? options.dataloader
                 : classType.name;
         this.dataloaderService.delete(dataloaderName, entity);
+
+        await this.deleteCascade(classType, entity);
+
         return result;
     }
 
@@ -313,6 +339,10 @@ export class MongoManager {
     ) {
         this.log('deleteMany %s %o', classType.name, query);
         const items = await this.find(classType, query, options);
+
+        // get a ref of entities that are going to be deleted before to delete them
+        const entities = await items.toArray();
+
         const result = await this.getCollection(classType).deleteMany(
             query,
             options
@@ -322,9 +352,14 @@ export class MongoManager {
                 ? options.dataloader
                 : classType.name;
         const dataloader = this.getDataloader<Model>(dataloaderName);
-        if (dataloader !== undefined && result.deletedCount > 0) {
-            await items.forEach((i) => dataloader.clear(i._id));
+
+        for (const entity of entities) {
+            await this.deleteCascade(classType, entity);
+            if (dataloader !== undefined && result.deletedCount > 0) {
+                dataloader.clear(entity._id);
+            }
         }
+
         return result;
     }
 

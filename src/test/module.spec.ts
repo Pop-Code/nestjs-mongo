@@ -24,6 +24,7 @@ import { RelationshipEntityLevel3Test } from './module/cascade/level3';
 import { EntityChildTest } from './module/child';
 import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
+import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
 import { EntitySlugTest } from './module/entity.slug';
@@ -155,6 +156,11 @@ describe('forFeature', () => {
             child,
             'parentId'
         );
+
+        if (parent === undefined) {
+            throw new Error('no parent');
+        }
+
         expect(parent).toBeInstanceOf(EntityTest);
         expect(parent._id).toBeInstanceOf(ObjectId);
         expect(parent._id).toEqual(entity._id);
@@ -222,7 +228,9 @@ describe('forFeature', () => {
         const manager = mod.get<MongoManager>(getManagerToken());
 
         const entity = await manager.findOne<EntityTest>(EntityTest, {});
-
+        if (entity === undefined) {
+            throw new Error('no entity');
+        }
         expect(entity._id).toBeInstanceOf(ObjectId);
 
         const obj: any = entity.serialize();
@@ -418,6 +426,15 @@ describe('Relationships cascades', () => {
         });
         const emptyChildren = await searchChildren.toArray();
         expect(emptyChildren).toHaveLength(0);
+    });
+});
+
+describe('Indexes', () => {
+    it('should define an index for a property', async () => {
+        const em = mod.get<MongoManager>(getManagerToken());
+        const indexes = await em.getCollection(EntityWithIndexTest).indexes();
+        expect(indexes).toHaveLength(2);
+        expect(indexes[1].unique).toBe(true);
     });
 });
 

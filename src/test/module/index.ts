@@ -11,6 +11,7 @@ import { RelationshipEntityLevel3Test } from './cascade/level3';
 import { EntityChildTest } from './child';
 import { TestController } from './controller';
 import { EntityTest } from './entity';
+import { EntityWithIndexTest } from './entity.index';
 import { EntityNestedTest } from './entity.nested';
 import { EntityRelationship } from './entity.relationship';
 
@@ -22,6 +23,7 @@ import { EntityRelationship } from './entity.relationship';
                 EntityChildTest,
                 EntityRelationship,
                 EntityNestedTest,
+                EntityWithIndexTest,
                 RelationshipEntityLevel1Test,
                 RelationshipEntityLevel2Test,
                 RelationshipEntityLevel3Test,

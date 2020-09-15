@@ -1,6 +1,7 @@
-import { Entity } from '../../entity';
 import { IsString } from 'class-validator';
+
 import { Collection } from '../../decorators';
+import { Entity } from '../../entity';
 
 export const TEST_COLLECTION_NAME = 'test';
 

@@ -1,12 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import {
-    IsArray,
-    IsInt,
-    IsOptional,
-    IsPositive,
-    Matches,
-    Max
-} from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsPositive, Matches, Max } from 'class-validator';
 
 import { ISerializable, Serializable } from '../serializer';
 
@@ -33,6 +26,9 @@ export class Filter {
     orderBy?: string[] = ['_id:asc'];
 
     getSort(): Array<[string, 1 | -1]> {
+        if (this.orderBy === undefined) {
+            return [];
+        }
         return this.orderBy.reduce((sorts: any[], orderString) => {
             const order = orderString.split(':');
             const property = order[0];
@@ -44,6 +40,9 @@ export class Filter {
 
     getSortForAggregation(): { [property: string]: 1 | -1 } {
         const sorts = {};
+        if (this.orderBy === undefined) {
+            return sorts;
+        }
         this.orderBy.forEach((sort) => {
             const order = sort.split(':');
             const property = order[0];

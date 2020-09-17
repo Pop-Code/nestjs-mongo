@@ -31,3 +31,5 @@ export * from './validation/pipes/relationship';
 export * from './validation/pipes/required.relationship';
 export * from './validation/unique/constraint';
 export * from './validation/unique/decorator';
+export * from './indexes/decorators';
+export * from './indexes/metadata';

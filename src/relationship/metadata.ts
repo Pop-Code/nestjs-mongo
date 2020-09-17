@@ -2,7 +2,11 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { isEmpty } from 'class-validator';
 import { find } from 'lodash';
 
-import { CHILD_RELATIONSHIPS, RELATIONSHIP_METADATA_NAME, RELATIONSHIPS_CASCADES_METADATA_NAME } from '../constants';
+import {
+    CHILD_RELATIONSHIPS,
+    RELATIONSHIP_METADATA_NAME,
+    RELATIONSHIPS_CASCADES_METADATA_NAME
+} from '../constants';
 import { isClass } from '../helpers';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';

@@ -393,11 +393,7 @@ export class MongoManager {
 
         let relationMetadata = options.cachedMetadata;
         if (isEmpty(relationMetadata) || relationMetadata === undefined) {
-            relationMetadata = getRelationshipMetadata<R, P>(
-                obj,
-                property,
-                this
-            );
+            relationMetadata = getRelationshipMetadata<R>(obj, property, this);
             if (isEmpty(relationMetadata)) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getRelationship on ${getObjectName(
@@ -437,11 +433,7 @@ export class MongoManager {
 
         let relationMetadata = options.cachedMetadata;
         if (isEmpty(relationMetadata) || relationMetadata === undefined) {
-            relationMetadata = getRelationshipMetadata<R, P>(
-                obj,
-                property,
-                this
-            );
+            relationMetadata = getRelationshipMetadata<R>(obj, property, this);
             if (isEmpty(relationMetadata) || relationMetadata === undefined) {
                 throw new Error(
                     `The property ${property} metadata @Relationship must be set to call getRelationships on ${getObjectName(
@@ -475,7 +467,7 @@ export class MongoManager {
     >(parent: P, ChildType: ClassType<C>, property: string) {
         let relationMetadata: RelationshipMetadata<P> | undefined;
         if (isEmpty(relationMetadata)) {
-            relationMetadata = getRelationshipMetadata<P, C>(
+            relationMetadata = getRelationshipMetadata<P>(
                 new ChildType(), // fix typing
                 property,
                 this

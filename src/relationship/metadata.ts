@@ -2,11 +2,7 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 import { isEmpty } from 'class-validator';
 import { find } from 'lodash';
 
-import {
-    CHILD_RELATIONSHIPS,
-    RELATIONSHIP_METADATA_NAME,
-    RELATIONSHIPS_CASCADES_METADATA_NAME
-} from '../constants';
+import { RELATIONSHIP_METADATA_NAME } from '../constants';
 import { isClass } from '../helpers';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
@@ -42,9 +38,15 @@ export interface RelationshipMetadata<R extends EntityInterface>
     type: ClassType<R>;
 }
 
+export const relationshipCascadesMetadata = new Map<
+    ClassType<any>,
+    RelationshipCascade[]
+>();
+export const childrenRelationshipMetadata = new Map<ClassType<any>, string[]>();
+
 export function setRelationshipMetadata<R extends EntityInterface = any>(
     target: any,
-    property: string | symbol,
+    property: string,
     metadata: RelationshipMetadataOptions<R>
 ) {
     if (isEmpty(metadata.type)) {
@@ -55,35 +57,37 @@ export function setRelationshipMetadata<R extends EntityInterface = any>(
         metadata.isArray = false;
     }
 
-    let relationsMetadata = Reflect.getMetadata(
-        CHILD_RELATIONSHIPS,
-        target.constructor
-    );
-    if (relationsMetadata === undefined) {
-        relationsMetadata = [];
-    }
-    relationsMetadata.push(property);
-    Reflect.defineMetadata(
-        CHILD_RELATIONSHIPS,
-        relationsMetadata,
-        target.constructor
-    );
+    addChildRelationshipMetadata(target.constructor, property);
 
     Reflect.defineMetadata(
         RELATIONSHIP_METADATA_NAME,
         metadata,
-        target.constructor,
+        target,
         property
     );
+}
+
+export function addChildRelationshipMetadata<P = any>(
+    target: ClassType<P>,
+    property: string
+) {
+    const relationsMetadata = getChildrenRelationshipMetadata(target);
+    relationsMetadata.push(property);
+    childrenRelationshipMetadata.set(target, relationsMetadata);
+}
+
+export function getChildrenRelationshipMetadata<P = any>(target: ClassType<P>) {
+    return childrenRelationshipMetadata.get(target) ?? [];
 }
 
 export function setRelationshipsCascadesMetadata<
     Child extends EntityInterface = any
 >(child: ClassType<Child>, manager: MongoManager) {
-    const props = Reflect.getMetadata(CHILD_RELATIONSHIPS, child);
+    const props = getChildrenRelationshipMetadata(child);
     if (Array.isArray(props)) {
         for (const prop of props) {
-            const rel = getRelationshipMetadata(child, prop, manager);
+            // eslint-disable-next-line new-cap
+            const rel = getRelationshipMetadata(new child(), prop, manager);
             if (Array.isArray(rel.cascade)) {
                 let owner = rel.type;
                 let target = child;
@@ -92,10 +96,8 @@ export function setRelationshipsCascadesMetadata<
                     target = rel.type;
                 }
                 const parentMeta =
-                    Reflect.getMetadata(
-                        RELATIONSHIPS_CASCADES_METADATA_NAME,
-                        owner
-                    ) ?? [];
+                    relationshipCascadesMetadata.get(owner) ?? [];
+
                 const cascadeOP: RelationshipCascade = {
                     model: target,
                     cascade: rel.cascade,
@@ -103,11 +105,7 @@ export function setRelationshipsCascadesMetadata<
                     isArray: rel.isArray
                 };
                 parentMeta.push(cascadeOP);
-                Reflect.defineMetadata(
-                    RELATIONSHIPS_CASCADES_METADATA_NAME,
-                    parentMeta,
-                    owner
-                );
+                relationshipCascadesMetadata.set(owner, parentMeta);
             }
         }
     }
@@ -115,8 +113,8 @@ export function setRelationshipsCascadesMetadata<
 
 export function getRelationshipsCascadesMetadata<
     Parent extends EntityInterface = any
->(target: ClassType<Parent>): RelationshipCascade[] {
-    return Reflect.getMetadata(RELATIONSHIPS_CASCADES_METADATA_NAME, target);
+>(target: ClassType<Parent>) {
+    return relationshipCascadesMetadata.get(target);
 }
 
 export function getRelationshipCascadesMetadata<
@@ -132,20 +130,14 @@ export function getRelationshipCascadesMetadata<
     });
 }
 
-export function getRelationshipMetadata<
-    R extends EntityInterface = any,
-    P = Object
->(
-    target: P,
+export function getRelationshipMetadata<R extends EntityInterface = any>(
+    target: any,
     property: string | symbol,
     em?: MongoManager
 ): RelationshipMetadata<R> {
-    const finalTarget =
-        typeof target === 'function' ? target : (target as any).constructor;
-
     const metadata: RelationshipMetadataOptions<R> = Reflect.getMetadata(
         RELATIONSHIP_METADATA_NAME,
-        finalTarget,
+        target,
         property
     );
 
@@ -154,7 +146,7 @@ export function getRelationshipMetadata<
     if (metadata === undefined) {
         throw new Error(
             `undefined relationship metadata for property ${property.toString()} in object ${
-                finalTarget.name as string
+                target.name as string
             }`
         );
     }
@@ -168,10 +160,11 @@ export function getRelationshipMetadata<
         if (em === undefined) {
             throw new Error(
                 `MongoManager parameter is required to get relationship metadata for property ${property.toString()} in object ${
-                    finalTarget.name as string
+                    target.name as string
                 }`
             );
         }
+
         const model = em.getModel(metadata.type);
         if (model === undefined) {
             throw new Error(`Can not get model ${metadata.type}`);

@@ -11,6 +11,7 @@ import { MongoModule } from '../module';
 import { MongoCoreModule } from '../module.core';
 import {
     CascadeType,
+    getChildrenRelationshipMetadata,
     getRelationshipCascadesMetadata,
     getRelationshipMetadata,
     getRelationshipsCascadesMetadata,
@@ -344,10 +345,27 @@ describe('Dataloader', () => {
 });
 
 describe('Relationships cascades', () => {
+    it('should have children relationship defined', () => {
+        const childrenRelationsLevel2 = getChildrenRelationshipMetadata(
+            RelationshipEntityLevel2Test
+        );
+        expect(childrenRelationsLevel2).toHaveLength(1);
+        expect(childrenRelationsLevel2[0]).toBe('parentId');
+
+        const childrenRelationsLevel3 = getChildrenRelationshipMetadata(
+            RelationshipEntityLevel3Test
+        );
+        expect(childrenRelationsLevel3).toHaveLength(1);
+        expect(childrenRelationsLevel3[0]).toBe('parentId');
+    });
+
     it('should have relationships cascades', () => {
         const relsCascadesMetadata = getRelationshipsCascadesMetadata(
             RelationshipEntityLevel1Test
         );
+        if (relsCascadesMetadata === undefined) {
+            throw Error('No cascades defined for RelationshipEntityLevel1Test');
+        }
         expect(relsCascadesMetadata).toBeInstanceOf(Array);
         expect(relsCascadesMetadata).toHaveLength(1);
         expect(relsCascadesMetadata[0].model).toBe(

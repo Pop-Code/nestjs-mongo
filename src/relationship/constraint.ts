@@ -74,9 +74,7 @@ export class IsValidRelationshipConstraint
                 );
                 if (isEmpty(relationship)) {
                     throw new Error(
-                        `The property ${
-                            args.property
-                        } contains an invalid relationship ${value.toHexString()}`
+                        `The property ${args.property} contains an invalid relationship`
                     );
                 }
             }

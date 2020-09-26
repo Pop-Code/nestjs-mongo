@@ -1,6 +1,6 @@
 {
     "name": "nestjs-mongo",
-    "version": "0.9.9",
+    "version": "0.9.91",
     "description": "A NestJS module that provide a simple mongodb orm like",
     "keywords": [
         "nestjs",

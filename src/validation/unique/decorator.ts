@@ -10,7 +10,7 @@ export function IsUnique(options?: IsUniqueOptions) {
             Index({
                 [propertyName]: {
                     unique: 1,
-                    sparse: options?.sparse
+                    sparse: get(options, 'sparse', false)
                 }
             })(object, propertyName);
         }

@@ -8,10 +8,11 @@ export function IsUnique(options?: IsUniqueOptions) {
     return (object: any, propertyName: string) => {
         if (options?.keys === undefined) {
             Index({
-                [propertyName]: {
-                    unique: 1,
-                    sparse: get(options, 'sparse', false)
-                }
+                key: {
+                    [propertyName]: 1
+                },
+                unique: true,
+                sparse: get(options, 'sparse', false)
             })(object, propertyName);
         }
         return registerDecorator({

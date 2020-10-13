@@ -12,6 +12,7 @@ import { MongoManager } from '../../manager';
 export type IsUniqueOptions = ValidationOptions & {
     keys?: string[];
     sparse?: boolean;
+    noIndex?: boolean;
 };
 
 @ValidatorConstraint({ name: 'IsUnique', async: true })

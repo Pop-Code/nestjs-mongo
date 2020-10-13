@@ -36,7 +36,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
         const managerToken = getManagerToken(DEFAULT_CONNECTION_NAME);
         const manager = this.moduleRef.get<MongoManager>(managerToken);
         const models = manager.getModels();
-        const indexJobs: Array<Promise<void>> = [];
+        const indexJobs: Array<Promise<any>> = [];
         for (const [, Model] of models.entries()) {
             setRelationshipsCascadesMetadata(Model, manager);
             indexJobs.push(createIndexes(Model, manager));

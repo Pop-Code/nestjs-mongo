@@ -1,6 +1,7 @@
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { isEmpty } from 'class-validator';
 import { find } from 'lodash';
+import { IndexSpecification } from 'mongodb';
 
 import { RELATIONSHIP_METADATA_NAME } from '../constants';
 import { isClass } from '../helpers';
@@ -26,6 +27,7 @@ export interface BaseRelationshipMetadata {
     isArray?: boolean;
     inversedBy?: string;
     cascade?: CascadeType[];
+    indexSpecification?: IndexSpecification;
 }
 
 export interface RelationshipMetadataOptions<R extends EntityInterface>

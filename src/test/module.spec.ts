@@ -28,6 +28,7 @@ import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
+import { EntityUniqueRelationship } from './module/entity.relationship.unique';
 import { EntitySlugTest } from './module/entity.slug';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
@@ -454,6 +455,23 @@ describe('Indexes', () => {
         expect(indexes).toHaveLength(2);
         expect(indexes[1].unique).toBe(true);
     });
+
+    it('should define an index for a relationship', async () => {
+        const em = mod.get<MongoManager>(getManagerToken());
+        const indexes = await em
+            .getCollection(EntityUniqueRelationship)
+            .indexes();
+
+        expect(indexes).toHaveLength(3);
+        expect(indexes[1].unique).toBe(true);
+        expect(indexes[1].sparse).toBe(true);
+        expect(indexes[1].key.child).toBe(1);
+
+        expect(indexes[2].unique).toBe(true);
+        expect(indexes[2].sparse).toBe(true);
+        expect(indexes[2].key.child).toBe(1);
+        expect(indexes[2].key.child2).toBe(1);
+    });
 });
 
 describe('Slugged entities', () => {
@@ -493,7 +511,9 @@ afterAll(async () => {
             RelationshipEntityLevel1Test,
             RelationshipEntityLevel2Test,
             RelationshipEntityLevel3Test,
-            RelationshipEntityLevel1WithChildrenTest
+            RelationshipEntityLevel1WithChildrenTest,
+            EntityWithIndexTest,
+            EntityUniqueRelationship
         ];
 
         for (const entity of entities) {

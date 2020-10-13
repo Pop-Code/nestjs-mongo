@@ -14,6 +14,7 @@ import { EntityTest } from './entity';
 import { EntityWithIndexTest } from './entity.index';
 import { EntityNestedTest } from './entity.nested';
 import { EntityRelationship } from './entity.relationship';
+import { EntityUniqueRelationship } from './entity.relationship.unique';
 
 @Module({
     imports: [
@@ -27,7 +28,8 @@ import { EntityRelationship } from './entity.relationship';
                 RelationshipEntityLevel1Test,
                 RelationshipEntityLevel2Test,
                 RelationshipEntityLevel3Test,
-                RelationshipEntityLevel1WithChildrenTest
+                RelationshipEntityLevel1WithChildrenTest,
+                EntityUniqueRelationship
             ]
         })
     ],

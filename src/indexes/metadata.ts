@@ -79,13 +79,13 @@ export async function createIndexes<Model extends EntityInterface>(
         const indexName = `${ModelClass.name}_${property}_relationship`;
         if (typeof rel.indexSpecification === 'object') {
             indexes.push({
-                ...rel.indexSpecification,
-                name: indexName
+                name: indexName,
+                ...rel.indexSpecification
             });
         } else if (rel.indexSpecification !== false) {
             indexes.push({
-                key: { [property]: 1 },
-                name: indexName
+                name: indexName,
+                key: { [property]: 1 }
             });
         }
     }

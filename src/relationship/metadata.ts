@@ -27,7 +27,7 @@ export interface BaseRelationshipMetadata {
     isArray?: boolean;
     inversedBy?: string;
     cascade?: CascadeType[];
-    indexSpecification?: IndexSpecification;
+    indexSpecification?: IndexSpecification | false;
 }
 
 export interface RelationshipMetadataOptions<R extends EntityInterface>

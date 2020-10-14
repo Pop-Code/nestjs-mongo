@@ -77,12 +77,12 @@ export async function createIndexes<Model extends EntityInterface>(
             manager
         );
         const indexName = `${ModelClass.name}_${property}_relationship`;
-        if (rel.indexSpecification !== undefined) {
+        if (typeof rel.indexSpecification === 'object') {
             indexes.push({
                 ...rel.indexSpecification,
                 name: indexName
             });
-        } else {
+        } else if (rel.indexSpecification !== false) {
             indexes.push({
                 key: { [property]: 1 },
                 name: indexName

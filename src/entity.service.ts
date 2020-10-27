@@ -114,7 +114,7 @@ export abstract class EntityService<
      */
     subscribe(onData: EventCallback<Model>): ChangeStream {
         return this.repository
-            .watch([], { updateLookup: 'fullDocument' })
+            .watch([], { fullDocument: 'updateLookup' })
             .on('change', (change: any) => {
                 this.onData(change, onData).catch((e) => {
                     throw e;

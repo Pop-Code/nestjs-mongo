@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { isEmpty } from 'class-validator';
 import Debug from 'debug';
 import { camelCase } from 'lodash';
 import { ChangeStream, ObjectId } from 'mongodb';
@@ -11,7 +12,6 @@ import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
 import { EventCallback, EventType } from './interfaces/event';
 import { MongoRepository } from './repository';
-import { isEmpty } from 'class-validator';
 
 @Injectable()
 export abstract class EntityService<
@@ -116,13 +116,13 @@ export abstract class EntityService<
         return this.repository
             .watch([], { updateLookup: 'fullDocument' })
             .on('change', (change: any) => {
-                this._onData(change, onData).catch((e) => {
+                this.onData(change, onData).catch((e) => {
                     throw e;
                 });
             });
     }
 
-    private readonly _onData = async (
+    protected readonly onData = async (
         change: any,
         onData: EventCallback<Model>
     ) => {

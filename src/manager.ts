@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { ClassTransformOptions } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
-import { isEmpty, validate } from 'class-validator';
+import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
 import { ChangeStream, CommonOptions, Cursor, FindOneOptions, MongoClient, MongoCountPreferences, ObjectId } from 'mongodb';
 
@@ -119,9 +119,31 @@ export class MongoManager {
         );
     }
 
+    async validate<Model>(
+        obj: Model,
+        validatorOptions: ValidatorOptions = {},
+        throwError: boolean = false
+    ) {
+        const errors = await validate(obj, {
+            whitelist: true,
+            validationError: { target: true, value: true },
+            ...validatorOptions
+        });
+
+        if (errors.length > 0 && throwError) {
+            throw this.exceptionFactory(errors);
+        }
+
+        return errors;
+    }
+
     async save<Model extends EntityInterface>(
         entity: Model,
-        options: MongoExecutionOptions & { dataloader?: string } = {}
+        options: MongoExecutionOptions & {
+            dataloader?: string;
+            skipValidation?: boolean;
+            validatorOptions?: ValidatorOptions;
+        } = {}
     ): Promise<Model> {
         const entityName = entity.constructor.name;
         const dataloaderName =
@@ -130,14 +152,9 @@ export class MongoManager {
                 : entityName;
         try {
             this.log('saving %s', entityName);
-            const errors = await validate(entity, {
-                whitelist: true,
-                validationError: { target: true, value: true }
-            });
-            if (errors.length > 0) {
-                throw this.exceptionFactory(errors);
+            if (options.skipValidation !== true) {
+                await this.validate(entity, options.validatorOptions, true);
             }
-
             const collection = this.getCollection(entity, options.database);
             let operation: any;
             if (!isEmpty(entity._id)) {

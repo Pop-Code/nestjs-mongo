@@ -1,5 +1,6 @@
 import { ClassTransformOptions } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
+import { ValidatorOptions } from 'class-validator';
 import { ChangeStream, Cursor } from 'mongodb';
 
 import { ObjectId } from './helpers';
@@ -89,5 +90,13 @@ export class MongoRepository<Model extends EntityInterface> {
 
     merge(entity: Model, data: any, options?: ClassTransformOptions): Model {
         return this.em.merge(entity, data, options);
+    }
+
+    async validate(
+        entity: Model,
+        validatorOptions: ValidatorOptions = {},
+        throwError: boolean = false
+    ) {
+        return await this.em.validate(entity, validatorOptions, throwError);
     }
 }

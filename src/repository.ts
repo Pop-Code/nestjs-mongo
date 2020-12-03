@@ -29,6 +29,7 @@ export class MongoRepository<Model extends EntityInterface> {
         return this.em.getCollection(this.classType).watch(pipes, options);
     }
 
+    // todo refactor
     async find(
         query?: any,
         options: { dataloader?: string } = {}
@@ -51,7 +52,7 @@ export class MongoRepository<Model extends EntityInterface> {
     }
 
     async list(query?: any): Promise<Cursor<Model>> {
-        return await this.em.find(this.classType, query);
+        return await this.findPaginated(query);
     }
 
     async count(query?: any, ...args: any[]): Promise<number> {

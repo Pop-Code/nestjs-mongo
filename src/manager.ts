@@ -220,7 +220,8 @@ export class MongoManager {
         options: { dataloader?: string } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
-        const cursor: Cursor<object> = await this.getCollection(classType).find(
+
+        const cursor: Cursor<object> = this.getCollection(classType).find(
             query
         );
         const cursorMap = cursor.map((data) => {
@@ -402,22 +403,21 @@ export class MongoManager {
         obj: P,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<R>;
             dataloader?: string;
         } = {}
     ): Promise<R | undefined> {
         this.log('getRelationship %s on %s', property, obj);
-
-        let relationMetadata = options.cachedMetadata;
-        if (isEmpty(relationMetadata) || relationMetadata === undefined) {
-            relationMetadata = getRelationshipMetadata<R>(obj, property, this);
-            if (isEmpty(relationMetadata)) {
-                throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getRelationship on ${getObjectName(
-                        obj
-                    )}`
-                );
-            }
+        const relationMetadata = getRelationshipMetadata<R>(
+            obj,
+            property,
+            this
+        );
+        if (isEmpty(relationMetadata)) {
+            throw new Error(
+                `The property ${property} metadata @Relationship must be set to call getRelationship on ${getObjectName(
+                    obj
+                )}`
+            );
         }
 
         if (
@@ -429,11 +429,14 @@ export class MongoManager {
             );
         }
 
-        const repository = this.getRepository(relationMetadata.type);
         const value = obj[property];
-        const relationship = await repository.findOne({
-            _id: value
-        });
+        const relationship = await this.findOne(
+            relationMetadata.type,
+            {
+                _id: value
+            },
+            options
+        );
 
         return relationship;
     }
@@ -442,22 +445,22 @@ export class MongoManager {
         obj: P,
         property: string,
         options: {
-            cachedMetadata?: RelationshipMetadata<R>;
             dataloader?: string;
         } = {}
     ): Promise<Array<R | Error>> {
         this.log('getRelationships %s on %s', property, obj);
 
-        let relationMetadata = options.cachedMetadata;
+        const relationMetadata = getRelationshipMetadata<R>(
+            obj,
+            property,
+            this
+        );
         if (isEmpty(relationMetadata) || relationMetadata === undefined) {
-            relationMetadata = getRelationshipMetadata<R>(obj, property, this);
-            if (isEmpty(relationMetadata) || relationMetadata === undefined) {
-                throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getRelationships on ${getObjectName(
-                        obj
-                    )}`
-                );
-            }
+            throw new Error(
+                `The property ${property} metadata @Relationship must be set to call getRelationships on ${getObjectName(
+                    obj
+                )}`
+            );
         }
 
         if (
@@ -471,11 +474,12 @@ export class MongoManager {
             );
         }
 
-        const repository = this.getRepository(relationMetadata.type);
         const value = obj[property];
-        const relationships = await repository.findById(value);
+        const relationshipsCursor = await this.find(relationMetadata.type, {
+            _id: { $in: value }
+        });
 
-        return relationships;
+        return await relationshipsCursor.toArray();
     }
 
     async getInversedRelationships<
@@ -502,14 +506,12 @@ export class MongoManager {
             throw new Error(`Can not get inversed metadata`);
         }
 
-        const repository = this.getRepository(ChildType);
-
         // todo set metadata for inversed side insted of using implicit _id ? ?
-        const children = await repository.find({
+        const children = await this.find(ChildType, {
             [property]: parent._id
         });
 
-        return children;
+        return await children.toArray();
     }
 
     fromPlain<Model extends EntityInterface>(

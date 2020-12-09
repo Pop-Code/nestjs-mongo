@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { isEmpty } from 'class-validator';
 import Debug from 'debug';
 import { camelCase } from 'lodash';
-import { ChangeStream, ObjectId } from 'mongodb';
+import { ChangeEvent, ChangeStream, ObjectId } from 'mongodb';
 
 import { Filter } from './classes/filter';
 import { HistoryActions } from './classes/history';
@@ -10,7 +10,7 @@ import { HistoryAction } from './classes/history.action';
 import { PaginatedData } from './classes/paginated';
 import { DEBUG } from './constants';
 import { EntityInterface } from './interfaces/entity';
-import { EventCallback, EventType } from './interfaces/event';
+import { EventCallback, EventType, SupportedChangeEvent } from './interfaces/event';
 import { MongoRepository } from './repository';
 
 @Injectable()
@@ -115,7 +115,7 @@ export abstract class EntityService<
     subscribe(onData: EventCallback<Model>): ChangeStream {
         return this.repository
             .watch([], { fullDocument: 'updateLookup' })
-            .on('change', (change: any) => {
+            .on('change', (change) => {
                 this.onData(change, onData).catch((e) => {
                     throw e;
                 });
@@ -123,23 +123,31 @@ export abstract class EntityService<
     }
 
     protected readonly onData = async (
-        change: any,
+        change: ChangeEvent<Model>,
         onData: EventCallback<Model>
     ) => {
         try {
             const em = this.repository.getEm();
             const classType = this.repository.getClassType();
-            const { operationType, fullDocument } = change;
-            let operation: EventType = operationType;
-
+            const { operationType } = change;
+            let operation: EventType | undefined;
             if (operationType === 'insert') {
                 operation = 'create';
-            }
-            if (operationType === 'replace') {
+            } else if (operationType === 'replace') {
                 operation = 'update';
+            } else if (operationType === 'delete') {
+                operation = 'delete';
+            }
+            if (operation === undefined) {
+                return;
             }
             if (!['create', 'update', 'delete'].includes(operation)) {
                 return;
+            }
+            const changeCast = change as SupportedChangeEvent<Model>;
+            let fullDocument: any;
+            if ((change as any).fullDocument !== undefined) {
+                fullDocument = (change as any).fullDocument;
             }
 
             const eventName = camelCase(`on_${operation}_${classType.name}`);
@@ -147,15 +155,21 @@ export abstract class EntityService<
                 'Event:%s for %s:%s',
                 eventName,
                 classType.name,
-                change.documentKey._id
+                changeCast.documentKey._id
             );
             if (operation === 'delete') {
-                onData(eventName, operation, change.documentKey._id);
+                onData(
+                    eventName,
+                    operation,
+                    changeCast.documentKey._id,
+                    changeCast
+                );
             } else {
                 onData(
                     eventName,
                     operation,
-                    em.fromPlain(classType, fullDocument)
+                    em.fromPlain(classType, fullDocument),
+                    changeCast
                 );
             }
         } catch (e) {

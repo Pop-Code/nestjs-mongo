@@ -1,10 +1,15 @@
+import { ChangeEventCR, ChangeEventDelete, ChangeEventUpdate, ObjectId } from 'mongodb';
+
 import { EntityInterface } from './entity';
-import { ObjectId } from 'mongodb';
 
 export type EventType = 'create' | 'update' | 'delete';
-
+export type SupportedChangeEvent<M = any> =
+    | ChangeEventUpdate<M>
+    | ChangeEventDelete<M>
+    | ChangeEventCR<M>;
 export type EventCallback<Model extends EntityInterface> = (
     eventName: string,
     eventType: EventType,
-    entity: Model | ObjectId
+    entity: Model | ObjectId,
+    originalEvent: SupportedChangeEvent<Model>
 ) => void;

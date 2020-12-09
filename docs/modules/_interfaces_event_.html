@@ -75,6 +75,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="_interfaces_event_.html#eventcallback" class="tsd-kind-icon">Event<wbr>Callback</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_interfaces_event_.html#eventtype" class="tsd-kind-icon">Event<wbr>Type</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="_interfaces_event_.html#supportedchangeevent" class="tsd-kind-icon">Supported<wbr>Change<wbr>Event</a></li>
 							</ul>
 						</section>
 					</div>
@@ -85,10 +86,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="eventcallback" class="tsd-anchor"></a>
 					<h3>Event<wbr>Callback</h3>
-					<div class="tsd-signature tsd-kind-icon">Event<wbr>Callback&lt;Model&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>eventName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, eventType<span class="tsd-signature-symbol">: </span><a href="_interfaces_event_.html#eventtype" class="tsd-signature-type">EventType</a>, entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<div class="tsd-signature tsd-kind-icon">Event<wbr>Callback&lt;Model&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>eventName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, eventType<span class="tsd-signature-symbol">: </span><a href="_interfaces_event_.html#eventtype" class="tsd-signature-type">EventType</a>, entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ObjectId</span>, originalEvent<span class="tsd-signature-symbol">: </span><a href="_interfaces_event_.html#supportedchangeevent" class="tsd-signature-type">SupportedChangeEvent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/4e9d54a/src/interfaces/event.ts#L6">src/interfaces/event.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ed51124/src/interfaces/event.ts#L10">src/interfaces/event.ts:10</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -102,7 +103,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>eventName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, eventType<span class="tsd-signature-symbol">: </span><a href="_interfaces_event_.html#eventtype" class="tsd-signature-type">EventType</a>, entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ObjectId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>eventName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, eventType<span class="tsd-signature-symbol">: </span><a href="_interfaces_event_.html#eventtype" class="tsd-signature-type">EventType</a>, entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ObjectId</span>, originalEvent<span class="tsd-signature-symbol">: </span><a href="_interfaces_event_.html#supportedchangeevent" class="tsd-signature-type">SupportedChangeEvent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -116,6 +117,9 @@
 											</li>
 											<li>
 												<h5>entity: <span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ObjectId</span></h5>
+											</li>
+											<li>
+												<h5>originalEvent: <a href="_interfaces_event_.html#supportedchangeevent" class="tsd-signature-type">SupportedChangeEvent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -131,9 +135,25 @@
 					<div class="tsd-signature tsd-kind-icon">Event<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"create"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"update"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"delete"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/4e9d54a/src/interfaces/event.ts#L4">src/interfaces/event.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ed51124/src/interfaces/event.ts#L5">src/interfaces/event.ts:5</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="supportedchangeevent" class="tsd-anchor"></a>
+					<h3>Supported<wbr>Change<wbr>Event</h3>
+					<div class="tsd-signature tsd-kind-icon">Supported<wbr>Change<wbr>Event&lt;M&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ChangeEventUpdate</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ChangeEventDelete</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ChangeEventCR</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ed51124/src/interfaces/event.ts#L6">src/interfaces/event.ts:6</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>M = <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -155,6 +175,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="_interfaces_event_.html#eventtype" class="tsd-kind-icon">Event<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_interfaces_event_.html#supportedchangeevent" class="tsd-kind-icon">Supported<wbr>Change<wbr>Event</a>
 					</li>
 				</ul>
 			</nav>

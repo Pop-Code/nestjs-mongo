@@ -223,7 +223,7 @@ describe('forFeature', () => {
             'parentId'
         );
         expect(children).toHaveLength(1);
-        expect((children[0] as EntityChildTest)._id).toEqual(child._id);
+        expect(children[0]._id).toEqual(child._id);
     });
 
     it('should serialize an entity', async () => {

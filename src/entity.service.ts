@@ -133,7 +133,10 @@ export abstract class EntityService<
             let operation: EventType | undefined;
             if (operationType === 'insert') {
                 operation = 'create';
-            } else if (operationType === 'replace') {
+            } else if (
+                operationType === 'replace' ||
+                operationType === 'update'
+            ) {
                 operation = 'update';
             } else if (operationType === 'delete') {
                 operation = 'delete';

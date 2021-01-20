@@ -1,15 +1,11 @@
+import { ClassConstructor, classToClassFromExist, ClassTransformOptions, plainToClass } from 'class-transformer';
+
 import { EntityInterface } from '../interfaces/entity';
-import { ClassType } from 'class-transformer/ClassTransformer';
-import {
-    ClassTransformOptions,
-    plainToClass,
-    classToClassFromExist
-} from 'class-transformer';
 
 export const EXCLUDED_PREFIXES = ['__'];
 
 export function fromPlain<Model extends EntityInterface>(
-    classType: ClassType<Model>,
+    classType: ClassConstructor<Model>,
     data: object,
     options?: ClassTransformOptions
 ): Model {

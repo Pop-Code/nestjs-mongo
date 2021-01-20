@@ -1,4 +1,4 @@
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor } from 'class-transformer';
 import { isEmpty } from 'class-validator';
 import { find } from 'lodash';
 import { IndexSpecification } from 'mongodb';
@@ -21,7 +21,7 @@ export interface RelationshipCascade<Child extends EntityInterface = any> {
 
 export type RelationshipTypeDescriptor<Relationship extends EntityInterface> = (
     obj: unknown
-) => ClassType<Relationship>;
+) => ClassConstructor<Relationship>;
 
 export interface BaseRelationshipMetadata {
     isArray?: boolean;
@@ -32,19 +32,22 @@ export interface BaseRelationshipMetadata {
 
 export interface RelationshipMetadataOptions<R extends EntityInterface>
     extends BaseRelationshipMetadata {
-    type: RelationshipTypeDescriptor<R> | ClassType<R> | string;
+    type: RelationshipTypeDescriptor<R> | ClassConstructor<R> | string;
 }
 
 export interface RelationshipMetadata<R extends EntityInterface>
     extends BaseRelationshipMetadata {
-    type: ClassType<R>;
+    type: ClassConstructor<R>;
 }
 
 export const relationshipCascadesMetadata = new Map<
-    ClassType<any>,
+    ClassConstructor<any>,
     RelationshipCascade[]
 >();
-export const childrenRelationshipMetadata = new Map<ClassType<any>, string[]>();
+export const childrenRelationshipMetadata = new Map<
+    ClassConstructor<any>,
+    string[]
+>();
 
 export function setRelationshipMetadata<R extends EntityInterface = any>(
     target: any,
@@ -70,7 +73,7 @@ export function setRelationshipMetadata<R extends EntityInterface = any>(
 }
 
 export function addChildRelationshipMetadata<P = any>(
-    target: ClassType<P>,
+    target: ClassConstructor<P>,
     property: string
 ) {
     const relationsMetadata = getChildrenRelationshipMetadata(target);
@@ -78,13 +81,15 @@ export function addChildRelationshipMetadata<P = any>(
     childrenRelationshipMetadata.set(target, relationsMetadata);
 }
 
-export function getChildrenRelationshipMetadata<P = any>(target: ClassType<P>) {
+export function getChildrenRelationshipMetadata<P = any>(
+    target: ClassConstructor<P>
+) {
     return childrenRelationshipMetadata.get(target) ?? [];
 }
 
 export function setRelationshipsCascadesMetadata<
     Child extends EntityInterface = any
->(child: ClassType<Child>, manager: MongoManager) {
+>(child: ClassConstructor<Child>, manager: MongoManager) {
     const props = getChildrenRelationshipMetadata(child);
     if (Array.isArray(props)) {
         for (const prop of props) {
@@ -115,7 +120,7 @@ export function setRelationshipsCascadesMetadata<
 
 export function getRelationshipsCascadesMetadata<
     Parent extends EntityInterface = any
->(target: ClassType<Parent>) {
+>(target: ClassConstructor<Parent>) {
     return relationshipCascadesMetadata.get(target);
 }
 
@@ -123,8 +128,8 @@ export function getRelationshipCascadesMetadata<
     Parent extends EntityInterface = any,
     Child extends EntityInterface = any
 >(
-    parent: ClassType<Parent>,
-    relationshipType: ClassType<Child>
+    parent: ClassConstructor<Parent>,
+    relationshipType: ClassConstructor<Child>
 ): RelationshipCascade<Child> | undefined {
     const relCascades = getRelationshipsCascadesMetadata<Parent>(parent);
     return find(relCascades, (cs) => {

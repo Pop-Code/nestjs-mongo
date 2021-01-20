@@ -1,4 +1,4 @@
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor } from 'class-transformer';
 import { find } from 'lodash';
 import { IndexSpecification } from 'mongodb';
 
@@ -46,7 +46,7 @@ export function getIndexMetadata(
 }
 
 export async function createIndexes<Model extends EntityInterface>(
-    ModelClass: ClassType<Model>,
+    ModelClass: ClassConstructor<Model>,
     manager: MongoManager
 ) {
     const indexes: IndexSpecification[] = [];

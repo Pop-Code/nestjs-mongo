@@ -1,7 +1,6 @@
 import { applyDecorators, Inject } from '@nestjs/common';
 import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
-import { Expose, Transform, TransformationType, Type } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor, Expose, Transform, TransformationType, Type } from 'class-transformer';
 import { Allow, isEmpty } from 'class-validator';
 import slugify from 'slugify';
 
@@ -21,7 +20,7 @@ export function InjectManager(
 }
 
 export function InjectRepository(
-    entity: ClassType<any>,
+    entity: ClassConstructor<any>,
     connectionName: string = DEFAULT_CONNECTION_NAME
 ) {
     return Inject(getRepositoryToken(entity.name, connectionName));
@@ -67,9 +66,8 @@ export function ObjectIdTransformer(
 
 export function TypeObjectId(isArray?: boolean) {
     const typefn = Type(() => ObjectId);
-    const trfn = Transform(
-        (value: any, object: any, type: TransformationType) =>
-            ObjectIdTransformer(value, object, type, isArray)
+    const trfn = Transform((params) =>
+        ObjectIdTransformer(params.value, params.obj, params.type, isArray)
     );
     const allowfn = Allow();
     return applyDecorators(typefn, trfn, allowfn);

@@ -1,5 +1,6 @@
-import slugify from 'slugify';
 import { RuntimeException } from '@nestjs/core/errors/exceptions/runtime.exception';
+import slugify from 'slugify';
+
 import { SlugDecorator } from '../decorators';
 
 jest.mock('slugify', () => jest.fn((x) => x.trim()));
@@ -29,7 +30,7 @@ describe('Slug decorator', () => {
     test('should handle options.keys', () => {
         const target: any = { firstName: 'John', lastName: 'Smith' };
 
-        SlugDecorator(target, 'slug', {
+        SlugDecorator<{ firstName: string; lastName: string }>(target, 'slug', {
             keys: ['firstName', 'lastName']
         });
 
@@ -41,7 +42,6 @@ describe('Slug decorator', () => {
     test('should throw RuntimeException if slugify fails', () => {
         const target: any = {};
         SlugDecorator(target, 'slug', {});
-
         expect(() => target.slug).toThrowError(RuntimeException);
     });
 });

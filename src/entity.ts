@@ -1,9 +1,10 @@
 import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
+
 import { TypeObjectId } from './decorators';
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
-import { Serializable, ISerializable } from './serializer';
+import { ISerializable, Serializable } from './serializer';
 
 export interface Entity extends ISerializable {}
 

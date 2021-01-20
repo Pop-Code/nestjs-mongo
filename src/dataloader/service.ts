@@ -1,4 +1,4 @@
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor } from 'class-transformer';
 import { getNamespace } from 'cls-hooked';
 import Debug from 'debug';
 import { Cursor, ObjectId } from 'mongodb';
@@ -37,7 +37,7 @@ export class DataloaderService {
     }
 
     create<Model extends EntityInterface>(
-        model: ClassType<Model>,
+        model: ClassConstructor<Model>,
         em: MongoManager,
         uuid: string
     ) {

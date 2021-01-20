@@ -171,7 +171,7 @@ export abstract class EntityService<
                 onData(
                     eventName,
                     operation,
-                    em.fromPlain(classType, fullDocument),
+                    em.fromPlain<Model>(classType, fullDocument),
                     changeCast
                 );
             }

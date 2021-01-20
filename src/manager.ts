@@ -1,6 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { ClassTransformOptions } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
 import { ChangeStream, CommonOptions, Cursor, FindOneOptions, MongoClient, MongoCountPreferences, ObjectId } from 'mongodb';
@@ -23,7 +22,7 @@ import { fromPlain, merge } from './transformers/utils';
 
 export class MongoManager {
     protected readonly repositories: Map<string, any> = new Map();
-    protected readonly models: Map<string, ClassType<any>> = new Map();
+    protected readonly models: Map<string, ClassConstructor<any>> = new Map();
 
     protected log = Debug(DEBUG + ':MongoManager');
     constructor(
@@ -35,18 +34,18 @@ export class MongoManager {
 
     registerModel<Model extends EntityInterface>(
         name: string,
-        model: ClassType<Model>
+        model: ClassConstructor<Model>
     ): MongoManager {
         this.log('Add model %s as %s', model.name, name);
         this.models.set(name, model);
         return this;
     }
 
-    getModel(id: string): ClassType<any> | undefined {
+    getModel(id: string): ClassConstructor<any> | undefined {
         return this.models.get(id);
     }
 
-    getModels(): Map<string, ClassType<any>> {
+    getModels(): Map<string, ClassConstructor<any>> {
         return this.models;
     }
 
@@ -62,7 +61,7 @@ export class MongoManager {
     getRepository<
         Model extends EntityInterface,
         R extends MongoRepository<Model> = MongoRepository<Model>
-    >(classType: ClassType<Model>): R {
+    >(classType: ClassConstructor<Model>): R {
         return this.repositories.get(getRepositoryToken(classType.name));
     }
 
@@ -82,7 +81,9 @@ export class MongoManager {
         return this.dataloaderService.get<Model>(id);
     }
 
-    getCollectionName<Model>(nameOrInstance: Model | ClassType<Model>): string {
+    getCollectionName<Model extends EntityInterface>(
+        nameOrInstance: Model | ClassConstructor<Model>
+    ): string {
         let name: string | undefined;
         if (
             typeof nameOrInstance === 'object' ||
@@ -91,19 +92,14 @@ export class MongoManager {
             name = Reflect.getMetadata(
                 'mongo:collectionName',
                 typeof nameOrInstance === 'object'
-                    ? (nameOrInstance as any).constructor
+                    ? nameOrInstance.constructor
                     : nameOrInstance
             );
-        } else if (typeof nameOrInstance === 'string') {
-            name = nameOrInstance;
         }
 
         if (name === undefined) {
             throw new Error(
-                // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                `@Collection decorator is required to use a class as model for: ${
-                    (nameOrInstance as any).toString() as string
-                }`
+                `@Collection decorator is required to use a class as model`
             );
         }
 
@@ -111,7 +107,7 @@ export class MongoManager {
     }
 
     getCollection<Model extends EntityInterface>(
-        nameOrInstance: Model | ClassType<Model>,
+        nameOrInstance: Model | ClassConstructor<Model>,
         databaseName?: string
     ) {
         return this.getDatabase(databaseName).collection(
@@ -119,8 +115,8 @@ export class MongoManager {
         );
     }
 
-    async validate<Model>(
-        obj: Model,
+    async validate(
+        obj: any,
         validatorOptions: ValidatorOptions = {},
         throwError: boolean = false
     ) {
@@ -215,7 +211,7 @@ export class MongoManager {
     }
 
     async find<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         query: any,
         options: { dataloader?: string } = {}
     ): Promise<Cursor<Model>> {
@@ -237,7 +233,7 @@ export class MongoManager {
     }
 
     async findOne<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         query: any,
         options: FindOneOptions<Model> & { dataloader?: string } = {}
     ): Promise<Model | undefined> {
@@ -279,7 +275,7 @@ export class MongoManager {
     }
 
     async count<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         query: any,
         options?: MongoCountPreferences
     ): Promise<number> {
@@ -299,7 +295,7 @@ export class MongoManager {
     }
 
     protected async deleteCascade<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         entity: Model
     ) {
         const relationshipsCascades = getRelationshipsCascadesMetadata(
@@ -329,7 +325,7 @@ export class MongoManager {
     }
 
     async deleteOne<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         query: any,
         options: CommonOptions & { dataloader?: string } = {}
     ) {
@@ -356,7 +352,7 @@ export class MongoManager {
     }
 
     async deleteMany<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         query: any,
         options: CommonOptions & { dataloader?: string } = {}
     ) {
@@ -391,7 +387,7 @@ export class MongoManager {
     }
 
     watch<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         pipes?: any[],
         options?: any
     ): ChangeStream {
@@ -485,7 +481,7 @@ export class MongoManager {
     async getInversedRelationships<
         P extends EntityInterface = any,
         C extends EntityInterface = any
-    >(parent: P, ChildType: ClassType<C>, property: string) {
+    >(parent: P, ChildType: ClassConstructor<C>, property: string) {
         let relationMetadata: RelationshipMetadata<P> | undefined;
         if (isEmpty(relationMetadata)) {
             relationMetadata = getRelationshipMetadata<P>(
@@ -515,7 +511,7 @@ export class MongoManager {
     }
 
     fromPlain<Model extends EntityInterface>(
-        classType: ClassType<Model>,
+        classType: ClassConstructor<Model>,
         data: object,
         options?: ClassTransformOptions
     ): Model {

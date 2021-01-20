@@ -19,7 +19,9 @@ export class Filter {
     @Type(() => Number)
     limit = 50;
 
-    @Transform((v) => (typeof v === 'string' ? v.split(',') : v))
+    @Transform(({ value }) =>
+        typeof value === 'string' ? value.split(',') : value
+    )
     @IsOptional()
     @IsArray()
     @Matches(/^(.+):(asc|desc)$/, { each: true })

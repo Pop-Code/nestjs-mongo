@@ -5,7 +5,7 @@
     "parserOptions": {
         "project": "./tsconfig.json"
     },
-    "ignorePatterns": ["dist/test/*", "typedoc.js"],
+    "ignorePatterns": ["typedoc.js", "docs/*"],
     "extends": [
         "standard-with-typescript",
         "prettier",

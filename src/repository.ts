@@ -1,5 +1,4 @@
-import { ClassTransformOptions } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
 import { ChangeStream, Cursor } from 'mongodb';
 
@@ -10,7 +9,7 @@ import { MongoManager } from './manager';
 export class MongoRepository<Model extends EntityInterface> {
     constructor(
         protected readonly em: MongoManager,
-        protected readonly classType: ClassType<Model>
+        protected readonly classType: ClassConstructor<Model>
     ) {}
 
     getClassType() {

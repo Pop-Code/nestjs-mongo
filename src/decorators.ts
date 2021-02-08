@@ -115,13 +115,6 @@ export function SlugDecorator<T>(
         target,
         key
     );
-
-    Object.defineProperty(target, key, {
-        enumerable: true,
-        get() {
-            return slugify(seed(this), config.options);
-        }
-    });
 }
 
 export function Slugify<T = any>(config: ISlugifyOptions<T>) {

@@ -1,6 +1,6 @@
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoClient, ObjectID } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
 import { DEFAULT_CONNECTION_NAME } from '../constants';
@@ -29,7 +29,6 @@ import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
 import { EntityUniqueRelationship } from './module/entity.relationship.unique';
-import { EntitySlugTest } from './module/entity.slug';
 
 export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
 let mod: TestingModule;
@@ -471,32 +470,6 @@ describe('Indexes', () => {
         expect(indexes[2].sparse).toBe(true);
         expect(indexes[2].key.child).toBe(1);
         expect(indexes[2].key.child2).toBe(1);
-    });
-});
-
-describe('Slugged entities', () => {
-    test("Should slugify an entity's property correctly", () => {
-        const entity = new EntitySlugTest('John', 'Smith');
-        expect(entity.slug).toEqual('john-smith');
-        expect(entity.slug2).toEqual('John-42');
-    });
-
-    test('Should expose slugs correctly via toJSON and serialize', () => {
-        const entity = new EntitySlugTest('John', 'Smith');
-        /* using setter should not expose hidden property __slug */
-        entity.slug = 'foo-bar';
-        entity._id = new ObjectID();
-
-        const json = entity.toJSON() as any;
-        expect(json.slug).toBeDefined();
-        expect(json.__slug).toBeUndefined();
-        expect(json.slug2).toBeDefined();
-
-        const serialized = entity.serialize() as any;
-
-        expect(serialized.slug).toBeDefined();
-        expect(serialized.__slug).toBeUndefined();
-        expect(serialized.slug2).toBeDefined();
     });
 });
 

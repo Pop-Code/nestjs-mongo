@@ -1,27 +1,31 @@
-import { Collection, Slugify } from '../../decorators';
-import { Entity } from '../../entity';
+import { Type } from 'class-transformer';
 
-export const TEST_ENTITY_SLUG_COLLECTION_NAME = 'test_slug';
+import { Slugify } from '../../decorators';
 
-@Collection(TEST_ENTITY_SLUG_COLLECTION_NAME)
-export class EntitySlugTest extends Entity {
-    constructor(
-        public readonly firstName: string,
-        public readonly lastName: string
-    ) {
-        super();
+export class EntitySlugTest {
+    constructor(firstName: string, lastName: string) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    @Slugify<EntitySlugTest>({
-        keys: ['firstName', 'lastName'],
+    @Type(() => String)
+    public readonly firstName: string;
+
+    @Type(() => String)
+    public readonly lastName: string;
+
+    @Slugify({
+        generate: ({ firstName, lastName }: { [key: string]: string }) =>
+            `${firstName} ${lastName}`,
         expose: true,
         options: { lower: true }
     })
     slug: string;
 
     @Slugify<EntitySlugTest>({
-        generate: ({ firstName }) => `${firstName} 42`,
-        expose: true
+        keys: ['firstName', 'lastName'],
+        expose: true,
+        options: { lower: true }
     })
     slug2: string;
 }

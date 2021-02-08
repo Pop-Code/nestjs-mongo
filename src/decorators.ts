@@ -100,34 +100,26 @@ export function SlugDecorator<T>(
     key: string,
     config: ISlugifyOptions<T>
 ) {
-    const refKey = `__${key}`;
+    const seed = (obj: any) => {
+        if (typeof config.generate === 'function') return config.generate(obj);
+
+        if (config.keys?.length !== undefined && config.keys?.length > 0)
+            return config.keys
+                .filter(Boolean)
+                .reduce((str, key) => `${str} ${obj[key] as string}`, '');
+
+        throw new RuntimeException('Unable to slugify');
+    };
+
+    Transform(({ value, obj }) => value ?? slugify(seed(obj), config.options))(
+        target,
+        key
+    );
 
     Object.defineProperty(target, key, {
+        enumerable: true,
         get() {
-            if (this[refKey] !== undefined) return this[refKey];
-
-            const seed = (() => {
-                if (typeof config.generate === 'function')
-                    return config.generate(this);
-
-                if (
-                    config.keys?.length !== undefined &&
-                    config.keys?.length > 0
-                )
-                    return config.keys
-                        .filter(Boolean)
-                        .reduce(
-                            (str, key) => `${str} ${this[key] as string}`,
-                            ''
-                        );
-
-                throw new RuntimeException('Unable to slugify');
-            })();
-
-            return slugify(seed, config.options);
-        },
-        set(value: string) {
-            this[refKey] = value;
+            return slugify(seed(this), config.options);
         }
     });
 }
@@ -135,8 +127,9 @@ export function SlugDecorator<T>(
 export function Slugify<T = any>(config: ISlugifyOptions<T>) {
     return applyDecorators(
         ...[
-            ...(config.expose !== undefined && config.expose ? [Expose()] : []),
-            (target: any, key: string) => SlugDecorator<T>(target, key, config)
+            Type(() => String),
+            (target: any, key: string) => SlugDecorator<T>(target, key, config),
+            ...(config.expose !== undefined && config.expose ? [Expose()] : [])
         ]
     );
 }

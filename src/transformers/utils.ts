@@ -20,7 +20,7 @@ export function merge<Model extends EntityInterface>(
     data: any,
     options?: ClassTransformOptions
 ) {
-    return classToClassFromExist(data, entity, {
+    return classToClassFromExist(entity, data, {
         excludePrefixes: EXCLUDED_PREFIXES,
         ...options
     });

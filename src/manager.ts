@@ -152,37 +152,42 @@ export class MongoManager {
                 await this.validate(entity, options.validatorOptions, true);
             }
             const collection = this.getCollection(entity, options.database);
+
+            const Model = this.getModel(entityName);
+            if (Model === undefined) {
+                throw new Error(`Can not find model ${entityName}`);
+            }
+            const proxy = this.merge(new Model(), entity);
+
             let operation: any;
-            if (!isEmpty(entity._id)) {
-                entity.updatedAt = new Date();
+            if (!isEmpty(proxy._id)) {
+                proxy.updatedAt = new Date();
 
                 const $unset: any = {};
                 for (const p in entity) {
                     if (
-                        Object.prototype.hasOwnProperty.call(entity, p) === true
+                        Object.prototype.hasOwnProperty.call(proxy, p) === true
                     ) {
-                        const v: any = entity[p];
+                        const v: any = proxy[p];
                         if (v === undefined) {
                             $unset[p] = 1;
                             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-                            delete entity[p];
+                            delete proxy[p];
                         }
                     }
                 }
 
                 const sets: any = { $set: entity };
-
                 if (Object.keys($unset).length > 0) {
                     sets.$unset = $unset;
                 }
-
-                operation = collection.updateOne({ _id: entity._id }, sets, {
+                operation = collection.updateOne({ _id: proxy._id }, sets, {
                     upsert: false,
                     ...options.mongoOperationOptions
                 });
             } else {
                 operation = collection.insertOne(
-                    entity,
+                    proxy,
                     options.mongoOperationOptions
                 );
             }
@@ -193,19 +198,18 @@ export class MongoManager {
 
             // new id
             if (insertedId instanceof ObjectId) {
-                entity._id = insertedId;
+                proxy._id = insertedId;
             }
 
+            // merge the proxy changes back to the entity
+            this.merge(entity, proxy);
             this.dataloaderService.update(dataloaderName, entity);
-
             return entity;
         } catch (e) {
             this.log('error saving %s', entityName);
-
             if (entity._id instanceof ObjectId) {
                 this.dataloaderService.delete(dataloaderName, entity);
             }
-
             throw e;
         }
     }
@@ -525,6 +529,6 @@ export class MongoManager {
         options?: ClassTransformOptions
     ): Model {
         this.log('%s transform merge', getObjectName(entity));
-        return merge(entity, data, options);
+        return merge(data, entity, options);
     }
 }

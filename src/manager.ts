@@ -161,8 +161,6 @@ export class MongoManager {
 
             let operation: any;
             if (!isEmpty(proxy._id)) {
-                proxy.updatedAt = new Date();
-
                 const $unset: any = {};
                 for (const p in entity) {
                     if (
@@ -178,6 +176,8 @@ export class MongoManager {
                 }
 
                 const sets: any = { $set: entity };
+                entity.updatedAt = new Date();
+
                 if (Object.keys($unset).length > 0) {
                     sets.$unset = $unset;
                 }

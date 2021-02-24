@@ -177,7 +177,7 @@ export class MongoManager {
                     }
                 }
 
-                const sets: any = { $set: entity };
+                const sets: any = { $set: proxy };
                 if (Object.keys($unset).length > 0) {
                     sets.$unset = $unset;
                 }

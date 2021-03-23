@@ -11,6 +11,11 @@ import { RelationshipEntityLevel3Test } from './cascade/level3';
 import { EntityChildTest } from './child';
 import { TestController } from './controller';
 import { EntityTest } from './entity';
+import {
+    ChildDynamicRelationship,
+    ParentDynamicRelationship1,
+    ParentDynamicRelationship2,
+} from './entity.dynamic.relationship';
 import { EntityWithIndexTest } from './entity.index';
 import { EntityNestedTest } from './entity.nested';
 import { EntityRelationship } from './entity.relationship';
@@ -29,7 +34,10 @@ import { EntityUniqueRelationship } from './entity.relationship.unique';
                 RelationshipEntityLevel2Test,
                 RelationshipEntityLevel3Test,
                 RelationshipEntityLevel1WithChildrenTest,
-                EntityUniqueRelationship
+                EntityUniqueRelationship,
+                ParentDynamicRelationship1,
+                ParentDynamicRelationship2,
+                ChildDynamicRelationship
             ]
         })
     ],

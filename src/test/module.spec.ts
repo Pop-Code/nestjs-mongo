@@ -25,6 +25,12 @@ import { RelationshipEntityLevel3Test } from './module/cascade/level3';
 import { EntityChildTest } from './module/child';
 import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
+import {
+    ChildDynamicRelationship,
+    DynamicRelationshipType,
+    ParentDynamicRelationship1,
+    ParentDynamicRelationship2,
+} from './module/entity.dynamic.relationship';
 import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
@@ -350,13 +356,13 @@ describe('Relationships cascades', () => {
             RelationshipEntityLevel2Test
         );
         expect(childrenRelationsLevel2).toHaveLength(1);
-        expect(childrenRelationsLevel2[0]).toBe('parentId');
+        expect(childrenRelationsLevel2[0].property).toBe('parentId');
 
         const childrenRelationsLevel3 = getChildrenRelationshipMetadata(
             RelationshipEntityLevel3Test
         );
         expect(childrenRelationsLevel3).toHaveLength(1);
-        expect(childrenRelationsLevel3[0]).toBe('parentId');
+        expect(childrenRelationsLevel3[0].property).toBe('parentId');
     });
 
     it('should have relationships cascades', () => {
@@ -446,6 +452,50 @@ describe('Relationships cascades', () => {
         expect(emptyChildren).toHaveLength(0);
     });
 });
+describe('Dynamic Relationship with cascades', () => {
+    it('should create an entity with dynamic relationship metadata', async () => {
+        const em = mod.get<MongoManager>(getManagerToken());
+
+        const parent1 = new ParentDynamicRelationship1();
+        parent1.foo = 'bar';
+        await em.save(parent1);
+
+        const child1 = new ChildDynamicRelationship();
+        child1.parentId = parent1._id;
+        child1.parentType =
+            DynamicRelationshipType.EntityParentDynamicRelationship1;
+
+        await em.save(child1);
+
+        const rel1 = await em.getRelationship(child1, 'parentId');
+        expect(rel1 instanceof ParentDynamicRelationship1).toBe(true);
+        expect(rel1._id.equals(parent1._id)).toBe(true);
+
+        const parent2 = new ParentDynamicRelationship2();
+        parent2.foo = 'bar';
+        parent2.bar = 'foo';
+        await em.save(parent2);
+
+        const child2 = new ChildDynamicRelationship();
+        child2.parentId = parent2._id;
+        child2.parentType =
+            DynamicRelationshipType.EntityParentDynamicRelationship2;
+        await em.save(child2);
+
+        const rel2 = await em.getRelationship(child2, 'parentId');
+        expect(rel2 instanceof ParentDynamicRelationship2).toBe(true);
+        expect(rel2._id.equals(parent2._id)).toBe(true);
+
+        // deleting should cascade
+        await em.deleteOne(ParentDynamicRelationship1, { _id: parent1._id });
+        const notFoundChild1 = await em.getRelationship(child1, 'parentId');
+        expect(notFoundChild1).toBeUndefined();
+
+        await em.deleteOne(ParentDynamicRelationship2, { _id: parent2._id });
+        const notFoundChild2 = await em.getRelationship(child2, 'parentId');
+        expect(notFoundChild2).toBeUndefined();
+    });
+});
 
 describe('Indexes', () => {
     it('should define an index for a property', async () => {
@@ -480,7 +530,10 @@ afterAll(async () => {
             EntityTest,
             EntityChildTest,
             EntityRelationship,
-            // EntityNestedTest,
+            EntityNestedTest,
+            ChildDynamicRelationship,
+            ParentDynamicRelationship1,
+            ParentDynamicRelationship2,
             RelationshipEntityLevel1Test,
             RelationshipEntityLevel2Test,
             RelationshipEntityLevel3Test,
@@ -490,11 +543,8 @@ afterAll(async () => {
         ];
 
         for (const entity of entities) {
-            // console.log('Cleaning', em.getCollection(entity));
             await em.getCollection(entity).drop();
         }
-
-        await em.getClient().close();
         await mod.close();
     } catch (e) {
         console.log(e);

@@ -1,6 +1,6 @@
 import { IsDefined } from 'class-validator';
 
-import { Collection, TypeObjectId } from '../../../decorators';
+import { Collection } from '../../../decorators';
 import { Entity } from '../../../entity';
 import { ObjectId } from '../../../helpers';
 import { IsValidRelationship, Relationship } from '../../../relationship/decorators';
@@ -9,7 +9,6 @@ import { EntityTest } from '../entity';
 
 @Collection('relationshipEntityLevel1WithChildrenTest')
 export class RelationshipEntityLevel1WithChildrenTest extends Entity {
-    @TypeObjectId(true)
     @Relationship({
         type: () => EntityTest,
         cascade: [CascadeType.DELETE],

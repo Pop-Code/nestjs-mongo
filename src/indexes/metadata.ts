@@ -69,7 +69,7 @@ export async function createIndexes<Model extends EntityInterface>(
 
     // relationship indexes
     const props = getChildrenRelationshipMetadata(ModelClass);
-    for (const property of props) {
+    for (const { property } of props) {
         // get relationship metadata
         const rel = getRelationshipMetadata(
             new ModelClass(),

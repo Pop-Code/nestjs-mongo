@@ -1,7 +1,9 @@
+import { applyDecorators } from '@nestjs/common';
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 import Debug from 'debug';
 
 import { DEBUG } from '../constants';
+import { TypeObjectId } from '../decorators';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { IsValidRelationshipConstraint } from './constraint';
@@ -56,7 +58,13 @@ export function Relationship<R extends EntityInterface = any, Model = any>(
         | string
 ) {
     const debug = Debug(DEBUG + ':Relationship');
-    return (target: Model, property: string) => {
+    const typeObjectIdDecorator = TypeObjectId(
+        typeof options === 'function' && typeof options === 'string'
+            ? false
+            : (options as any).isArray
+    );
+
+    const relationshipDecorator = (target: Model, property: string) => {
         debug('Register relationship metadata %o', options);
         if (typeof options === 'function' || typeof options === 'string') {
             setRelationshipMetadata<R>(target, property, {
@@ -66,4 +74,6 @@ export function Relationship<R extends EntityInterface = any, Model = any>(
             setRelationshipMetadata<R>(target, property, options);
         }
     };
+
+    return applyDecorators(typeObjectIdDecorator, relationshipDecorator);
 }

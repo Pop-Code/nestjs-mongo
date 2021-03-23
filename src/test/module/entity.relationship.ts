@@ -6,9 +6,7 @@ import { Entity } from '../../entity';
 import { Relationship } from '../../relationship/decorators';
 import { EntityChildTest } from './child';
 
-export const TEST_COLLECTION_NAME = 'testrelationship';
-
-@Collection(TEST_COLLECTION_NAME)
+@Collection('testrelationship')
 export class EntityRelationship extends Entity {
     @IsString()
     foo: string;

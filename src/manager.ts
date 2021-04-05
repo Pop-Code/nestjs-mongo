@@ -130,7 +130,6 @@ export class MongoManager {
         throwError: boolean = false
     ) {
         const errors = await validate(obj, {
-            whitelist: true,
             validationError: { target: true, value: true },
             ...validatorOptions
         });

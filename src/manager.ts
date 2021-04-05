@@ -155,6 +155,14 @@ export class MongoManager {
             typeof options.dataloader === 'string'
                 ? options.dataloader
                 : entityName;
+
+        /**
+         * if we're dealing with a session, hydrate model with session object
+         * so that relation decorators work on current session when validating
+         */
+        if (options?.mongoOperationOptions?.session !== undefined)
+            entity.__session = options.mongoOperationOptions.session;
+
         try {
             this.log('saving %s', entityName);
             if (options.skipValidation !== true) {

@@ -2,6 +2,7 @@ import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validat
 import { first, isEmpty } from 'lodash';
 
 import { ObjectId } from '../helpers';
+import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
 import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
@@ -21,10 +22,10 @@ export class IsValidRelationshipConstraint
         value: ObjectId | ObjectId[],
         args: IsValidRelationshipValidationArguments
     ) {
-        const obj = args.object as any;
+        const entity = args.object as EntityInterface;
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
-                obj,
+                entity,
                 args.property,
                 this.em
             );
@@ -44,6 +45,11 @@ export class IsValidRelationshipConstraint
                         relationMetadata.type,
                         {
                             _id
+                        },
+                        {
+                            ...(entity?.__session !== undefined
+                                ? { session: entity.__session }
+                                : {})
                         }
                     );
                     if (isEmpty(innerR)) {
@@ -69,8 +75,13 @@ export class IsValidRelationshipConstraint
                     );
                 }
                 relationship = await this.em.getRelationship(
-                    args.object as any,
-                    args.property
+                    entity,
+                    args.property,
+                    {
+                        ...(entity?.__session !== undefined
+                            ? { session: entity.__session }
+                            : {})
+                    }
                 );
                 if (isEmpty(relationship)) {
                     throw new Error(
@@ -87,8 +98,10 @@ export class IsValidRelationshipConstraint
                 const message = await withTest(
                     args.object,
                     relationship,
-                    this.em
+                    this.em,
+                    entity?.__session
                 );
+
                 if (typeof message === 'string') {
                     throw new Error(message);
                 }

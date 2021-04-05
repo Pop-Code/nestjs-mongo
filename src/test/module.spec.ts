@@ -36,7 +36,8 @@ import { EntityNestedTest } from './module/entity.nested';
 import { EntityRelationship } from './module/entity.relationship';
 import { EntityUniqueRelationship } from './module/entity.relationship.unique';
 
-export const DBTEST = 'mongodb://localhost:27017/nestjs-mongo-test';
+export const DBTEST =
+    'mongodb://localhost:27017/nestjs-mongo-test?retryWrites=false';
 let mod: TestingModule;
 let app: INestApplication;
 
@@ -520,6 +521,72 @@ describe('Indexes', () => {
         expect(indexes[2].sparse).toBe(true);
         expect(indexes[2].key.child).toBe(1);
         expect(indexes[2].key.child2).toBe(1);
+    });
+});
+
+describe('Mongo sessions support', () => {
+    it('should throw while attempting to read a relationship created during a session without passing session object', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const session = manager.getClient().startSession();
+
+        await expect(
+            session.withTransaction(
+                async () => {
+                    const entity = new EntityTest();
+                    entity.foo = 'bar';
+                    entity.bar = 'foo';
+                    await manager.save<EntityTest>(entity, {
+                        mongoOperationOptions: { session }
+                    });
+
+                    const child = new EntityChildTest();
+                    child.foo = 'child';
+                    child.parentId = entity._id;
+
+                    /* SESSION OBJECT INTENTIONALY OMITTED IN SAVE */
+                    await manager.save(child);
+                },
+                {
+                    readPreference: 'primary',
+                    readConcern: { level: 'local' },
+                    writeConcern: { w: 'majority' }
+                }
+            )
+        ).rejects.toThrow();
+
+        session.endSession();
+    });
+
+    it('should resolve a relationship created during a session when passing session object', async () => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const session = manager.getClient().startSession();
+
+        await expect(
+            session.withTransaction(
+                async () => {
+                    const entity = new EntityTest();
+                    entity.foo = 'bar';
+                    entity.bar = 'foo';
+                    await manager.save<EntityTest>(entity, {
+                        mongoOperationOptions: { session }
+                    });
+                    const child = new EntityChildTest();
+                    child.foo = 'child';
+                    child.parentId = entity._id;
+
+                    await manager.save(child, {
+                        mongoOperationOptions: { session }
+                    });
+                },
+                {
+                    readPreference: 'primary',
+                    readConcern: { level: 'local' },
+                    writeConcern: { w: 'majority' }
+                }
+            )
+        ).resolves.toBeTruthy();
+
+        session.endSession();
     });
 });
 

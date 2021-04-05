@@ -2,7 +2,16 @@ import { NotFoundException } from '@nestjs/common';
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
-import { ChangeStream, CommonOptions, Cursor, FindOneOptions, MongoClient, MongoCountPreferences, ObjectId } from 'mongodb';
+import {
+    ChangeStream,
+    ClientSession,
+    CommonOptions,
+    Cursor,
+    FindOneOptions,
+    MongoClient,
+    MongoCountPreferences,
+    ObjectId,
+} from 'mongodb';
 
 import { DEBUG } from './constants';
 import { DataloaderService } from './dataloader/service';
@@ -121,7 +130,6 @@ export class MongoManager {
         throwError: boolean = false
     ) {
         const errors = await validate(obj, {
-            whitelist: true,
             validationError: { target: true, value: true },
             ...validatorOptions
         });
@@ -146,6 +154,14 @@ export class MongoManager {
             typeof options.dataloader === 'string'
                 ? options.dataloader
                 : entityName;
+
+        /**
+         * if we're dealing with a session, hydrate model with session object
+         * so that relation decorators work on current session when validating
+         */
+        if (options?.mongoOperationOptions?.session !== undefined)
+            entity.__session = options.mongoOperationOptions.session;
+
         try {
             this.log('saving %s', entityName);
             if (options.skipValidation !== true) {
@@ -217,13 +233,19 @@ export class MongoManager {
     async find<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: any,
-        options: { dataloader?: string } = {}
+        options: { dataloader?: string; session?: ClientSession } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
 
         const cursor: Cursor<object> = this.getCollection(classType).find(
-            query
+            query,
+            {
+                ...(options?.session !== undefined
+                    ? { session: options.session }
+                    : {})
+            }
         );
+
         const cursorMap = cursor.map((data) => {
             const entity = this.fromPlain<Model>(classType, data);
             return entity;
@@ -404,6 +426,7 @@ export class MongoManager {
         property: string,
         options: {
             dataloader?: string;
+            session?: ClientSession;
         } = {}
     ): Promise<R | undefined> {
         this.log('getRelationship %s on %s', property, obj);
@@ -446,6 +469,7 @@ export class MongoManager {
         property: string,
         options: {
             dataloader?: string;
+            session?: ClientSession;
         } = {}
     ): Promise<Array<R | Error>> {
         this.log('getRelationships %s on %s', property, obj);
@@ -475,9 +499,13 @@ export class MongoManager {
         }
 
         const value = obj[property];
-        const relationshipsCursor = await this.find(relationMetadata.type, {
-            _id: { $in: value }
-        });
+        const relationshipsCursor = await this.find(
+            relationMetadata.type,
+            {
+                _id: { $in: value }
+            },
+            options
+        );
 
         return await relationshipsCursor.toArray();
     }
@@ -485,7 +513,12 @@ export class MongoManager {
     async getInversedRelationships<
         P extends EntityInterface = any,
         C extends EntityInterface = any
-    >(parent: P, ChildType: ClassConstructor<C>, property: string) {
+    >(
+        parent: P,
+        ChildType: ClassConstructor<C>,
+        property: string,
+        options: { session?: ClientSession } = {}
+    ) {
         let relationMetadata: RelationshipMetadata<P> | undefined;
         if (isEmpty(relationMetadata)) {
             relationMetadata = getRelationshipMetadata<P>(
@@ -507,9 +540,13 @@ export class MongoManager {
         }
 
         // todo set metadata for inversed side insted of using implicit _id ? ?
-        const children = await this.find(ChildType, {
-            [property]: parent._id
-        });
+        const children = await this.find(
+            ChildType,
+            {
+                [property]: parent._id
+            },
+            options
+        );
 
         return await children.toArray();
     }

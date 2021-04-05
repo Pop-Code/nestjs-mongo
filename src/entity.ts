@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
+import { ClientSession } from 'mongodb';
 
 import { TypeObjectId } from './decorators';
 import { ObjectId } from './helpers';
@@ -21,4 +22,6 @@ export abstract class Entity implements EntityInterface {
     @IsDate()
     @IsOptional()
     updatedAt?: Date;
+
+    __session?: ClientSession;
 }

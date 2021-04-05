@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 import Debug from 'debug';
+import { ClientSession } from 'mongodb';
 
 import { DEBUG } from '../constants';
 import { TypeObjectId } from '../decorators';
@@ -21,7 +22,8 @@ export interface IsValidRelationshipOptions extends ValidationOptions {
 export type WithRelationshipTest = (
     object: any,
     relationship: any,
-    em: MongoManager
+    em: MongoManager,
+    session?: ClientSession
 ) => Promise<string | true>;
 
 export interface IsValidRelationshipValidationArguments

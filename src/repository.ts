@@ -1,6 +1,6 @@
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
-import { ChangeStream, Cursor } from 'mongodb';
+import { ChangeStream, ClientSession, Cursor } from 'mongodb';
 
 import { ObjectId } from './helpers';
 import { EntityInterface } from './interfaces/entity';
@@ -79,9 +79,24 @@ export class MongoRepository<Model extends EntityInterface> {
 
     async getRelationship<E extends EntityInterface>(
         object: Model,
-        property: string
+        property: string,
+        options: {
+            dataloader?: string;
+            session?: ClientSession;
+        } = {}
     ): Promise<E | undefined> {
-        return await this.em.getRelationship<E>(object, property);
+        return await this.em.getRelationship<E>(object, property, options);
+    }
+
+    async getRelationships<E extends EntityInterface>(
+        object: Model,
+        property: string,
+        options: {
+            dataloader?: string;
+            session?: ClientSession;
+        } = {}
+    ): Promise<Array<E | Error>> {
+        return await this.em.getRelationships<E>(object, property);
     }
 
     fromPlain(data: object, options?: ClassTransformOptions): Model {

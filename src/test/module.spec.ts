@@ -561,20 +561,23 @@ describe('Mongo sessions support', () => {
         const manager = mod.get<MongoManager>(getManagerToken());
         const session = manager.getClient().startSession();
 
+        let entityTest;
+        let entityChildTest;
+
         await expect(
             session.withTransaction(
                 async () => {
                     const entity = new EntityTest();
                     entity.foo = 'bar';
                     entity.bar = 'foo';
-                    await manager.save<EntityTest>(entity, {
+                    entityTest = await manager.save<EntityTest>(entity, {
                         mongoOperationOptions: { session }
                     });
                     const child = new EntityChildTest();
                     child.foo = 'child';
                     child.parentId = entity._id;
 
-                    await manager.save(child, {
+                    entityChildTest = await manager.save(child, {
                         mongoOperationOptions: { session }
                     });
                 },
@@ -585,6 +588,19 @@ describe('Mongo sessions support', () => {
                 }
             )
         ).resolves.toBeTruthy();
+
+        const entityTestCheck = await manager
+            .getCollection(EntityTest)
+            .find({ _id: entityTest._id }, { session })
+            .next();
+
+        const entityChildTestCheck = await manager
+            .getCollection(EntityChildTest)
+            .find({ _id: entityChildTest._id }, { session })
+            .next();
+
+        expect(entityChildTestCheck.__session).toBeUndefined();
+        expect(entityTestCheck.__session).toBeUndefined();
 
         session.endSession();
     });

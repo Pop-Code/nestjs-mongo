@@ -131,6 +131,7 @@ export class MongoManager {
     ) {
         const errors = await validate(obj, {
             validationError: { target: true, value: true },
+            whitelist: true,
             ...validatorOptions
         });
 
@@ -174,6 +175,7 @@ export class MongoManager {
                 throw new Error(`Can not find model ${entityName}`);
             }
             const proxy = this.merge(new Model(), entity);
+            delete proxy.__session;
 
             let operation: any;
             if (!isEmpty(proxy._id)) {

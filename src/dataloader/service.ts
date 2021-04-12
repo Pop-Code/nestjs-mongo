@@ -93,15 +93,17 @@ export class DataloaderService {
         if (loader === undefined) {
             return false;
         }
-        entities.map((entity) => {
-            this.log(
-                'Updating dataloader %s %s %s',
-                loader.uuid,
-                entity.constructor.name,
-                entity._id
-            );
-            loader.clear(entity._id).prime(entity._id, entity);
-        });
+        entities
+            .forEach((entity) => {
+                this.log(
+                    'Updating dataloader %s %s %s',
+                    loader.uuid,
+                    entity.constructor.name,
+                    entity._id
+                );
+                loader.clear(entity._id).prime(entity._id, entity);
+            })
+            .catch((e) => console.log(e));
     }
 
     delete<Model extends EntityInterface>(id: string, entity: Model) {

@@ -6,11 +6,7 @@
         "project": "./tsconfig.json"
     },
     "ignorePatterns": ["typedoc.js", "docs/*"],
-    "extends": [
-        "standard-with-typescript",
-        "prettier",
-        "prettier/@typescript-eslint"
-    ],
+    "extends": ["standard-with-typescript", "prettier"],
     "root": true,
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",

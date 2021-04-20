@@ -4,7 +4,7 @@ import { createNamespace } from 'cls-hooked';
 import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
-import { DEFAULT_CONNECTION_NAME, LOADER_SESSION_NAME } from '../constants';
+import { DEFAULT_CONNECTION_NAME, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../constants';
 import { DataloaderService } from '../dataloader/service';
 import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
@@ -525,12 +525,32 @@ describe('Indexes', () => {
     });
 });
 
-describe('Mongo sessions support', () => {
+describe('Mongo sessions loader', () => {
+    it('should set / clear session object on namespace', (done) => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const sessionLoaderService = manager.getSessionLoaderService();
+
+        const ns = createNamespace(SESSION_LOADER_NAMESPACE);
+
+        ns.run(() => {
+            const session = manager.getClient().startSession();
+
+            sessionLoaderService.setMongoSession(session);
+            expect(ns.get(MONGO_SESSION_KEY)).toEqual(session);
+
+            sessionLoaderService.clearMongoSession();
+            expect(ns.get(MONGO_SESSION_KEY)).not.toBeDefined();
+
+            session.endSession();
+            done();
+        });
+    });
+
     it('should throw while attempting to read a relationship created during a session if session is cleared', (done) => {
         const manager = mod.get<MongoManager>(getManagerToken());
         const session = manager.getClient().startSession();
 
-        const namespace = createNamespace(LOADER_SESSION_NAME);
+        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
 
         namespace.run(() => {
             session
@@ -574,7 +594,7 @@ describe('Mongo sessions support', () => {
         let entityTest;
         let entityChildTest;
 
-        const namespace = createNamespace(LOADER_SESSION_NAME);
+        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
 
         namespace.run(() => {
             session

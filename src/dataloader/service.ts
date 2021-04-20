@@ -1,9 +1,9 @@
 import { ClassConstructor } from 'class-transformer';
 import { getNamespace } from 'cls-hooked';
 import Debug from 'debug';
-import { ClientSession, Cursor, ObjectId } from 'mongodb';
+import { Cursor, ObjectId } from 'mongodb';
 
-import { DEBUG, LOADER_SESSION_NAME, MONGO_SESSION_KEY } from '../constants';
+import { DATA_LOADER_NAMESPACE, DEBUG } from '../constants';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { MongoDataloader } from './data';
@@ -14,7 +14,7 @@ export class DataloaderService {
     protected readonly loaders: Map<string, MongoDataloader<any>> = new Map();
 
     getSession() {
-        return getNamespace(LOADER_SESSION_NAME);
+        return getNamespace(DATA_LOADER_NAMESPACE);
     }
 
     get<Model extends EntityInterface>(
@@ -26,7 +26,7 @@ export class DataloaderService {
         this.log('Retrieving dataloader %s', id);
         const session = this.getSession();
         if (session === undefined) {
-            this.log('Namespace %s does not exist', LOADER_SESSION_NAME);
+            this.log('Namespace %s does not exist', DATA_LOADER_NAMESPACE);
             return;
         }
         const loader = session.get(id);
@@ -34,26 +34,6 @@ export class DataloaderService {
             this.log('Unable to find dataloader %s in session', id);
         }
         return loader;
-    }
-
-    getMongoSession(): ClientSession | undefined {
-        const session = this.getSession();
-        return session?.get?.(MONGO_SESSION_KEY);
-    }
-
-    setMongoSession(mongoClientSession: ClientSession): void {
-        this.log(
-            'Registering mongo session on namespace %s',
-            LOADER_SESSION_NAME
-        );
-
-        const session = this.getSession();
-        session?.set?.(MONGO_SESSION_KEY, mongoClientSession);
-    }
-
-    clearMongoSession(): void {
-        const session = this.getSession();
-        session?.set?.(MONGO_SESSION_KEY, undefined);
     }
 
     create<Model extends EntityInterface>(

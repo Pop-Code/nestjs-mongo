@@ -29,6 +29,7 @@ import {
     RelationshipMetadata,
 } from './relationship/metadata';
 import { MongoRepository } from './repository';
+import { SessionLoaderService } from './session/service';
 import { fromPlain, merge } from './transformers/utils';
 
 export class MongoManager {
@@ -40,6 +41,7 @@ export class MongoManager {
         @InjectMongoClient()
         protected readonly client: MongoClient,
         protected readonly dataloaderService: DataloaderService,
+        protected readonly sessionLoaderService: SessionLoaderService,
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
@@ -88,20 +90,24 @@ export class MongoManager {
         return this.dataloaderService;
     }
 
+    getSessionLoaderService() {
+        return this.sessionLoaderService;
+    }
+
     getDataloader<Model extends EntityInterface>(id: string) {
         return this.dataloaderService.get<Model>(id);
     }
 
     getMongoSession() {
-        return this.dataloaderService.getMongoSession();
+        return this.sessionLoaderService.getMongoSession();
     }
 
     setMongoSession(mongoSession: ClientSession): void {
-        this.dataloaderService.setMongoSession(mongoSession);
+        this.sessionLoaderService.setMongoSession(mongoSession);
     }
 
     clearMongoSession(): void {
-        this.dataloaderService.clearMongoSession();
+        this.sessionLoaderService.clearMongoSession();
     }
 
     getCollectionName<Model extends EntityInterface>(

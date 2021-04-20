@@ -6,6 +6,8 @@ export * from './classes/paginated';
 export * from './constants';
 export * from './dataloader/data';
 export * from './dataloader/service';
+export * from './session/middleware';
+export * from './session/service';
 export * from './decorators';
 export * from './entity';
 export * from './entity.service';

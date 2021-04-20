@@ -13,6 +13,7 @@ import { MongoManager } from './manager';
 import { IsValidRelationshipConstraint } from './relationship/constraint';
 import { setRelationshipsCascadesMetadata } from './relationship/metadata';
 import { MongoRepository } from './repository';
+import { SessionLoaderService } from './session/service';
 import { IsUniqueConstraint } from './validation/unique/constraint';
 
 @Global()
@@ -89,6 +90,11 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
             useClass: DataloaderService
         };
 
+        const sessionLoaderServiceProvider = {
+            provide: SessionLoaderService,
+            useClass: SessionLoaderService
+        };
+
         // the mongo manager provider
         const managerToken = getManagerToken(connectionName);
         const mongoManagerProvider = {
@@ -96,11 +102,13 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
             useFactory: (
                 client: MongoClient,
                 config: MongoModuleOptions,
-                dataloaderService: DataloaderService
+                dataloaderService: DataloaderService,
+                sessionLoaderService: SessionLoaderService
             ): MongoManager => {
                 const em = new MongoManager(
                     client,
                     dataloaderService,
+                    sessionLoaderService,
                     config.exceptionFactory
                 );
 
@@ -108,14 +116,18 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
                     IsValidRelationshipConstraint
                 );
                 isValidRelationship.setEm(em);
-                isValidRelationship.setDataloaderService(dataloaderService);
 
                 const isUnique = getFromContainer(IsUniqueConstraint);
                 isUnique.setEm(em);
 
                 return em;
             },
-            inject: [mongoConnectionToken, configToken, DataloaderService]
+            inject: [
+                mongoConnectionToken,
+                configToken,
+                DataloaderService,
+                SessionLoaderService
+            ]
         };
 
         return {
@@ -126,6 +138,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
                 configProvider,
                 mongoClientProvider,
                 dataloaderServiceProvider,
+                sessionLoaderServiceProvider,
                 mongoManagerProvider
             ],
             exports: [
@@ -133,6 +146,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
                 configProvider,
                 mongoClientProvider,
                 dataloaderServiceProvider,
+                sessionLoaderServiceProvider,
                 mongoManagerProvider
             ]
         };

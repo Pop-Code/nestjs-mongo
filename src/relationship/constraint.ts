@@ -1,7 +1,6 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { first, isEmpty } from 'lodash';
 
-import { DataloaderService } from '../dataloader/service';
 import { ObjectId } from '../helpers';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
@@ -12,8 +11,6 @@ import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 export class IsValidRelationshipConstraint
     implements ValidatorConstraintInterface {
     private em: MongoManager;
-    private dataloaderService: DataloaderService;
-
     private message: string;
 
     defaultMessage?(args?: IsValidRelationshipValidationArguments): string {
@@ -25,8 +22,8 @@ export class IsValidRelationshipConstraint
         args: IsValidRelationshipValidationArguments
     ) {
         const entity = args.object as EntityInterface;
-
-        const session = this.dataloaderService.getMongoSession();
+        const sessionLoaderService = this.em.getSessionLoaderService();
+        const session = sessionLoaderService.getMongoSession();
 
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
@@ -116,13 +113,6 @@ export class IsValidRelationshipConstraint
 
     setEm(em: MongoManager): IsValidRelationshipConstraint {
         this.em = em;
-        return this;
-    }
-
-    setDataloaderService(
-        service: DataloaderService
-    ): IsValidRelationshipConstraint {
-        this.dataloaderService = service;
         return this;
     }
 }

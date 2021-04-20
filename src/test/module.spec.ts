@@ -1,9 +1,10 @@
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { createNamespace } from 'cls-hooked';
 import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
-import { DEFAULT_CONNECTION_NAME } from '../constants';
+import { DEFAULT_CONNECTION_NAME, LOADER_SESSION_NAME } from '../constants';
 import { DataloaderService } from '../dataloader/service';
 import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
@@ -525,84 +526,98 @@ describe('Indexes', () => {
 });
 
 describe('Mongo sessions support', () => {
-    it('should throw while attempting to read a relationship created during a session without passing session object', async () => {
+    it('should throw while attempting to read a relationship created during a session if session is cleared', (done) => {
         const manager = mod.get<MongoManager>(getManagerToken());
         const session = manager.getClient().startSession();
 
-        await expect(
-            session.withTransaction(
-                async () => {
-                    const entity = new EntityTest();
-                    entity.foo = 'bar';
-                    entity.bar = 'foo';
-                    await manager.save<EntityTest>(entity, {
-                        mongoOperationOptions: { session }
-                    });
+        const namespace = createNamespace(LOADER_SESSION_NAME);
 
-                    const child = new EntityChildTest();
-                    child.foo = 'child';
-                    child.parentId = entity._id;
+        namespace.run(() => {
+            session
+                .withTransaction(
+                    async () => {
+                        manager.setMongoSession(session);
 
-                    /* SESSION OBJECT INTENTIONALY OMITTED IN SAVE */
-                    await manager.save(child);
-                },
-                {
-                    readPreference: 'primary',
-                    readConcern: { level: 'local' },
-                    writeConcern: { w: 'majority' }
-                }
-            )
-        ).rejects.toThrow();
+                        const entity = new EntityTest();
+                        entity.foo = 'bar';
+                        entity.bar = 'foo';
+                        await manager.save(entity);
 
-        session.endSession();
+                        manager.clearMongoSession();
+
+                        const child = new EntityChildTest();
+                        child.foo = 'child';
+                        child.parentId = entity._id;
+
+                        await manager.save(child);
+                    },
+                    {
+                        readPreference: 'primary',
+                        readConcern: { level: 'local' },
+                        writeConcern: { w: 'majority' }
+                    }
+                )
+                .catch((e) => {
+                    expect(e).toBeDefined();
+                })
+                .finally(() => {
+                    session.endSession();
+                    done();
+                });
+        });
     });
 
-    it('should resolve a relationship created during a session when passing session object', async () => {
+    it('should resolve a relationship created during a session', (done) => {
         const manager = mod.get<MongoManager>(getManagerToken());
         const session = manager.getClient().startSession();
 
         let entityTest;
         let entityChildTest;
 
-        await expect(
-            session.withTransaction(
-                async () => {
-                    const entity = new EntityTest();
-                    entity.foo = 'bar';
-                    entity.bar = 'foo';
-                    entityTest = await manager.save<EntityTest>(entity, {
-                        mongoOperationOptions: { session }
-                    });
-                    const child = new EntityChildTest();
-                    child.foo = 'child';
-                    child.parentId = entity._id;
+        const namespace = createNamespace(LOADER_SESSION_NAME);
 
-                    entityChildTest = await manager.save(child, {
-                        mongoOperationOptions: { session }
-                    });
-                },
-                {
-                    readPreference: 'primary',
-                    readConcern: { level: 'local' },
-                    writeConcern: { w: 'majority' }
-                }
-            )
-        ).resolves.toBeTruthy();
+        namespace.run(() => {
+            session
+                .withTransaction(
+                    async () => {
+                        manager.setMongoSession(session);
 
-        const entityTestCheck = await manager
-            .getCollection(EntityTest)
-            .find({ _id: entityTest._id }, { session })
-            .next();
+                        const entity = new EntityTest();
+                        entity.foo = 'bar';
+                        entity.bar = 'foo';
+                        entityTest = await manager.save<EntityTest>(entity);
 
-        const entityChildTestCheck = await manager
-            .getCollection(EntityChildTest)
-            .find({ _id: entityChildTest._id }, { session })
-            .next();
+                        const child = new EntityChildTest();
+                        child.foo = 'child';
+                        child.parentId = entity._id;
+                        entityChildTest = await manager.save(child);
+                    },
+                    {
+                        readPreference: 'primary',
+                        readConcern: { level: 'local' },
+                        writeConcern: { w: 'majority' }
+                    }
+                )
+                .then(async (value) => {
+                    expect(value).toBeTruthy();
+                    const entityTestCheck = await manager
+                        .getCollection(EntityTest)
+                        .find({ _id: entityTest._id }, { session })
+                        .next();
 
-        expect(entityChildTestCheck.__session).toBeUndefined();
-        expect(entityTestCheck.__session).toBeUndefined();
+                    const entityChildTestCheck = await manager
+                        .getCollection(EntityChildTest)
+                        .find({ _id: entityChildTest._id }, { session })
+                        .next();
 
-        session.endSession();
+                    expect(entityChildTestCheck.__session).toBeUndefined();
+                    expect(entityTestCheck.__session).toBeUndefined();
+                })
+                .finally(() => {
+                    session.endSession();
+                    done();
+                });
+        });
     });
 });
 

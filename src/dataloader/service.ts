@@ -1,9 +1,9 @@
 import { ClassConstructor } from 'class-transformer';
 import { getNamespace } from 'cls-hooked';
 import Debug from 'debug';
-import { Cursor, ObjectId } from 'mongodb';
+import { ClientSession, Cursor, ObjectId } from 'mongodb';
 
-import { DEBUG, LOADER_SESSION_NAME } from '../constants';
+import { DEBUG, LOADER_SESSION_NAME, MONGO_SESSION_KEY } from '../constants';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { MongoDataloader } from './data';
@@ -34,6 +34,26 @@ export class DataloaderService {
             this.log('Unable to find dataloader %s in session', id);
         }
         return loader;
+    }
+
+    getMongoSession(): ClientSession | undefined {
+        const session = this.getSession();
+        return session?.get?.(MONGO_SESSION_KEY);
+    }
+
+    setMongoSession(mongoClientSession: ClientSession): void {
+        this.log(
+            'Registering mongo session on namespace %s',
+            LOADER_SESSION_NAME
+        );
+
+        const session = this.getSession();
+        session?.set?.(MONGO_SESSION_KEY, mongoClientSession);
+    }
+
+    clearMongoSession(): void {
+        const session = this.getSession();
+        session?.set?.(MONGO_SESSION_KEY, undefined);
     }
 
     create<Model extends EntityInterface>(

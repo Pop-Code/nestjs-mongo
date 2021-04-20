@@ -90,6 +90,18 @@ export class MongoManager {
         return this.dataloaderService.get<Model>(id);
     }
 
+    getMongoSession() {
+        return this.dataloaderService.getMongoSession();
+    }
+
+    setMongoSession(mongoSession: ClientSession): void {
+        this.dataloaderService.setMongoSession(mongoSession);
+    }
+
+    clearMongoSession(): void {
+        this.dataloaderService.clearMongoSession();
+    }
+
     getCollectionName<Model extends EntityInterface>(
         nameOrInstance: Model | ClassConstructor<Model>
     ): string {

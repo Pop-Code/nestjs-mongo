@@ -1,6 +1,7 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { first, isEmpty } from 'lodash';
 
+import { DataloaderService } from '../dataloader/service';
 import { ObjectId } from '../helpers';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
@@ -11,6 +12,7 @@ import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 export class IsValidRelationshipConstraint
     implements ValidatorConstraintInterface {
     private em: MongoManager;
+    private dataloaderService: DataloaderService;
 
     private message: string;
 
@@ -23,6 +25,9 @@ export class IsValidRelationshipConstraint
         args: IsValidRelationshipValidationArguments
     ) {
         const entity = args.object as EntityInterface;
+
+        const session = this.dataloaderService.getMongoSession();
+
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
                 entity,
@@ -47,9 +52,7 @@ export class IsValidRelationshipConstraint
                             _id
                         },
                         {
-                            ...(entity?.__session !== undefined
-                                ? { session: entity.__session }
-                                : {})
+                            ...(session !== undefined ? { session } : {})
                         }
                     );
                     if (isEmpty(innerR)) {
@@ -78,9 +81,7 @@ export class IsValidRelationshipConstraint
                     entity,
                     args.property,
                     {
-                        ...(entity?.__session !== undefined
-                            ? { session: entity.__session }
-                            : {})
+                        ...(session !== undefined ? { session } : {})
                     }
                 );
                 if (isEmpty(relationship)) {
@@ -99,7 +100,7 @@ export class IsValidRelationshipConstraint
                     args.object,
                     relationship,
                     this.em,
-                    entity?.__session
+                    session
                 );
 
                 if (typeof message === 'string') {
@@ -115,6 +116,13 @@ export class IsValidRelationshipConstraint
 
     setEm(em: MongoManager): IsValidRelationshipConstraint {
         this.em = em;
+        return this;
+    }
+
+    setDataloaderService(
+        service: DataloaderService
+    ): IsValidRelationshipConstraint {
+        this.dataloaderService = service;
         return this;
     }
 }

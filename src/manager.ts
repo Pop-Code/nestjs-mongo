@@ -2,8 +2,10 @@ import { NotFoundException } from '@nestjs/common';
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
+import { omit } from 'lodash';
 import {
     ChangeStream,
+    ChangeStreamOptions,
     ClientSession,
     CommonOptions,
     Cursor,
@@ -120,7 +122,7 @@ export class MongoManager {
 
         if (name === undefined) {
             throw new Error(
-                `@Collection decorator is required to use a class as model`
+                '@Collection decorator is required to use a class as model'
             );
         }
 
@@ -168,12 +170,7 @@ export class MongoManager {
                 ? options.dataloader
                 : entityName;
 
-        /**
-         * if we're dealing with a session, hydrate model with session object
-         * so that relation decorators work on current session when validating
-         */
-        if (options?.mongoOperationOptions?.session !== undefined)
-            entity.__session = options.mongoOperationOptions.session;
+        const session = this.getMongoSession();
 
         try {
             this.log('saving %s', entityName);
@@ -187,7 +184,6 @@ export class MongoManager {
                 throw new Error(`Can not find model ${entityName}`);
             }
             const proxy = this.merge(new Model(), entity);
-            delete proxy.__session;
 
             let operation: any;
             if (!isEmpty(proxy._id)) {
@@ -213,13 +209,12 @@ export class MongoManager {
                 }
                 operation = collection.updateOne({ _id: proxy._id }, sets, {
                     upsert: false,
-                    ...options.mongoOperationOptions
+                    ...(session !== undefined ? { session } : {})
                 });
             } else {
-                operation = collection.insertOne(
-                    proxy,
-                    options.mongoOperationOptions
-                );
+                operation = collection.insertOne(proxy, {
+                    ...(session !== undefined ? { session } : {})
+                });
             }
             const { result, insertedId } = await operation;
             if (result.ok !== 1) {
@@ -250,13 +245,13 @@ export class MongoManager {
         options: { dataloader?: string; session?: ClientSession } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
+        const session = this.getMongoSession();
 
         const cursor: Cursor<object> = this.getCollection(classType).find(
             query,
             {
-                ...(options?.session !== undefined
-                    ? { session: options.session }
-                    : {})
+                ...(session !== undefined ? { session } : {}),
+                ...omit(options, 'dataloader')
             }
         );
 
@@ -268,6 +263,7 @@ export class MongoManager {
             typeof options.dataloader === 'string'
                 ? options.dataloader
                 : classType.name;
+
         this.dataloaderService.updateAll(dataloaderName, cursorMap);
         return cursorMap;
     }
@@ -278,6 +274,8 @@ export class MongoManager {
         options: FindOneOptions<Model> & { dataloader?: string } = {}
     ): Promise<Model | undefined> {
         this.log('findOne %s %o', classType.name, query);
+        const session = this.getMongoSession();
+
         let entity: Model | undefined;
         const dataloaderName =
             typeof options.dataloader === 'string'
@@ -293,7 +291,10 @@ export class MongoManager {
         if (entity === undefined) {
             const obj = await this.getCollection(classType).findOne<object>(
                 query,
-                options
+                {
+                    ...(session !== undefined ? { session } : {}),
+                    ...omit(options, 'dataloader')
+                }
             );
             if (obj === undefined || obj === null) {
                 return;
@@ -317,13 +318,14 @@ export class MongoManager {
     async count<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: any,
-        options?: MongoCountPreferences
+        options: MongoCountPreferences = {}
     ): Promise<number> {
         this.log('count %s %o', classType.name, query);
-        return await this.getCollection(classType).countDocuments(
-            query,
-            options
-        );
+        const session = this.getMongoSession();
+        return await this.getCollection(classType).countDocuments(query, {
+            ...(session !== undefined ? { session } : {}),
+            ...options
+        });
     }
 
     isIdQuery(query: any): boolean {
@@ -370,6 +372,7 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteOne %s %o', classType.name, query);
+        const session = this.getMongoSession();
         const entity = await this.findOne<Model>(classType, query);
 
         if (entity === undefined) {
@@ -378,7 +381,10 @@ export class MongoManager {
 
         const result = await this.getCollection(classType).deleteOne(
             { _id: entity._id },
-            options
+            {
+                ...(session !== undefined ? { session } : {}),
+                ...omit(options, 'dataloader')
+            }
         );
         const dataloaderName =
             typeof options.dataloader === 'string'
@@ -397,15 +403,16 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteMany %s %o', classType.name, query);
+        const session = this.getMongoSession();
         const items = await this.find(classType, query, options);
 
         // get a ref of entities that are going to be deleted before to delete them
         const entities = await items.toArray();
 
-        const result = await this.getCollection(classType).deleteMany(
-            query,
-            options
-        );
+        const result = await this.getCollection(classType).deleteMany(query, {
+            ...(session !== undefined ? { session } : {}),
+            ...omit(options, 'dataloader')
+        });
         const dataloaderName =
             typeof options.dataloader === 'string'
                 ? options.dataloader
@@ -429,10 +436,14 @@ export class MongoManager {
     watch<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         pipes?: any[],
-        options?: any
+        options: ChangeStreamOptions & { session?: ClientSession } = {}
     ): ChangeStream {
         this.log('watch %o', pipes);
-        return this.getCollection(classType).watch(pipes, options);
+        const session = this.getMongoSession();
+        return this.getCollection(classType).watch(pipes, {
+            ...(session !== undefined ? { session } : {}),
+            ...options
+        });
     }
 
     async getRelationship<R extends EntityInterface = any, P = Object>(
@@ -469,9 +480,7 @@ export class MongoManager {
         const value = obj[property];
         const relationship = await this.findOne(
             relationMetadata.type,
-            {
-                _id: value
-            },
+            { _id: value },
             options
         );
 
@@ -550,7 +559,7 @@ export class MongoManager {
         }
 
         if (isEmpty(relationMetadata?.inversedBy)) {
-            throw new Error(`Can not get inversed metadata`);
+            throw new Error('Can not get inversed metadata');
         }
 
         // todo set metadata for inversed side insted of using implicit _id ? ?

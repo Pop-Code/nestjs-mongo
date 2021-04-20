@@ -104,10 +104,14 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
                     config.exceptionFactory
                 );
 
-                const c = getFromContainer(IsValidRelationshipConstraint);
-                c.setEm(em);
-                const c2 = getFromContainer(IsUniqueConstraint);
-                c2.setEm(em);
+                const isValidRelationship = getFromContainer(
+                    IsValidRelationshipConstraint
+                );
+                isValidRelationship.setEm(em);
+                isValidRelationship.setDataloaderService(dataloaderService);
+
+                const isUnique = getFromContainer(IsUniqueConstraint);
+                isUnique.setEm(em);
 
                 return em;
             },

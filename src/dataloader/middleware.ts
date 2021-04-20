@@ -10,7 +10,7 @@ import { MongoManager } from '../manager';
 import { DataloaderService } from './service';
 
 @Injectable()
-export class DataLooaderMiddleware implements NestMiddleware {
+export class DataLoaderMiddleware implements NestMiddleware {
     protected log = Debug(DEBUG + ':DataLooaderMiddleware');
 
     constructor(

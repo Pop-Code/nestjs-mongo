@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
-import { DataLooaderMiddleware } from '../../dataloader/middleware';
+import { DataLoaderMiddleware } from '../../dataloader/middleware';
 import { InjectRepository } from '../../decorators';
 import { MongoModule } from '../../module';
 import { MongoRepository } from '../../repository';
@@ -50,6 +50,6 @@ export class MongoDbModuleTest implements NestModule {
     ) {}
 
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(DataLooaderMiddleware).forRoutes('test');
+        consumer.apply(DataLoaderMiddleware).forRoutes('test');
     }
 }

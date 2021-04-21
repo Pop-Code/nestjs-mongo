@@ -13,6 +13,8 @@ import {
     MongoClient,
     MongoCountPreferences,
     ObjectId,
+    SessionOptions,
+    TransactionOptions,
 } from 'mongodb';
 
 import { DEBUG } from './constants';
@@ -578,6 +580,39 @@ export class MongoManager {
         );
 
         return await children.toArray();
+    }
+
+    /**
+     * To avoid Transaction Errors, it is important to keep a sequential approach in the way transactions are commited to the session.
+     * ie: do not to use Promise.all (parallel execution) in your transaction function as it could cause inconsistencies in the order
+     * in which transactions will be committed to the session.
+     */
+    async startSessionWithTransaction(
+        transactionFn: (session: ClientSession) => Promise<any>,
+        options: {
+            useContext?: boolean;
+            transactionOptions?: TransactionOptions;
+            sessionOptions?: SessionOptions;
+        } = {}
+    ): Promise<ClientSession> {
+        const session = this.getClient().startSession(
+            options.sessionOptions ?? {}
+        );
+        const useContext = options.useContext === true;
+
+        useContext && this.setMongoSession(session);
+
+        try {
+            await session.withTransaction(
+                async () => await transactionFn(session),
+                options.transactionOptions ?? {}
+            );
+        } finally {
+            useContext && this.clearMongoSession();
+            session.endSession();
+        }
+
+        return session;
     }
 
     fromPlain<Model extends EntityInterface>(

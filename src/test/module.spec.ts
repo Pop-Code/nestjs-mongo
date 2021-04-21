@@ -11,11 +11,11 @@ import { MongoManager } from '../manager';
 import { MongoModule } from '../module';
 import { MongoCoreModule } from '../module.core';
 import {
-    CascadeType,
-    getChildrenRelationshipMetadata,
-    getRelationshipCascadesMetadata,
-    getRelationshipMetadata,
-    getRelationshipsCascadesMetadata,
+  CascadeType,
+  getChildrenRelationshipMetadata,
+  getRelationshipCascadesMetadata,
+  getRelationshipMetadata,
+  getRelationshipsCascadesMetadata,
 } from '../relationship/metadata';
 import { MongoRepository } from '../repository';
 import { MongoDbModuleTest } from './module';
@@ -27,10 +27,10 @@ import { EntityChildTest } from './module/child';
 import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import {
-    ChildDynamicRelationship,
-    DynamicRelationshipType,
-    ParentDynamicRelationship1,
-    ParentDynamicRelationship2,
+  ChildDynamicRelationship,
+  DynamicRelationshipType,
+  ParentDynamicRelationship1,
+  ParentDynamicRelationship2,
 } from './module/entity.dynamic.relationship';
 import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
@@ -535,11 +535,11 @@ describe('Mongo sessions loader', () => {
         ns.run(() => {
             const session = manager.getClient().startSession();
 
-            sessionLoaderService.setMongoSession(session);
-            expect(ns.get(MONGO_SESSION_KEY)).toEqual(session);
+            sessionLoaderService.setSessionContext(session);
+            expect(ns.get(MONGO_SESSION_KEY).session).toEqual(session);
 
-            sessionLoaderService.clearMongoSession();
-            expect(ns.get(MONGO_SESSION_KEY)).not.toBeDefined();
+            sessionLoaderService.clearSessionContext();
+            expect(ns.get(MONGO_SESSION_KEY)?.session).not.toBeDefined();
 
             session.endSession();
             done();
@@ -556,14 +556,14 @@ describe('Mongo sessions loader', () => {
             session
                 .withTransaction(
                     async () => {
-                        manager.setMongoSession(session);
+                        manager.setSessionContext(session);
 
                         const entity = new EntityTest();
                         entity.foo = 'bar';
                         entity.bar = 'foo';
                         await manager.save(entity);
 
-                        manager.clearMongoSession();
+                        manager.clearSessionContext();
 
                         const child = new EntityChildTest();
                         child.foo = 'child';
@@ -591,26 +591,23 @@ describe('Mongo sessions loader', () => {
         const manager = mod.get<MongoManager>(getManagerToken());
         const session = manager.getClient().startSession();
 
-        let entityTest;
-        let entityChildTest;
-
         const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
 
         namespace.run(() => {
             session
                 .withTransaction(
                     async () => {
-                        manager.setMongoSession(session);
+                        manager.setSessionContext(session);
 
                         const entity = new EntityTest();
                         entity.foo = 'bar';
                         entity.bar = 'foo';
-                        entityTest = await manager.save<EntityTest>(entity);
+                        await manager.save<EntityTest>(entity);
 
                         const child = new EntityChildTest();
                         child.foo = 'child';
                         child.parentId = entity._id;
-                        entityChildTest = await manager.save(child);
+                        await manager.save(child);
                     },
                     {
                         readPreference: 'primary',
@@ -620,18 +617,6 @@ describe('Mongo sessions loader', () => {
                 )
                 .then(async (value) => {
                     expect(value).toBeTruthy();
-                    const entityTestCheck = await manager
-                        .getCollection(EntityTest)
-                        .find({ _id: entityTest._id }, { session })
-                        .next();
-
-                    const entityChildTestCheck = await manager
-                        .getCollection(EntityChildTest)
-                        .find({ _id: entityChildTest._id }, { session })
-                        .next();
-
-                    expect(entityChildTestCheck.__session).toBeUndefined();
-                    expect(entityTestCheck.__session).toBeUndefined();
                 })
                 .finally(() => {
                     session.endSession();

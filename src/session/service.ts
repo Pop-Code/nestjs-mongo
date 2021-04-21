@@ -4,6 +4,8 @@ import Debug from 'debug';
 import { ClientSession } from 'mongodb';
 
 import { DEBUG, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../constants';
+import { TransactionsOrchestrator } from './orchestrator';
+import { ClientSessionContext } from './types';
 
 @Injectable()
 export class SessionLoaderService {
@@ -13,22 +15,27 @@ export class SessionLoaderService {
         return getNamespace(SESSION_LOADER_NAMESPACE);
     }
 
-    getMongoSession(): ClientSession | undefined {
+    getSessionContext(): ClientSessionContext {
         const session = this.getSession();
         return session?.get?.(MONGO_SESSION_KEY);
     }
 
-    setMongoSession(mongoClientSession: ClientSession): void {
+    setSessionContext(mongoClientSession: ClientSession): void {
         this.log(
             'Registering mongo session on namespace %s',
             SESSION_LOADER_NAMESPACE
         );
 
         const session = this.getSession();
-        session?.set?.(MONGO_SESSION_KEY, mongoClientSession);
+        const orchestrator = new TransactionsOrchestrator(this.log);
+
+        session?.set?.(MONGO_SESSION_KEY, {
+            session: mongoClientSession,
+            orchestrator
+        });
     }
 
-    clearMongoSession(): void {
+    clearSessionContext(): void {
         this.log(
             'Clearing mongo session on namespace %s',
             SESSION_LOADER_NAMESPACE

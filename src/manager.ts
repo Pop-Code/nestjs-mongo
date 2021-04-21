@@ -4,17 +4,17 @@ import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
 import { omit } from 'lodash';
 import {
-    ChangeStream,
-    ChangeStreamOptions,
-    ClientSession,
-    CommonOptions,
-    Cursor,
-    FindOneOptions,
-    MongoClient,
-    MongoCountPreferences,
-    ObjectId,
-    SessionOptions,
-    TransactionOptions,
+  ChangeStream,
+  ChangeStreamOptions,
+  ClientSession,
+  CommonOptions,
+  Cursor,
+  FindOneOptions,
+  MongoClient,
+  MongoCountPreferences,
+  ObjectId,
+  SessionOptions,
+  TransactionOptions,
 } from 'mongodb';
 
 import { DEBUG } from './constants';
@@ -25,10 +25,10 @@ import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
 import {
-    CascadeType,
-    getRelationshipMetadata,
-    getRelationshipsCascadesMetadata,
-    RelationshipMetadata,
+  CascadeType,
+  getRelationshipMetadata,
+  getRelationshipsCascadesMetadata,
+  RelationshipMetadata,
 } from './relationship/metadata';
 import { MongoRepository } from './repository';
 import { SessionLoaderService } from './session/service';
@@ -100,16 +100,16 @@ export class MongoManager {
         return this.dataloaderService.get<Model>(id);
     }
 
-    getMongoSession() {
-        return this.sessionLoaderService.getMongoSession();
+    getSessionContext() {
+        return this.sessionLoaderService.getSessionContext();
     }
 
-    setMongoSession(mongoSession: ClientSession): void {
-        this.sessionLoaderService.setMongoSession(mongoSession);
+    setSessionContext(mongoSession: ClientSession): void {
+        this.sessionLoaderService.setSessionContext(mongoSession);
     }
 
-    clearMongoSession(): void {
-        this.sessionLoaderService.clearMongoSession();
+    clearSessionContext(): void {
+        this.sessionLoaderService.clearSessionContext();
     }
 
     getCollectionName<Model extends EntityInterface>(
@@ -178,7 +178,7 @@ export class MongoManager {
                 ? options.dataloader
                 : entityName;
 
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
 
         try {
             this.log('saving %s', entityName);
@@ -217,11 +217,11 @@ export class MongoManager {
                 }
                 operation = collection.updateOne({ _id: proxy._id }, sets, {
                     upsert: false,
-                    ...(session !== undefined ? { session } : {})
+                    ...(ctx !== undefined ? { session: ctx.session } : {})
                 });
             } else {
                 operation = collection.insertOne(proxy, {
-                    ...(session !== undefined ? { session } : {})
+                    ...(ctx !== undefined ? { session: ctx.session } : {})
                 });
             }
             const { result, insertedId } = await operation;
@@ -253,12 +253,12 @@ export class MongoManager {
         options: { dataloader?: string; session?: ClientSession } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
 
         const cursor: Cursor<object> = this.getCollection(classType).find(
             query,
             {
-                ...(session !== undefined ? { session } : {}),
+                ...(ctx !== undefined ? { session: ctx.session } : {}),
                 ...omit(options, 'dataloader')
             }
         );
@@ -282,7 +282,7 @@ export class MongoManager {
         options: FindOneOptions<Model> & { dataloader?: string } = {}
     ): Promise<Model | undefined> {
         this.log('findOne %s %o', classType.name, query);
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
 
         let entity: Model | undefined;
         const dataloaderName =
@@ -300,7 +300,7 @@ export class MongoManager {
             const obj = await this.getCollection(classType).findOne<object>(
                 query,
                 {
-                    ...(session !== undefined ? { session } : {}),
+                    ...(ctx !== undefined ? { session: ctx.session } : {}),
                     ...omit(options, 'dataloader')
                 }
             );
@@ -329,9 +329,9 @@ export class MongoManager {
         options: MongoCountPreferences = {}
     ): Promise<number> {
         this.log('count %s %o', classType.name, query);
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
         return await this.getCollection(classType).countDocuments(query, {
-            ...(session !== undefined ? { session } : {}),
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...options
         });
     }
@@ -380,7 +380,7 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteOne %s %o', classType.name, query);
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
         const entity = await this.findOne<Model>(classType, query);
 
         if (entity === undefined) {
@@ -390,7 +390,7 @@ export class MongoManager {
         const result = await this.getCollection(classType).deleteOne(
             { _id: entity._id },
             {
-                ...(session !== undefined ? { session } : {}),
+                ...(ctx !== undefined ? { session: ctx.session } : {}),
                 ...omit(options, 'dataloader')
             }
         );
@@ -411,14 +411,14 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteMany %s %o', classType.name, query);
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
         const items = await this.find(classType, query, options);
 
         // get a ref of entities that are going to be deleted before to delete them
         const entities = await items.toArray();
 
         const result = await this.getCollection(classType).deleteMany(query, {
-            ...(session !== undefined ? { session } : {}),
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...omit(options, 'dataloader')
         });
         const dataloaderName =
@@ -447,9 +447,9 @@ export class MongoManager {
         options: ChangeStreamOptions & { session?: ClientSession } = {}
     ): ChangeStream {
         this.log('watch %o', pipes);
-        const session = this.getMongoSession();
+        const ctx = this.getSessionContext();
         return this.getCollection(classType).watch(pipes, {
-            ...(session !== undefined ? { session } : {}),
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...options
         });
     }
@@ -599,8 +599,7 @@ export class MongoManager {
             options.sessionOptions ?? {}
         );
         const useContext = options.useContext === true;
-
-        useContext && this.setMongoSession(session);
+        useContext && this.setSessionContext(session);
 
         try {
             await session.withTransaction(
@@ -608,7 +607,7 @@ export class MongoManager {
                 options.transactionOptions ?? {}
             );
         } finally {
-            useContext && this.clearMongoSession();
+            useContext && this.clearSessionContext();
             session.endSession();
         }
 

@@ -1,7 +1,7 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { Request } from 'express';
 
-import { LOADER_SESSION_NAME } from '../../constants';
+import { DATA_LOADER_NAMESPACE } from '../../constants';
 import { InjectManager } from '../../decorators';
 import { ObjectId } from '../../helpers';
 import { MongoManager } from '../../manager';
@@ -25,7 +25,7 @@ export class TestController {
         return {
             item,
             uuid: loader.uuid,
-            reqUuid: request[LOADER_SESSION_NAME + '_uuid']
+            reqUuid: request[DATA_LOADER_NAMESPACE + '_uuid']
         };
     }
 }

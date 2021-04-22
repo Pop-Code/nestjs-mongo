@@ -2,15 +2,19 @@ import { NotFoundException } from '@nestjs/common';
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
+import { omit } from 'lodash';
 import {
-    ChangeStream,
-    ClientSession,
-    CommonOptions,
-    Cursor,
-    FindOneOptions,
-    MongoClient,
-    MongoCountPreferences,
-    ObjectId,
+  ChangeStream,
+  ChangeStreamOptions,
+  ClientSession,
+  CommonOptions,
+  Cursor,
+  FindOneOptions,
+  MongoClient,
+  MongoCountPreferences,
+  ObjectId,
+  SessionOptions,
+  TransactionOptions,
 } from 'mongodb';
 
 import { DEBUG } from './constants';
@@ -21,12 +25,13 @@ import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
 import {
-    CascadeType,
-    getRelationshipMetadata,
-    getRelationshipsCascadesMetadata,
-    RelationshipMetadata,
+  CascadeType,
+  getRelationshipMetadata,
+  getRelationshipsCascadesMetadata,
+  RelationshipMetadata,
 } from './relationship/metadata';
 import { MongoRepository } from './repository';
+import { SessionLoaderService } from './session/service';
 import { fromPlain, merge } from './transformers/utils';
 
 export class MongoManager {
@@ -38,6 +43,7 @@ export class MongoManager {
         @InjectMongoClient()
         protected readonly client: MongoClient,
         protected readonly dataloaderService: DataloaderService,
+        protected readonly sessionLoaderService: SessionLoaderService,
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
@@ -86,8 +92,24 @@ export class MongoManager {
         return this.dataloaderService;
     }
 
+    getSessionLoaderService() {
+        return this.sessionLoaderService;
+    }
+
     getDataloader<Model extends EntityInterface>(id: string) {
         return this.dataloaderService.get<Model>(id);
+    }
+
+    getSessionContext() {
+        return this.sessionLoaderService.getSessionContext();
+    }
+
+    setSessionContext(mongoSession: ClientSession): void {
+        this.sessionLoaderService.setSessionContext(mongoSession);
+    }
+
+    clearSessionContext(): void {
+        this.sessionLoaderService.clearSessionContext();
     }
 
     getCollectionName<Model extends EntityInterface>(
@@ -108,7 +130,7 @@ export class MongoManager {
 
         if (name === undefined) {
             throw new Error(
-                `@Collection decorator is required to use a class as model`
+                '@Collection decorator is required to use a class as model'
             );
         }
 
@@ -156,12 +178,7 @@ export class MongoManager {
                 ? options.dataloader
                 : entityName;
 
-        /**
-         * if we're dealing with a session, hydrate model with session object
-         * so that relation decorators work on current session when validating
-         */
-        if (options?.mongoOperationOptions?.session !== undefined)
-            entity.__session = options.mongoOperationOptions.session;
+        const ctx = this.getSessionContext();
 
         try {
             this.log('saving %s', entityName);
@@ -175,7 +192,6 @@ export class MongoManager {
                 throw new Error(`Can not find model ${entityName}`);
             }
             const proxy = this.merge(new Model(), entity);
-            delete proxy.__session;
 
             let operation: any;
             if (!isEmpty(proxy._id)) {
@@ -201,13 +217,12 @@ export class MongoManager {
                 }
                 operation = collection.updateOne({ _id: proxy._id }, sets, {
                     upsert: false,
-                    ...options.mongoOperationOptions
+                    ...(ctx !== undefined ? { session: ctx.session } : {})
                 });
             } else {
-                operation = collection.insertOne(
-                    proxy,
-                    options.mongoOperationOptions
-                );
+                operation = collection.insertOne(proxy, {
+                    ...(ctx !== undefined ? { session: ctx.session } : {})
+                });
             }
             const { result, insertedId } = await operation;
             if (result.ok !== 1) {
@@ -238,13 +253,13 @@ export class MongoManager {
         options: { dataloader?: string; session?: ClientSession } = {}
     ): Promise<Cursor<Model>> {
         this.log('find %s %o', classType.name, query);
+        const ctx = this.getSessionContext();
 
         const cursor: Cursor<object> = this.getCollection(classType).find(
             query,
             {
-                ...(options?.session !== undefined
-                    ? { session: options.session }
-                    : {})
+                ...(ctx !== undefined ? { session: ctx.session } : {}),
+                ...omit(options, 'dataloader')
             }
         );
 
@@ -256,6 +271,7 @@ export class MongoManager {
             typeof options.dataloader === 'string'
                 ? options.dataloader
                 : classType.name;
+
         this.dataloaderService.updateAll(dataloaderName, cursorMap);
         return cursorMap;
     }
@@ -266,6 +282,8 @@ export class MongoManager {
         options: FindOneOptions<Model> & { dataloader?: string } = {}
     ): Promise<Model | undefined> {
         this.log('findOne %s %o', classType.name, query);
+        const ctx = this.getSessionContext();
+
         let entity: Model | undefined;
         const dataloaderName =
             typeof options.dataloader === 'string'
@@ -281,7 +299,10 @@ export class MongoManager {
         if (entity === undefined) {
             const obj = await this.getCollection(classType).findOne<object>(
                 query,
-                options
+                {
+                    ...(ctx !== undefined ? { session: ctx.session } : {}),
+                    ...omit(options, 'dataloader')
+                }
             );
             if (obj === undefined || obj === null) {
                 return;
@@ -305,13 +326,14 @@ export class MongoManager {
     async count<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: any,
-        options?: MongoCountPreferences
+        options: MongoCountPreferences = {}
     ): Promise<number> {
         this.log('count %s %o', classType.name, query);
-        return await this.getCollection(classType).countDocuments(
-            query,
-            options
-        );
+        const ctx = this.getSessionContext();
+        return await this.getCollection(classType).countDocuments(query, {
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
+            ...options
+        });
     }
 
     isIdQuery(query: any): boolean {
@@ -358,6 +380,7 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteOne %s %o', classType.name, query);
+        const ctx = this.getSessionContext();
         const entity = await this.findOne<Model>(classType, query);
 
         if (entity === undefined) {
@@ -366,7 +389,10 @@ export class MongoManager {
 
         const result = await this.getCollection(classType).deleteOne(
             { _id: entity._id },
-            options
+            {
+                ...(ctx !== undefined ? { session: ctx.session } : {}),
+                ...omit(options, 'dataloader')
+            }
         );
         const dataloaderName =
             typeof options.dataloader === 'string'
@@ -385,15 +411,16 @@ export class MongoManager {
         options: CommonOptions & { dataloader?: string } = {}
     ) {
         this.log('deleteMany %s %o', classType.name, query);
+        const ctx = this.getSessionContext();
         const items = await this.find(classType, query, options);
 
         // get a ref of entities that are going to be deleted before to delete them
         const entities = await items.toArray();
 
-        const result = await this.getCollection(classType).deleteMany(
-            query,
-            options
-        );
+        const result = await this.getCollection(classType).deleteMany(query, {
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
+            ...omit(options, 'dataloader')
+        });
         const dataloaderName =
             typeof options.dataloader === 'string'
                 ? options.dataloader
@@ -417,10 +444,14 @@ export class MongoManager {
     watch<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         pipes?: any[],
-        options?: any
+        options: ChangeStreamOptions & { session?: ClientSession } = {}
     ): ChangeStream {
         this.log('watch %o', pipes);
-        return this.getCollection(classType).watch(pipes, options);
+        const ctx = this.getSessionContext();
+        return this.getCollection(classType).watch(pipes, {
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
+            ...options
+        });
     }
 
     async getRelationship<R extends EntityInterface = any, P = Object>(
@@ -457,9 +488,7 @@ export class MongoManager {
         const value = obj[property];
         const relationship = await this.findOne(
             relationMetadata.type,
-            {
-                _id: value
-            },
+            { _id: value },
             options
         );
 
@@ -538,7 +567,7 @@ export class MongoManager {
         }
 
         if (isEmpty(relationMetadata?.inversedBy)) {
-            throw new Error(`Can not get inversed metadata`);
+            throw new Error('Can not get inversed metadata');
         }
 
         // todo set metadata for inversed side insted of using implicit _id ? ?
@@ -551,6 +580,38 @@ export class MongoManager {
         );
 
         return await children.toArray();
+    }
+
+    /**
+     * To avoid Transaction Errors, it is important to keep a sequential approach in the way transactions are commited to the session.
+     * ie: do not to use Promise.all (parallel execution) in your transaction function as it could cause inconsistencies in the order
+     * in which transactions will be committed to the session.
+     */
+    async startSessionWithTransaction(
+        transactionFn: (session: ClientSession) => Promise<any>,
+        options: {
+            useContext?: boolean;
+            transactionOptions?: TransactionOptions;
+            sessionOptions?: SessionOptions;
+        } = {}
+    ): Promise<ClientSession> {
+        const session = this.getClient().startSession(
+            options.sessionOptions ?? {}
+        );
+        const useContext = options.useContext === true;
+        useContext && this.setSessionContext(session);
+
+        try {
+            await session.withTransaction(
+                async () => await transactionFn(session),
+                options.transactionOptions ?? {}
+            );
+        } finally {
+            useContext && this.clearSessionContext();
+            session.endSession();
+        }
+
+        return session;
     }
 
     fromPlain<Model extends EntityInterface>(

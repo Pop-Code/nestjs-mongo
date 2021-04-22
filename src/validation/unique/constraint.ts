@@ -8,6 +8,7 @@ import {
 
 import { Entity } from '../../entity';
 import { MongoManager } from '../../manager';
+import { ensureSequentialTransaction } from '../../session/utils';
 
 export type IsUniqueOptions = ValidationOptions & {
     keys?: string[];
@@ -46,7 +47,11 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
             query._id = { $ne: id };
         }
         const type: any = object.constructor;
-        const count = await this.em.count(type, query);
+        const count = await ensureSequentialTransaction(
+            this.em.getSessionLoaderService().getSessionContext(),
+            async () => await this.em.count(type, query)
+        );
+
         if (count > 0) {
             this.message = `An item ${
                 args.object.constructor.name

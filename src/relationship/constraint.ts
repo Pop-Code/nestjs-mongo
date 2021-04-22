@@ -4,6 +4,7 @@ import { first, isEmpty } from 'lodash';
 import { ObjectId } from '../helpers';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
+import { ensureSequentialTransaction } from '../session/utils';
 import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
 import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 
@@ -11,7 +12,6 @@ import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 export class IsValidRelationshipConstraint
     implements ValidatorConstraintInterface {
     private em: MongoManager;
-
     private message: string;
 
     defaultMessage?(args?: IsValidRelationshipValidationArguments): string {
@@ -23,6 +23,9 @@ export class IsValidRelationshipConstraint
         args: IsValidRelationshipValidationArguments
     ) {
         const entity = args.object as EntityInterface;
+
+        const ctx = this.em.getSessionLoaderService().getSessionContext();
+
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
                 entity,
@@ -41,16 +44,12 @@ export class IsValidRelationshipConstraint
                 const errors: Error[] = [];
                 relationship = [];
                 for (const [index, _id] of value.entries()) {
-                    const innerR = await this.em.findOne<any>(
-                        relationMetadata.type,
-                        {
-                            _id
-                        },
-                        {
-                            ...(entity?.__session !== undefined
-                                ? { session: entity.__session }
-                                : {})
-                        }
+                    const innerR = await ensureSequentialTransaction(
+                        ctx,
+                        async () =>
+                            await this.em.findOne<any>(relationMetadata.type, {
+                                _id
+                            })
                     );
                     if (isEmpty(innerR)) {
                         errors.push(
@@ -74,18 +73,16 @@ export class IsValidRelationshipConstraint
                         `The ${args.property} must not be an array`
                     );
                 }
-                relationship = await this.em.getRelationship(
-                    entity,
-                    args.property,
-                    {
-                        ...(entity?.__session !== undefined
-                            ? { session: entity.__session }
-                            : {})
-                    }
+
+                relationship = await ensureSequentialTransaction(
+                    ctx,
+                    async () =>
+                        await this.em.getRelationship(entity, args.property)
                 );
+
                 if (isEmpty(relationship)) {
                     throw new Error(
-                        `The property ${args.property} contains an invalid relationship`
+                        `The propertyana ${args.property} contains an invalid relationship`
                     );
                 }
             }
@@ -95,11 +92,12 @@ export class IsValidRelationshipConstraint
                 const withTest: WithRelationshipTest = withTestFunction.bind(
                     args.object
                 );
+
                 const message = await withTest(
                     args.object,
                     relationship,
                     this.em,
-                    entity?.__session
+                    ctx?.session
                 );
 
                 if (typeof message === 'string') {

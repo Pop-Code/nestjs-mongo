@@ -3,7 +3,7 @@ import { getNamespace } from 'cls-hooked';
 import Debug from 'debug';
 import { Cursor, ObjectId } from 'mongodb';
 
-import { DEBUG, LOADER_SESSION_NAME } from '../constants';
+import { DATA_LOADER_NAMESPACE, DEBUG } from '../constants';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { MongoDataloader } from './data';
@@ -14,7 +14,7 @@ export class DataloaderService {
     protected readonly loaders: Map<string, MongoDataloader<any>> = new Map();
 
     getSession() {
-        return getNamespace(LOADER_SESSION_NAME);
+        return getNamespace(DATA_LOADER_NAMESPACE);
     }
 
     get<Model extends EntityInterface>(
@@ -26,7 +26,7 @@ export class DataloaderService {
         this.log('Retrieving dataloader %s', id);
         const session = this.getSession();
         if (session === undefined) {
-            this.log('Namespace %s does not exist', LOADER_SESSION_NAME);
+            this.log('Namespace %s does not exist', DATA_LOADER_NAMESPACE);
             return;
         }
         const loader = session.get(id);

@@ -1,5 +1,3 @@
-import { ClientSession } from 'mongodb';
-
 import { HistoryActions } from '../classes/history';
 import { ObjectId } from '../helpers';
 import { ISerializable } from '../serializer';
@@ -9,5 +7,4 @@ export interface EntityInterface extends ISerializable {
     createdAt: Date;
     updatedAt?: Date;
     history?: HistoryActions;
-    __session?: ClientSession;
 }

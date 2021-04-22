@@ -4,13 +4,13 @@ import Debug from 'debug';
 import { Request, Response } from 'express';
 import { v1 as uuid } from 'uuid';
 
-import { DEBUG, LOADER_SESSION_NAME } from '../constants';
+import { DATA_LOADER_NAMESPACE, DEBUG } from '../constants';
 import { InjectManager } from '../decorators';
 import { MongoManager } from '../manager';
 import { DataloaderService } from './service';
 
 @Injectable()
-export class DataLooaderMiddleware implements NestMiddleware {
+export class DataLoaderMiddleware implements NestMiddleware {
     protected log = Debug(DEBUG + ':DataLooaderMiddleware');
 
     constructor(
@@ -19,11 +19,11 @@ export class DataLooaderMiddleware implements NestMiddleware {
     ) {}
 
     use(req: Request, res: Response, next: Function) {
-        const namespace = createNamespace(LOADER_SESSION_NAME);
+        const namespace = createNamespace(DATA_LOADER_NAMESPACE);
         const loaderId = uuid();
-        req[LOADER_SESSION_NAME + '_uuid'] = loaderId;
+        req[DATA_LOADER_NAMESPACE + '_uuid'] = loaderId;
         namespace.run(() => {
-            this.log('Running namespace %s', LOADER_SESSION_NAME);
+            this.log('Running namespace %s', DATA_LOADER_NAMESPACE);
             for (const [id, model] of this.em.getModels().entries()) {
                 const loader = this.dataloaderService.create(
                     model,

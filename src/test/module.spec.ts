@@ -1,20 +1,21 @@
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { createNamespace } from 'cls-hooked';
 import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
-import { DEFAULT_CONNECTION_NAME } from '../constants';
+import { DEFAULT_CONNECTION_NAME, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../constants';
 import { DataloaderService } from '../dataloader/service';
 import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
 import { MongoManager } from '../manager';
 import { MongoModule } from '../module';
 import { MongoCoreModule } from '../module.core';
 import {
-    CascadeType,
-    getChildrenRelationshipMetadata,
-    getRelationshipCascadesMetadata,
-    getRelationshipMetadata,
-    getRelationshipsCascadesMetadata,
+  CascadeType,
+  getChildrenRelationshipMetadata,
+  getRelationshipCascadesMetadata,
+  getRelationshipMetadata,
+  getRelationshipsCascadesMetadata,
 } from '../relationship/metadata';
 import { MongoRepository } from '../repository';
 import { MongoDbModuleTest } from './module';
@@ -26,10 +27,10 @@ import { EntityChildTest } from './module/child';
 import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import {
-    ChildDynamicRelationship,
-    DynamicRelationshipType,
-    ParentDynamicRelationship1,
-    ParentDynamicRelationship2,
+  ChildDynamicRelationship,
+  DynamicRelationshipType,
+  ParentDynamicRelationship1,
+  ParentDynamicRelationship2,
 } from './module/entity.dynamic.relationship';
 import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
@@ -524,85 +525,104 @@ describe('Indexes', () => {
     });
 });
 
-describe('Mongo sessions support', () => {
-    it('should throw while attempting to read a relationship created during a session without passing session object', async () => {
+describe('Mongo sessions loader', () => {
+    it('should set / clear session object on namespace', (done) => {
         const manager = mod.get<MongoManager>(getManagerToken());
-        const session = manager.getClient().startSession();
+        const sessionLoaderService = manager.getSessionLoaderService();
 
-        await expect(
-            session.withTransaction(
-                async () => {
-                    const entity = new EntityTest();
-                    entity.foo = 'bar';
-                    entity.bar = 'foo';
-                    await manager.save<EntityTest>(entity, {
-                        mongoOperationOptions: { session }
-                    });
+        const ns = createNamespace(SESSION_LOADER_NAMESPACE);
 
-                    const child = new EntityChildTest();
-                    child.foo = 'child';
-                    child.parentId = entity._id;
+        ns.run(() => {
+            const session = manager.getClient().startSession();
 
-                    /* SESSION OBJECT INTENTIONALY OMITTED IN SAVE */
-                    await manager.save(child);
-                },
-                {
-                    readPreference: 'primary',
-                    readConcern: { level: 'local' },
-                    writeConcern: { w: 'majority' }
-                }
-            )
-        ).rejects.toThrow();
+            sessionLoaderService.setSessionContext(session);
+            expect(ns.get(MONGO_SESSION_KEY).session).toEqual(session);
 
-        session.endSession();
+            sessionLoaderService.clearSessionContext();
+            expect(ns.get(MONGO_SESSION_KEY)?.session).not.toBeDefined();
+
+            session.endSession();
+            done();
+        });
     });
 
-    it('should resolve a relationship created during a session when passing session object', async () => {
+    it('should throw while attempting to read a relationship created during a session if session is cleared', (done) => {
         const manager = mod.get<MongoManager>(getManagerToken());
         const session = manager.getClient().startSession();
 
-        let entityTest;
-        let entityChildTest;
+        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
 
-        await expect(
-            session.withTransaction(
-                async () => {
-                    const entity = new EntityTest();
-                    entity.foo = 'bar';
-                    entity.bar = 'foo';
-                    entityTest = await manager.save<EntityTest>(entity, {
-                        mongoOperationOptions: { session }
-                    });
-                    const child = new EntityChildTest();
-                    child.foo = 'child';
-                    child.parentId = entity._id;
+        namespace.run(() => {
+            session
+                .withTransaction(
+                    async () => {
+                        manager.setSessionContext(session);
 
-                    entityChildTest = await manager.save(child, {
-                        mongoOperationOptions: { session }
-                    });
-                },
-                {
-                    readPreference: 'primary',
-                    readConcern: { level: 'local' },
-                    writeConcern: { w: 'majority' }
-                }
-            )
-        ).resolves.toBeTruthy();
+                        const entity = new EntityTest();
+                        entity.foo = 'bar';
+                        entity.bar = 'foo';
+                        await manager.save(entity);
 
-        const entityTestCheck = await manager
-            .getCollection(EntityTest)
-            .find({ _id: entityTest._id }, { session })
-            .next();
+                        manager.clearSessionContext();
 
-        const entityChildTestCheck = await manager
-            .getCollection(EntityChildTest)
-            .find({ _id: entityChildTest._id }, { session })
-            .next();
+                        const child = new EntityChildTest();
+                        child.foo = 'child';
+                        child.parentId = entity._id;
 
-        expect(entityChildTestCheck.__session).toBeUndefined();
-        expect(entityTestCheck.__session).toBeUndefined();
+                        await manager.save(child);
+                    },
+                    {
+                        readPreference: 'primary',
+                        readConcern: { level: 'local' },
+                        writeConcern: { w: 'majority' }
+                    }
+                )
+                .catch((e) => {
+                    expect(e).toBeDefined();
+                })
+                .finally(() => {
+                    session.endSession();
+                    done();
+                });
+        });
+    });
 
-        session.endSession();
+    it('should resolve a relationship created during a session', (done) => {
+        const manager = mod.get<MongoManager>(getManagerToken());
+        const session = manager.getClient().startSession();
+
+        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
+
+        namespace.run(() => {
+            session
+                .withTransaction(
+                    async () => {
+                        manager.setSessionContext(session);
+
+                        const entity = new EntityTest();
+                        entity.foo = 'bar';
+                        entity.bar = 'foo';
+                        await manager.save<EntityTest>(entity);
+
+                        const child = new EntityChildTest();
+                        child.foo = 'child';
+                        child.parentId = entity._id;
+                        await manager.save(child);
+                    },
+                    {
+                        readPreference: 'primary',
+                        readConcern: { level: 'local' },
+                        writeConcern: { w: 'majority' }
+                    }
+                )
+                .then(async (value) => {
+                    expect(value).toBeTruthy();
+                })
+                .finally(() => {
+                    session.endSession();
+                    done();
+                });
+        });
     });
 });
 

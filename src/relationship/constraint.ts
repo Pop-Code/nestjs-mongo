@@ -82,7 +82,7 @@ export class IsValidRelationshipConstraint
 
                 if (isEmpty(relationship)) {
                     throw new Error(
-                        `The propertyana ${args.property} contains an invalid relationship`
+                        `The property ${args.property} contains an invalid relationship`
                     );
                 }
             }

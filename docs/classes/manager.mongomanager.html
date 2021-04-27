@@ -95,11 +95,13 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="manager.mongomanager.html#log" class="tsd-kind-icon">log</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="manager.mongomanager.html#models" class="tsd-kind-icon">models</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="manager.mongomanager.html#repositories" class="tsd-kind-icon">repositories</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="manager.mongomanager.html#sessionloaderservice" class="tsd-kind-icon">session<wbr>Loader<wbr>Service</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#clearsessioncontext" class="tsd-kind-icon">clear<wbr>Session<wbr>Context</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#count" class="tsd-kind-icon">count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected"><a href="manager.mongomanager.html#deletecascade" class="tsd-kind-icon">delete<wbr>Cascade</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#deletemany" class="tsd-kind-icon">delete<wbr>Many</a></li>
@@ -119,12 +121,16 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#getrelationship" class="tsd-kind-icon">get<wbr>Relationship</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#getrelationships" class="tsd-kind-icon">get<wbr>Relationships</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#getrepository" class="tsd-kind-icon">get<wbr>Repository</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#getsessioncontext" class="tsd-kind-icon">get<wbr>Session<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#getsessionloaderservice" class="tsd-kind-icon">get<wbr>Session<wbr>Loader<wbr>Service</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#isidquery" class="tsd-kind-icon">is<wbr>IdQuery</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#isidsquery" class="tsd-kind-icon">is<wbr>Ids<wbr>Query</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#merge" class="tsd-kind-icon">merge</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#registermodel" class="tsd-kind-icon">register<wbr>Model</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#registerrepository" class="tsd-kind-icon">register<wbr>Repository</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#save" class="tsd-kind-icon">save</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#setsessioncontext" class="tsd-kind-icon">set<wbr>Session<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#startsessionwithtransaction" class="tsd-kind-icon">start<wbr>Session<wbr>With<wbr>Transaction</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="manager.mongomanager.html#validate" class="tsd-kind-icon">validate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="manager.mongomanager.html#watch" class="tsd-kind-icon">watch</a></li>
 							</ul>
@@ -138,13 +144,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Manager<span class="tsd-signature-symbol">(</span>client<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MongoClient</span>, dataloaderService<span class="tsd-signature-symbol">: </span><a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a>, exceptionFactory<span class="tsd-signature-symbol">: </span><a href="../modules/interfaces_exception.html#exceptionfactory" class="tsd-signature-type" data-tsd-kind="Type alias">ExceptionFactory</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Manager<span class="tsd-signature-symbol">(</span>client<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MongoClient</span>, dataloaderService<span class="tsd-signature-symbol">: </span><a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a>, sessionLoaderService<span class="tsd-signature-symbol">: </span><a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a>, exceptionFactory<span class="tsd-signature-symbol">: </span><a href="../modules/interfaces_exception.html#exceptionfactory" class="tsd-signature-type" data-tsd-kind="Type alias">ExceptionFactory</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L27">src/manager.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L41">src/manager.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -154,6 +160,9 @@
 								</li>
 								<li>
 									<h5>dataloaderService: <a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a></h5>
+								</li>
+								<li>
+									<h5>sessionLoaderService: <a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></h5>
 								</li>
 								<li>
 									<h5>exceptionFactory: <a href="../modules/interfaces_exception.html#exceptionfactory" class="tsd-signature-type" data-tsd-kind="Type alias">ExceptionFactory</a></h5>
@@ -193,7 +202,7 @@
 					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Debugger</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L27">src/manager.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L41">src/manager.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -203,7 +212,7 @@
 					<div class="tsd-signature tsd-kind-icon">models<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L25">src/manager.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L39">src/manager.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -213,13 +222,37 @@
 					<div class="tsd-signature tsd-kind-icon">repositories<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L24">src/manager.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L38">src/manager.ts:38</a></li>
 						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="sessionloaderservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> session<wbr>Loader<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">session<wbr>Loader<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></div>
+					<aside class="tsd-sources">
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="clearsessioncontext" class="tsd-anchor"></a>
+					<h3>clear<wbr>Session<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L111">src/manager.ts:111</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 					<a name="count" class="tsd-anchor"></a>
 					<h3>count</h3>
@@ -230,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L281">src/manager.ts:281</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L326">src/manager.ts:326</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -248,7 +281,7 @@
 									<h5>query: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">MongoCountPreferences</span></h5>
+									<h5>options: <span class="tsd-signature-type">MongoCountPreferences</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -265,7 +298,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L301">src/manager.ts:301</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L347">src/manager.ts:347</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -291,13 +324,13 @@
 					<a name="deletemany" class="tsd-anchor"></a>
 					<h3>delete<wbr>Many</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Many&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Many&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L358">src/manager.ts:358</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L408">src/manager.ts:408</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -315,7 +348,7 @@
 									<h5>query: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -326,13 +359,13 @@
 					<a name="deleteone" class="tsd-anchor"></a>
 					<h3>delete<wbr>One</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>One&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>One&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L331">src/manager.ts:331</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L377">src/manager.ts:377</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -350,7 +383,7 @@
 									<h5>query: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <span class="tsd-signature-type">CommonOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DeleteWriteOpResultObject</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -361,13 +394,13 @@
 					<a name="find" class="tsd-anchor"></a>
 					<h3>find</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">find&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="index.cursor.html" class="tsd-signature-type" data-tsd-kind="Class">Cursor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">find&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="index.cursor.html" class="tsd-signature-type" data-tsd-kind="Class">Cursor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L217">src/manager.ts:217</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L250">src/manager.ts:250</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -385,10 +418,13 @@
 									<h5>query: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span></h5>
 										</li>
 									</ul>
 								</li>
@@ -401,13 +437,13 @@
 					<a name="findone" class="tsd-anchor"></a>
 					<h3>find<wbr>One</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>One&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FindOneOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">find<wbr>One&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FindOneOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L239">src/manager.ts:239</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L279">src/manager.ts:279</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -425,7 +461,7 @@
 									<h5>query: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-type">FindOneOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <span class="tsd-signature-type">FindOneOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -442,7 +478,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L517">src/manager.ts:517</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L617">src/manager.ts:617</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -477,7 +513,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L68">src/manager.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L83">src/manager.ts:83</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MongoClient</span></h4>
@@ -494,7 +530,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L109">src/manager.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L140">src/manager.ts:140</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -526,7 +562,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L84">src/manager.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L115">src/manager.ts:115</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -555,7 +591,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L72">src/manager.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L87">src/manager.ts:87</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -578,7 +614,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L80">src/manager.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L99">src/manager.ts:99</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -607,7 +643,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L76">src/manager.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L91">src/manager.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a></h4>
@@ -618,13 +654,13 @@
 					<a name="getinversedrelationships" class="tsd-anchor"></a>
 					<h3>get<wbr>Inversed<wbr>Relationships</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Inversed<wbr>Relationships&lt;P, C&gt;<span class="tsd-signature-symbol">(</span>parent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">P</span>, ChildType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Inversed<wbr>Relationships&lt;P, C&gt;<span class="tsd-signature-symbol">(</span>parent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">P</span>, ChildType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L485">src/manager.ts:485</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L544">src/manager.ts:544</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -647,6 +683,14 @@
 								<li>
 									<h5>property: <span class="tsd-signature-type">string</span></h5>
 								</li>
+								<li>
+									<h5>options: <span class="tsd-signature-symbol">{ </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span></h5>
+										</li>
+									</ul>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
@@ -662,7 +706,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L44">src/manager.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L59">src/manager.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -685,7 +729,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L48">src/manager.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L63">src/manager.ts:63</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -696,13 +740,13 @@
 					<a name="getrelationship" class="tsd-anchor"></a>
 					<h3>get<wbr>Relationship</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship&lt;R, P&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">P</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship&lt;R, P&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">P</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L402">src/manager.ts:402</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L457">src/manager.ts:457</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -723,10 +767,13 @@
 									<h5>property: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span></h5>
 										</li>
 									</ul>
 								</li>
@@ -739,13 +786,13 @@
 					<a name="getrelationships" class="tsd-anchor"></a>
 					<h3>get<wbr>Relationships</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationships&lt;R, P&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">P</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationships&lt;R, P&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">P</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L444">src/manager.ts:444</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L498">src/manager.ts:498</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -766,10 +813,13 @@
 									<h5>property: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span></h5>
 										</li>
 									</ul>
 								</li>
@@ -788,7 +838,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L61">src/manager.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L76">src/manager.ts:76</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -811,6 +861,40 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getsessioncontext" class="tsd-anchor"></a>
+					<h3>get<wbr>Session<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/session_types.html#clientsessioncontext" class="tsd-signature-type" data-tsd-kind="Type alias">ClientSessionContext</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L103">src/manager.ts:103</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/session_types.html#clientsessioncontext" class="tsd-signature-type" data-tsd-kind="Type alias">ClientSessionContext</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getsessionloaderservice" class="tsd-anchor"></a>
+					<h3>get<wbr>Session<wbr>Loader<wbr>Service</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Session<wbr>Loader<wbr>Service<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L95">src/manager.ts:95</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="isidquery" class="tsd-anchor"></a>
 					<h3>is<wbr>IdQuery</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -820,7 +904,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L293">src/manager.ts:293</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L339">src/manager.ts:339</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -843,7 +927,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L297">src/manager.ts:297</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L343">src/manager.ts:343</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -866,7 +950,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L526">src/manager.ts:526</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L626">src/manager.ts:626</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -901,7 +985,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L35">src/manager.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L50">src/manager.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -933,7 +1017,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L52">src/manager.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L67">src/manager.ts:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -962,13 +1046,13 @@
 					<a name="save" class="tsd-anchor"></a>
 					<h3>save</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">save&lt;Model&gt;<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/interfaces_execution_options.mongoexecutionoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoExecutionOptions</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>skipValidation<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validatorOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ValidatorOptions</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">save&lt;Model&gt;<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/interfaces_execution_options.mongoexecutionoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoExecutionOptions</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>skipValidation<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validatorOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ValidatorOptions</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L136">src/manager.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L167">src/manager.ts:167</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -983,10 +1067,95 @@
 									<h5>entity: <span class="tsd-signature-type">Model</span></h5>
 								</li>
 								<li>
-									<h5>options: <a href="../interfaces/interfaces_execution_options.mongoexecutionoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoExecutionOptions</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>skipValidation<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validatorOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ValidatorOptions</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>options: <a href="../interfaces/interfaces_execution_options.mongoexecutionoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoExecutionOptions</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>dataloader<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>skipValidation<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validatorOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ValidatorOptions</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setsessioncontext" class="tsd-anchor"></a>
+					<h3>set<wbr>Session<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span>mongoSession<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L107">src/manager.ts:107</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>mongoSession: <span class="tsd-signature-type">ClientSession</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="startsessionwithtransaction" class="tsd-anchor"></a>
+					<h3>start<wbr>Session<wbr>With<wbr>Transaction</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">start<wbr>Session<wbr>With<wbr>Transaction<span class="tsd-signature-symbol">(</span>transactionFn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>session<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>sessionOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SessionOptions</span><span class="tsd-signature-symbol">; </span>transactionOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TransactionOptions</span><span class="tsd-signature-symbol">; </span>useContext<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L590">src/manager.ts:590</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>To avoid Transaction Errors, it is important to keep a sequential approach in the way transactions are commited to the session.
+										ie: do not to use Promise.all (parallel execution) in your transaction function as it could cause inconsistencies in the order
+									in which transactions will be committed to the session.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>transactionFn: <span class="tsd-signature-symbol">(</span>session<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>session<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>session: <span class="tsd-signature-type">ClientSession</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>options: <span class="tsd-signature-symbol">{ </span>sessionOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SessionOptions</span><span class="tsd-signature-symbol">; </span>transactionOptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TransactionOptions</span><span class="tsd-signature-symbol">; </span>useContext<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> session<wbr>Options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SessionOptions</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> transaction<wbr>Options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TransactionOptions</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> use<wbr>Context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1000,7 +1169,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L118">src/manager.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L149">src/manager.ts:149</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1009,7 +1178,7 @@
 									<h5>obj: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>validatorOptions: <span class="tsd-signature-type">ValidatorOptions</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5>validatorOptions: <span class="tsd-signature-type">ValidatorOptions</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 								<li>
 									<h5>throwError: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
@@ -1023,13 +1192,13 @@
 					<a name="watch" class="tsd-anchor"></a>
 					<h3>watch</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">watch&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, pipes<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ChangeStream</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">watch&lt;Model&gt;<span class="tsd-signature-symbol">(</span>classType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&gt;</span>, pipes<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ChangeStreamOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ChangeStream</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/manager.ts#L393">src/manager.ts:393</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/manager.ts#L444">src/manager.ts:444</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1047,7 +1216,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> pipes: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
+									<h5>options: <span class="tsd-signature-type">ChangeStreamOptions</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ChangeStream</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1094,6 +1263,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="manager.mongomanager.html#repositories" class="tsd-kind-icon">repositories</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="manager.mongomanager.html#sessionloaderservice" class="tsd-kind-icon">session<wbr>Loader<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="manager.mongomanager.html#clearsessioncontext" class="tsd-kind-icon">clear<wbr>Session<wbr>Context</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="manager.mongomanager.html#count" class="tsd-kind-icon">count</a>
@@ -1153,6 +1328,12 @@
 								<a href="manager.mongomanager.html#getrepository" class="tsd-kind-icon">get<wbr>Repository</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="manager.mongomanager.html#getsessioncontext" class="tsd-kind-icon">get<wbr>Session<wbr>Context</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="manager.mongomanager.html#getsessionloaderservice" class="tsd-kind-icon">get<wbr>Session<wbr>Loader<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="manager.mongomanager.html#isidquery" class="tsd-kind-icon">is<wbr>IdQuery</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -1169,6 +1350,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="manager.mongomanager.html#save" class="tsd-kind-icon">save</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="manager.mongomanager.html#setsessioncontext" class="tsd-kind-icon">set<wbr>Session<wbr>Context</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="manager.mongomanager.html#startsessionwithtransaction" class="tsd-kind-icon">start<wbr>Session<wbr>With<wbr>Transaction</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="manager.mongomanager.html#validate" class="tsd-kind-icon">validate</a>

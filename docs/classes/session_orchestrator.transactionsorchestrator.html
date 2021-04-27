@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DataLooaderMiddleware | NestJS Mongo</title>
+	<title>TransactionsOrchestrator | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,31 +55,34 @@
 					<a href="../modules.html">NestJS Mongo</a>
 				</li>
 				<li>
-					<a href="../modules/dataloader_middleware.html">dataloader/middleware</a>
+					<a href="../modules/session_orchestrator.html">session/orchestrator</a>
 				</li>
 				<li>
-					<a href="dataloader_middleware.datalooadermiddleware.html">DataLooaderMiddleware</a>
+					<a href="session_orchestrator.transactionsorchestrator.html">TransactionsOrchestrator</a>
 				</li>
 			</ul>
-			<h1>Class DataLooaderMiddleware</h1>
+			<h1>Class TransactionsOrchestrator</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Transactions in sessions need to be sequential
+							Utility class to allow wrapping promises sequentially when used
+						in a Promise.all context.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DataLooaderMiddleware</span>
+						<span class="target">TransactionsOrchestrator</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><span class="tsd-signature-type">NestMiddleware</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -89,21 +92,21 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="dataloader_middleware.datalooadermiddleware.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="session_orchestrator.transactionsorchestrator.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="dataloader_middleware.datalooadermiddleware.html#dataloaderservice" class="tsd-kind-icon">dataloader<wbr>Service</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="dataloader_middleware.datalooadermiddleware.html#em" class="tsd-kind-icon">em</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="dataloader_middleware.datalooadermiddleware.html#log" class="tsd-kind-icon">log</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_orchestrator.transactionsorchestrator.html#current" class="tsd-kind-icon">current</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_orchestrator.transactionsorchestrator.html#jobs" class="tsd-kind-icon">jobs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_orchestrator.transactionsorchestrator.html#log" class="tsd-kind-icon">log</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="dataloader_middleware.datalooadermiddleware.html#use" class="tsd-kind-icon">use</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="session_orchestrator.transactionsorchestrator.html#addjob" class="tsd-kind-icon">add<wbr>Job</a></li>
 							</ul>
 						</section>
 					</div>
@@ -115,25 +118,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Data<wbr>Looader<wbr>Middleware<span class="tsd-signature-symbol">(</span>em<span class="tsd-signature-symbol">: </span><a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a>, dataloaderService<span class="tsd-signature-symbol">: </span><a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="dataloader_middleware.datalooadermiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">DataLooaderMiddleware</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Transactions<wbr>Orchestrator<span class="tsd-signature-symbol">(</span>log<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Debugger</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="session_orchestrator.transactionsorchestrator.html" class="tsd-signature-type" data-tsd-kind="Class">TransactionsOrchestrator</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/dataloader/middleware.ts#L14">src/dataloader/middleware.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/orchestrator.ts#L10">src/session/orchestrator.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>em: <a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></h5>
-								</li>
-								<li>
-									<h5>dataloaderService: <a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a></h5>
+									<h5>log: <span class="tsd-signature-type">Debugger</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="dataloader_middleware.datalooadermiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">DataLooaderMiddleware</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="session_orchestrator.transactionsorchestrator.html" class="tsd-signature-type" data-tsd-kind="Class">TransactionsOrchestrator</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -141,58 +141,61 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="dataloaderservice" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> dataloader<wbr>Service</h3>
-					<div class="tsd-signature tsd-kind-icon">dataloader<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="dataloader_service.dataloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">DataloaderService</a></div>
+					<a name="current" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> current</h3>
+					<div class="tsd-signature tsd-kind-icon">current<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/orchestrator.ts#L10">src/session/orchestrator.ts:10</a></li>
+						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="em" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> em</h3>
-					<div class="tsd-signature tsd-kind-icon">em<span class="tsd-signature-symbol">:</span> <a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></div>
+					<a name="jobs" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> jobs</h3>
+					<div class="tsd-signature tsd-kind-icon">jobs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/orchestrator.ts#L9">src/session/orchestrator.ts:9</a></li>
+						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="log" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> log</h3>
-					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Debugger</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> log</h3>
+					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Debugger</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/dataloader/middleware.ts#L14">src/dataloader/middleware.ts:14</a></li>
-						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="use" class="tsd-anchor"></a>
-					<h3>use</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">use<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="addjob" class="tsd-anchor"></a>
+					<h3>add<wbr>Job</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Job&lt;F&gt;<span class="tsd-signature-symbol">(</span>jobFunc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/dataloader/middleware.ts#L21">src/dataloader/middleware.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/orchestrator.ts#L14">src/session/orchestrator.ts:14</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>F<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>req: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>res: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>next: <span class="tsd-signature-type">Function</span></h5>
+									<h5>jobFunc: <span class="tsd-signature-type">F</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -205,7 +208,7 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/dataloader_middleware.html">dataloader/middleware</a>
+						<a href="../modules/session_orchestrator.html">session/orchestrator</a>
 					</li>
 				</ul>
 			</nav>
@@ -214,22 +217,22 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="dataloader_middleware.datalooadermiddleware.html" class="tsd-kind-icon">Data<wbr>Looader<wbr>Middleware</a>
+						<a href="session_orchestrator.transactionsorchestrator.html" class="tsd-kind-icon">Transactions<wbr>Orchestrator</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="dataloader_middleware.datalooadermiddleware.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="session_orchestrator.transactionsorchestrator.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="dataloader_middleware.datalooadermiddleware.html#dataloaderservice" class="tsd-kind-icon">dataloader<wbr>Service</a>
+								<a href="session_orchestrator.transactionsorchestrator.html#current" class="tsd-kind-icon">current</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="dataloader_middleware.datalooadermiddleware.html#em" class="tsd-kind-icon">em</a>
+								<a href="session_orchestrator.transactionsorchestrator.html#jobs" class="tsd-kind-icon">jobs</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="dataloader_middleware.datalooadermiddleware.html#log" class="tsd-kind-icon">log</a>
+								<a href="session_orchestrator.transactionsorchestrator.html#log" class="tsd-kind-icon">log</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="dataloader_middleware.datalooadermiddleware.html#use" class="tsd-kind-icon">use</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="session_orchestrator.transactionsorchestrator.html#addjob" class="tsd-kind-icon">add<wbr>Job</a>
 							</li>
 						</ul>
 					</li>
@@ -255,7 +258,6 @@
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RequiredRelationshipPipe | NestJS Mongo</title>
+	<title>SessionLoaderMiddleware | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">NestJS Mongo</a>
 				</li>
 				<li>
-					<a href="../modules/index.html">index</a>
+					<a href="../modules/session_middleware.html">session/middleware</a>
 				</li>
 				<li>
-					<a href="index.requiredrelationshippipe.html">RequiredRelationshipPipe</a>
+					<a href="session_middleware.sessionloadermiddleware.html">SessionLoaderMiddleware</a>
 				</li>
 			</ul>
-			<h1>Class RequiredRelationshipPipe</h1>
+			<h1>Class SessionLoaderMiddleware</h1>
 		</div>
 	</div>
 </header>
@@ -72,13 +72,14 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="validation_pipes_relationship.relationshippipe.html" class="tsd-signature-type" data-tsd-kind="Class">RelationshipPipe</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">RequiredRelationshipPipe</span>
-							</li>
-						</ul>
+						<span class="target">SessionLoaderMiddleware</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><span class="tsd-signature-type">NestMiddleware</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -88,19 +89,21 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="index.requiredrelationshippipe.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="session_middleware.sessionloadermiddleware.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="index.requiredrelationshippipe.html#em" class="tsd-kind-icon">em</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_middleware.sessionloadermiddleware.html#em" class="tsd-kind-icon">em</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_middleware.sessionloadermiddleware.html#log" class="tsd-kind-icon">log</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_middleware.sessionloadermiddleware.html#service" class="tsd-kind-icon">service</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="index.requiredrelationshippipe.html#transform" class="tsd-kind-icon">transform</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="session_middleware.sessionloadermiddleware.html#use" class="tsd-kind-icon">use</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,68 +111,83 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Required<wbr>Relationship<wbr>Pipe<span class="tsd-signature-symbol">(</span>em<span class="tsd-signature-symbol">: </span><a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="validation_pipes_required_relationship.requiredrelationshippipe.html" class="tsd-signature-type" data-tsd-kind="Class">RequiredRelationshipPipe</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Session<wbr>Loader<wbr>Middleware<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="session_middleware.sessionloadermiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderMiddleware</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="validation_pipes_relationship.relationshippipe.html">RelationshipPipe</a>.<a href="validation_pipes_relationship.relationshippipe.html#constructor">constructor</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/validation/pipes/relationship.ts#L9">src/validation/pipes/relationship.ts:9</a></li>
-								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>em: <a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="validation_pipes_required_relationship.requiredrelationshippipe.html" class="tsd-signature-type" data-tsd-kind="Class">RequiredRelationshipPipe</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="session_middleware.sessionloadermiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderMiddleware</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="em" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> em</h3>
 					<div class="tsd-signature tsd-kind-icon">em<span class="tsd-signature-symbol">:</span> <a href="manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="validation_pipes_relationship.relationshippipe.html">RelationshipPipe</a>.<a href="validation_pipes_relationship.relationshippipe.html#em">em</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/middleware.ts#L14">src/session/middleware.ts:14</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="log" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> log</h3>
+					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Debugger</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/middleware.ts#L13">src/session/middleware.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="service" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> service</h3>
+					<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/middleware.ts#L16">src/session/middleware.ts:16</a></li>
+						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="transform" class="tsd-anchor"></a>
-					<h3>transform</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">transform<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="helpers.objectid.html" class="tsd-signature-type" data-tsd-kind="Class">ObjectId</a>, metadata<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArgumentMetadata</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/interfaces_entity.entityinterface.html" class="tsd-signature-type" data-tsd-kind="Interface">EntityInterface</a><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="use" class="tsd-anchor"></a>
+					<h3>use</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">use<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, __<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="validation_pipes_relationship.relationshippipe.html">RelationshipPipe</a>.<a href="validation_pipes_relationship.relationshippipe.html#transform">transform</a></p>
+								<p>Implementation of NestMiddleware.use</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/validation/pipes/required.relationship.ts#L7">src/validation/pipes/required.relationship.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/middleware.ts#L18">src/session/middleware.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <a href="helpers.objectid.html" class="tsd-signature-type" data-tsd-kind="Class">ObjectId</a></h5>
+									<h5>_: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>metadata: <span class="tsd-signature-type">ArgumentMetadata</span></h5>
+									<h5>__: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>next: <span class="tsd-signature-type">Function</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/interfaces_entity.entityinterface.html" class="tsd-signature-type" data-tsd-kind="Interface">EntityInterface</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -182,7 +200,7 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/index.html">index</a>
+						<a href="../modules/session_middleware.html">session/middleware</a>
 					</li>
 				</ul>
 			</nav>
@@ -191,16 +209,22 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="index.requiredrelationshippipe.html" class="tsd-kind-icon">Required<wbr>Relationship<wbr>Pipe</a>
+						<a href="session_middleware.sessionloadermiddleware.html" class="tsd-kind-icon">Session<wbr>Loader<wbr>Middleware</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-								<a href="index.requiredrelationshippipe.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="session_middleware.sessionloadermiddleware.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="index.requiredrelationshippipe.html#em" class="tsd-kind-icon">em</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="session_middleware.sessionloadermiddleware.html#em" class="tsd-kind-icon">em</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="index.requiredrelationshippipe.html#transform" class="tsd-kind-icon">transform</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="session_middleware.sessionloadermiddleware.html#log" class="tsd-kind-icon">log</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="session_middleware.sessionloadermiddleware.html#service" class="tsd-kind-icon">service</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="session_middleware.sessionloadermiddleware.html#use" class="tsd-kind-icon">use</a>
 							</li>
 						</ul>
 					</li>
@@ -225,6 +249,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
@@ -235,7 +260,7 @@
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 			</ul>
 		</div>
 	</div>

@@ -80,12 +80,6 @@
 							<li>
 								<a href="relationship_metadata.relationshipmetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadata</a>
 							</li>
-							<li>
-								<a href="index.relationshipmetadataoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadataOptions</a>
-							</li>
-							<li>
-								<a href="index.relationshipmetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadata</a>
-							</li>
 						</ul>
 					</li>
 				</ul>
@@ -101,6 +95,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="relationship_metadata.baserelationshipmetadata.html#indexspecification" class="tsd-kind-icon">index<wbr>Specification</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="relationship_metadata.baserelationshipmetadata.html#inversedby" class="tsd-kind-icon">inversed<wbr>By</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="relationship_metadata.baserelationshipmetadata.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="relationship_metadata.baserelationshipmetadata.html#possibletypes" class="tsd-kind-icon">possible<wbr>Types</a></li>
 							</ul>
 						</section>
 					</div>
@@ -111,40 +106,50 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="cascade" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cascade</h3>
-					<div class="tsd-signature tsd-kind-icon">cascade<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../enums/relationship_metadata.cascadetype.html#delete" class="tsd-signature-type" data-tsd-kind="Enumeration member">DELETE</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">cascade<span class="tsd-signature-symbol">:</span> <a href="../enums/relationship_metadata.cascadetype.html#delete" class="tsd-signature-type" data-tsd-kind="Enumeration member">DELETE</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/metadata.ts#L29">src/relationship/metadata.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/metadata.ts#L34">src/relationship/metadata.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="indexspecification" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> index<wbr>Specification</h3>
-					<div class="tsd-signature tsd-kind-icon">index<wbr>Specification<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IndexSpecification</span></div>
+					<div class="tsd-signature tsd-kind-icon">index<wbr>Specification<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IndexSpecification</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/metadata.ts#L30">src/relationship/metadata.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/metadata.ts#L35">src/relationship/metadata.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="inversedby" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> inversed<wbr>By</h3>
-					<div class="tsd-signature tsd-kind-icon">inversed<wbr>By<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">inversed<wbr>By<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/metadata.ts#L28">src/relationship/metadata.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/metadata.ts#L33">src/relationship/metadata.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="isarray" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Array</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/metadata.ts#L27">src/relationship/metadata.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/metadata.ts#L32">src/relationship/metadata.ts:32</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="possibletypes" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> possible<wbr>Types</h3>
+					<div class="tsd-signature tsd-kind-icon">possible<wbr>Types<span class="tsd-signature-symbol">:</span> <a href="relationship_metadata.possibletypes.html" class="tsd-signature-type" data-tsd-kind="Interface">PossibleTypes</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/metadata.ts#L36">src/relationship/metadata.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,10 +188,16 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="relationship_metadata.baserelationshipmetadata.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="relationship_metadata.baserelationshipmetadata.html#possibletypes" class="tsd-kind-icon">possible<wbr>Types</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="relationship_metadata.possibletypes.html" class="tsd-kind-icon">Possible<wbr>Types</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="relationship_metadata.relationshipcascade.html" class="tsd-kind-icon">Relationship<wbr>Cascade</a>
 					</li>

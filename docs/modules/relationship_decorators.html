@@ -98,10 +98,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="withrelationshiptest" class="tsd-anchor"></a>
 					<h3>With<wbr>Relationship<wbr>Test</h3>
-					<div class="tsd-signature tsd-kind-icon">With<wbr>Relationship<wbr>Test<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, relationship<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, em<span class="tsd-signature-symbol">: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">With<wbr>Relationship<wbr>Test<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, relationship<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, em<span class="tsd-signature-symbol">: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a>, session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/decorators.ts#L19">src/relationship/decorators.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/decorators.ts#L22">src/relationship/decorators.ts:22</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -109,7 +109,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, relationship<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, em<span class="tsd-signature-symbol">: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, relationship<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, em<span class="tsd-signature-symbol">: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a>, session<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -123,6 +123,9 @@
 											</li>
 											<li>
 												<h5>em: <a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> session: <span class="tsd-signature-type">ClientSession</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -138,7 +141,7 @@
 					<div class="tsd-signature tsd-kind-icon">With<wbr>Valid<wbr>Relationship<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, relationship<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, em<span class="tsd-signature-symbol">: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/decorators.ts#L10">src/relationship/decorators.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/decorators.ts#L13">src/relationship/decorators.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -182,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/decorators.ts#L30">src/relationship/decorators.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/decorators.ts#L34">src/relationship/decorators.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -220,13 +223,13 @@
 					<a name="relationship" class="tsd-anchor"></a>
 					<h3>Relationship</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">Relationship&lt;R, Model&gt;<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/relationship_metadata.relationshipmetadataoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadataOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="relationship_metadata.html#relationshiptypedescriptor" class="tsd-signature-type" data-tsd-kind="Type alias">RelationshipTypeDescriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">Relationship&lt;R, Model&gt;<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/relationship_metadata.relationshipmetadataoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadataOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="relationship_metadata.html#relationshiptypedescriptor" class="tsd-signature-type" data-tsd-kind="Type alias">RelationshipTypeDescriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span>&lt;TFunction, Y&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TFunction</span>, propertyKey<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, descriptor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TypedPropertyDescriptor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Y</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/relationship/decorators.ts#L52">src/relationship/decorators.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/relationship/decorators.ts#L56">src/relationship/decorators.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -244,21 +247,33 @@
 									<h5>options: <a href="../interfaces/relationship_metadata.relationshipmetadataoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadataOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="relationship_metadata.html#relationshiptypedescriptor" class="tsd-signature-type" data-tsd-kind="Type alias">RelationshipTypeDescriptor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns &lt;TFunction, Y&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TFunction</span>, propertyKey<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, descriptor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TypedPropertyDescriptor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Y</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-signature">
-									<ul class="tsd-signatures tsd-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Model</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-has-type-parameter">
+										<li class="tsd-signature tsd-kind-icon">&lt;TFunction, Y&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TFunction</span>, propertyKey<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, descriptor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">TypedPropertyDescriptor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Y</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
+											<h4 class="tsd-type-parameters-title">Type parameters</h4>
+											<ul class="tsd-type-parameters">
+												<li>
+													<h4>TFunction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span></h4>
+												</li>
+												<li>
+													<h4>Y</h4>
+												</li>
+											</ul>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
-													<h5>target: <span class="tsd-signature-type">Model</span></h5>
+													<h5>target: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TFunction</span></h5>
 												</li>
 												<li>
-													<h5>property: <span class="tsd-signature-type">string</span></h5>
+													<h5><span class="tsd-flag ts-flagOptional">Optional</span> propertyKey: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></h5>
+												</li>
+												<li>
+													<h5><span class="tsd-flag ts-flagOptional">Optional</span> descriptor: <span class="tsd-signature-type">TypedPropertyDescriptor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Y</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>

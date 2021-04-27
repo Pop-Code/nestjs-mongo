@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>HistoryActions | NestJS Mongo</title>
+	<title>SessionLoaderService | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">NestJS Mongo</a>
 				</li>
 				<li>
-					<a href="../modules/index.html">index</a>
+					<a href="../modules/session_service.html">session/service</a>
 				</li>
 				<li>
-					<a href="index.historyactions.html">HistoryActions</a>
+					<a href="session_service.sessionloaderservice.html">SessionLoaderService</a>
 				</li>
 			</ul>
-			<h1>Class HistoryActions</h1>
+			<h1>Class SessionLoaderService</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">HistoryActions</span>
+						<span class="target">SessionLoaderService</span>
 					</li>
 				</ul>
 			</section>
@@ -83,21 +83,22 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="index.historyactions.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="session_service.sessionloaderservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="index.historyactions.html#actions" class="tsd-kind-icon">actions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_service.sessionloaderservice.html#log" class="tsd-kind-icon">log</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.historyactions.html#add" class="tsd-kind-icon">add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.historyactions.html#clear" class="tsd-kind-icon">clear</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="index.historyactions.html#getactions" class="tsd-kind-icon">get<wbr>Actions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="session_service.sessionloaderservice.html#clearsessioncontext" class="tsd-kind-icon">clear<wbr>Session<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="session_service.sessionloaderservice.html#getsession" class="tsd-kind-icon">get<wbr>Session</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="session_service.sessionloaderservice.html#getsessioncontext" class="tsd-kind-icon">get<wbr>Session<wbr>Context</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="session_service.sessionloaderservice.html#setsessioncontext" class="tsd-kind-icon">set<wbr>Session<wbr>Context</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,26 +110,26 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>History<wbr>Actions<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes_history.historyactions.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryActions</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Session<wbr>Loader<wbr>Service<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="classes_history.historyactions.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryActions</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="session_service.sessionloaderservice.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderService</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="actions" class="tsd-anchor"></a>
-					<h3>actions</h3>
-					<div class="tsd-signature tsd-kind-icon">actions<span class="tsd-signature-symbol">:</span> <a href="classes_history_action.historyaction.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryAction</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="log" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> log</h3>
+					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Debugger</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/classes/history.ts#L8">src/classes/history.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/service.ts#L12">src/session/service.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -136,59 +137,76 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="add" class="tsd-anchor"></a>
-					<h3>add</h3>
+					<a name="clearsessioncontext" class="tsd-anchor"></a>
+					<h3>clear<wbr>Session<wbr>Context</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span>historyAction<span class="tsd-signature-symbol">: </span><a href="classes_history_action.historyaction.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryAction</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/classes/history.ts#L10">src/classes/history.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/service.ts#L38">src/session/service.ts:38</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getsession" class="tsd-anchor"></a>
+					<h3>get<wbr>Session</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Session<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Namespace</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/service.ts#L14">src/session/service.ts:14</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Namespace</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getsessioncontext" class="tsd-anchor"></a>
+					<h3>get<wbr>Session<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/session_types.html#clientsessioncontext" class="tsd-signature-type" data-tsd-kind="Type alias">ClientSessionContext</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/service.ts#L18">src/session/service.ts:18</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/session_types.html#clientsessioncontext" class="tsd-signature-type" data-tsd-kind="Type alias">ClientSessionContext</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setsessioncontext" class="tsd-anchor"></a>
+					<h3>set<wbr>Session<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Session<wbr>Context<span class="tsd-signature-symbol">(</span>mongoClientSession<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClientSession</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e67a7d4/src/session/service.ts#L23">src/session/service.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>historyAction: <a href="classes_history_action.historyaction.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryAction</a></h5>
+									<h5>mongoClientSession: <span class="tsd-signature-type">ClientSession</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="clear" class="tsd-anchor"></a>
-					<h3>clear</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/classes/history.ts#L14">src/classes/history.ts:14</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getactions" class="tsd-anchor"></a>
-					<h3>get<wbr>Actions</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Actions<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes_history_action.historyaction.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryAction</a><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/a1a6ffa/src/classes/history.ts#L18">src/classes/history.ts:18</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="classes_history_action.historyaction.html" class="tsd-signature-type" data-tsd-kind="Class">HistoryAction</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -201,7 +219,7 @@
 						<a href="../modules.html">Exports</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/index.html">index</a>
+						<a href="../modules/session_service.html">session/service</a>
 					</li>
 				</ul>
 			</nav>
@@ -210,22 +228,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="index.historyactions.html" class="tsd-kind-icon">History<wbr>Actions</a>
+						<a href="session_service.sessionloaderservice.html" class="tsd-kind-icon">Session<wbr>Loader<wbr>Service</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="index.historyactions.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="session_service.sessionloaderservice.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="index.historyactions.html#actions" class="tsd-kind-icon">actions</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="index.historyactions.html#add" class="tsd-kind-icon">add</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="session_service.sessionloaderservice.html#log" class="tsd-kind-icon">log</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="index.historyactions.html#clear" class="tsd-kind-icon">clear</a>
+								<a href="session_service.sessionloaderservice.html#clearsessioncontext" class="tsd-kind-icon">clear<wbr>Session<wbr>Context</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="index.historyactions.html#getactions" class="tsd-kind-icon">get<wbr>Actions</a>
+								<a href="session_service.sessionloaderservice.html#getsession" class="tsd-kind-icon">get<wbr>Session</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="session_service.sessionloaderservice.html#getsessioncontext" class="tsd-kind-icon">get<wbr>Session<wbr>Context</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="session_service.sessionloaderservice.html#setsessioncontext" class="tsd-kind-icon">set<wbr>Session<wbr>Context</a>
 							</li>
 						</ul>
 					</li>
@@ -251,7 +272,6 @@
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
@@ -260,6 +280,9 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 			</ul>
 		</div>
 	</div>

@@ -8,6 +8,7 @@ export * from './dataloader/data';
 export * from './dataloader/service';
 export * from './session/middleware';
 export * from './session/service';
+export * from './session/utils';
 export * from './decorators';
 export * from './entity';
 export * from './entity.service';

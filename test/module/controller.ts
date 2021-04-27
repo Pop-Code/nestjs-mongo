@@ -1,10 +1,10 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { Request } from 'express';
 
-import { DATA_LOADER_NAMESPACE } from '../../constants';
-import { InjectManager } from '../../decorators';
-import { ObjectId } from '../../helpers';
-import { MongoManager } from '../../manager';
+import { DATA_LOADER_NAMESPACE } from '../../src/constants';
+import { InjectManager } from '../../src/decorators';
+import { ObjectId } from '../../src/helpers';
+import { MongoManager } from '../../src/manager';
 import { EntityTest } from './entity';
 
 @Controller('test')

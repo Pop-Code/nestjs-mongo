@@ -65,7 +65,7 @@
         "typescript": "4.2.4"
     },
     "scripts": {
-        "build": "rm -Rf dist && tsc -b",
+        "build": "rm -Rf dist && tsc -b tsconfig.build.json",
         "format": "prettier \"**/*.ts\" --ignore-path ./.prettierignore --write && git status",
         "lint": "eslint .",
         "doc": "rm -Rf ./docs && typedoc ./src && touch ./docs/.nojekyll",
@@ -81,7 +81,7 @@
             "json",
             "ts"
         ],
-        "rootDir": "src",
+        "rootDir": ".",
         "testRegex": ".spec.(t|j)s$",
         "transform": {
             "^.+\\.(t|j)s$": "ts-jest"

@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
-import { DataLoaderMiddleware } from '../../dataloader/middleware';
-import { InjectRepository } from '../../decorators';
-import { MongoModule } from '../../module';
-import { MongoRepository } from '../../repository';
+import { DataLoaderMiddleware } from '../../src/dataloader/middleware';
+import { InjectRepository } from '../../src/decorators';
+import { MongoModule } from '../../src/module';
+import { MongoRepository } from '../../src/repository';
 import { RelationshipEntityLevel1Test } from './cascade/level1';
 import { RelationshipEntityLevel1WithChildrenTest } from './cascade/level1WithChildren';
 import { RelationshipEntityLevel2Test } from './cascade/level2';

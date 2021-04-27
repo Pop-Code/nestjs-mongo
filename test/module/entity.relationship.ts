@@ -1,9 +1,9 @@
 import { IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
-import { Collection } from '../../decorators';
-import { Entity } from '../../entity';
-import { Relationship } from '../../relationship/decorators';
+import { Collection } from '../../src/decorators';
+import { Entity } from '../../src/entity';
+import { Relationship } from '../../src/relationship/decorators';
 import { EntityChildTest } from './child';
 
 @Collection('testrelationship')

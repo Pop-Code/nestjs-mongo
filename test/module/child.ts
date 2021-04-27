@@ -1,10 +1,10 @@
 import { Type } from 'class-transformer';
 import { IsDefined, IsOptional, IsString, ValidateNested } from 'class-validator';
 
-import { Collection } from '../../decorators';
-import { Entity } from '../../entity';
-import { ObjectId } from '../../helpers';
-import { IsValidRelationship, Relationship } from '../../relationship/decorators';
+import { Collection } from '../../src/decorators';
+import { Entity } from '../../src/entity';
+import { ObjectId } from '../../src/helpers';
+import { IsValidRelationship, Relationship } from '../../src/relationship/decorators';
 import { EntityTest } from './entity';
 import { EntityNestedTest } from './entity.nested';
 import { EntityRelationship } from './entity.relationship';

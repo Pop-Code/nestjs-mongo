@@ -1,10 +1,10 @@
 import { IsIn, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
-import { Collection } from '../../decorators';
-import { Entity } from '../../entity';
-import { Relationship } from '../../relationship/decorators';
-import { CascadeType } from '../../relationship/metadata';
+import { Collection } from '../../src/decorators';
+import { Entity } from '../../src/entity';
+import { Relationship } from '../../src/relationship/decorators';
+import { CascadeType } from '../../src/relationship/metadata';
 
 @Collection('testdynamicparentrelationship1')
 export class ParentDynamicRelationship1 extends Entity {

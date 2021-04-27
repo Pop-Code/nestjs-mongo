@@ -1,10 +1,10 @@
 import { IsDefined } from 'class-validator';
 
-import { Collection } from '../../../decorators';
-import { Entity } from '../../../entity';
-import { ObjectId } from '../../../helpers';
-import { IsValidRelationship, Relationship } from '../../../relationship/decorators';
-import { CascadeType } from '../../../relationship/metadata';
+import { Collection } from '../../../src/decorators';
+import { Entity } from '../../../src/entity';
+import { ObjectId } from '../../../src/helpers';
+import { IsValidRelationship, Relationship } from '../../../src/relationship/decorators';
+import { CascadeType } from '../../../src/relationship/metadata';
 import { RelationshipEntityLevel1Test } from './level1';
 
 @Collection('relationshipEntityLevel2Test')

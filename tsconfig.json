@@ -17,6 +17,6 @@
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "strictNullChecks": true
-    },
-    "include": ["src/**/*"]
+    }
+    // "include": ["src/**/*", "test"]
 }

@@ -1,23 +1,25 @@
+import 'reflect-metadata';
+
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createNamespace } from 'cls-hooked';
 import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
-import { DEFAULT_CONNECTION_NAME, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../constants';
-import { DataloaderService } from '../dataloader/service';
-import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../helpers';
-import { MongoManager } from '../manager';
-import { MongoModule } from '../module';
-import { MongoCoreModule } from '../module.core';
+import { DEFAULT_CONNECTION_NAME, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../src/constants';
+import { DataloaderService } from '../src/dataloader/service';
+import { getConnectionToken, getManagerToken, getRepositoryToken, ObjectId } from '../src/helpers';
+import { MongoManager } from '../src/manager';
+import { MongoModule } from '../src/module';
+import { MongoCoreModule } from '../src/module.core';
 import {
-  CascadeType,
-  getChildrenRelationshipMetadata,
-  getRelationshipCascadesMetadata,
-  getRelationshipMetadata,
-  getRelationshipsCascadesMetadata,
-} from '../relationship/metadata';
-import { MongoRepository } from '../repository';
+    CascadeType,
+    getChildrenRelationshipMetadata,
+    getRelationshipCascadesMetadata,
+    getRelationshipMetadata,
+    getRelationshipsCascadesMetadata,
+} from '../src/relationship/metadata';
+import { MongoRepository } from '../src/repository';
 import { MongoDbModuleTest } from './module';
 import { RelationshipEntityLevel1Test } from './module/cascade/level1';
 import { RelationshipEntityLevel1WithChildrenTest } from './module/cascade/level1WithChildren';
@@ -27,10 +29,10 @@ import { EntityChildTest } from './module/child';
 import { TestController } from './module/controller';
 import { EntityTest, TEST_COLLECTION_NAME } from './module/entity';
 import {
-  ChildDynamicRelationship,
-  DynamicRelationshipType,
-  ParentDynamicRelationship1,
-  ParentDynamicRelationship2,
+    ChildDynamicRelationship,
+    DynamicRelationshipType,
+    ParentDynamicRelationship1,
+    ParentDynamicRelationship2,
 } from './module/entity.dynamic.relationship';
 import { EntityWithIndexTest } from './module/entity.index';
 import { EntityNestedTest } from './module/entity.nested';
@@ -513,15 +515,27 @@ describe('Indexes', () => {
             .getCollection(EntityUniqueRelationship)
             .indexes();
 
-        expect(indexes).toHaveLength(3);
-        expect(indexes[1].unique).toBe(true);
-        expect(indexes[1].sparse).toBe(true);
-        expect(indexes[1].key.child).toBe(1);
+        expect(indexes).toHaveLength(5);
+
+        // bar
+        expect(indexes[1].name).toBe('bar_1');
+        expect(indexes[1].key.bar).toBe(1);
 
         expect(indexes[2].unique).toBe(true);
         expect(indexes[2].sparse).toBe(true);
+        expect(indexes[2].name).toBe('child_1_child2_1');
         expect(indexes[2].key.child).toBe(1);
         expect(indexes[2].key.child2).toBe(1);
+
+        expect(indexes[3].key.child).toBe(1);
+        expect(indexes[3].name).toBe(
+            'EntityUniqueRelationship_child_relationship'
+        );
+
+        expect(indexes[4].key.child2).toBe(1);
+        expect(indexes[4].name).toBe(
+            'EntityUniqueRelationship_child2_relationship'
+        );
     });
 });
 

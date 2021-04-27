@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 
-import { Slugify } from '../../decorators';
+import { Slugify } from '../../src/decorators';
 
 export class EntitySlugTest {
     constructor(firstName: string, lastName: string) {

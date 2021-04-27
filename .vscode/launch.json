@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug node",
+            "port": 9229
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "start:watch",
+            "runtimeExecutable": "yarn",
+            "runtimeArgs": ["run", "start:watch"],
+            "env": {
+                "AWS_PROFILE": "gv",
+                "NODE_CONFIG_DIR": "${env:HOME}/.gv"
+            }
+        }
+    ]
+}

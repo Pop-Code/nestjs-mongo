@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "sanaajani.taskrunnercode",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "rbbit.typescript-hero"
+    ]
+}

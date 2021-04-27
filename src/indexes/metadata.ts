@@ -19,12 +19,11 @@ export function setIndexMetadata(
 ) {
     let targetMetadata: IndexMetadata[] | undefined = Reflect.getMetadata(
         INDEX_METADATA_NAME,
-        target
+        target.constructor
     );
     if (targetMetadata === undefined) {
         targetMetadata = [];
     }
-
     targetMetadata.push({ property, metadata });
     Reflect.defineMetadata(
         INDEX_METADATA_NAME,
@@ -53,7 +52,8 @@ export async function createIndexes<Model extends EntityInterface>(
 
     // declared indexes
     const indexesMetadata = getIndexMetadatas(ModelClass);
-    const collection = await manager.getCollection(ModelClass);
+    const collection = manager.getCollection(ModelClass);
+
     if (indexesMetadata !== undefined) {
         for (const index of indexesMetadata) {
             const mongoIndex = {
@@ -90,6 +90,14 @@ export async function createIndexes<Model extends EntityInterface>(
         }
     }
     if (indexes.length > 0) {
-        await collection.createIndexes(indexes);
+        try {
+            await collection.createIndexes(indexes);
+        } catch (e) {
+            throw new Error(
+                `Unable to create index on collection ${
+                    collection.namespace
+                }: ${JSON.stringify(indexes)} ${e.message as string}`
+            );
+        }
     }
 }

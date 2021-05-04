@@ -5,6 +5,7 @@ test/
 .pretiierignore
 .gitignore
 tsconfig.json
+tsconfig.build.json
 typedoc.js
 yarn.lock
 renovate.json

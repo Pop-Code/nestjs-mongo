@@ -12,6 +12,7 @@ import { DataloaderService } from './service';
 @Injectable()
 export class DataLoaderMiddleware implements NestMiddleware {
     protected log = Debug(DEBUG + ':DataLooaderMiddleware');
+    protected static readonly ns = createNamespace(DATA_LOADER_NAMESPACE);
 
     constructor(
         @InjectManager() protected readonly em: MongoManager,
@@ -19,10 +20,9 @@ export class DataLoaderMiddleware implements NestMiddleware {
     ) {}
 
     use(req: Request, res: Response, next: Function) {
-        const namespace = createNamespace(DATA_LOADER_NAMESPACE);
         const loaderId = uuid();
         req[DATA_LOADER_NAMESPACE + '_uuid'] = loaderId;
-        namespace.run(() => {
+        DataLoaderMiddleware.ns.run(() => {
             this.log('Running namespace %s', DATA_LOADER_NAMESPACE);
             for (const [id, model] of this.em.getModels().entries()) {
                 const loader = this.dataloaderService.create(
@@ -31,7 +31,7 @@ export class DataLoaderMiddleware implements NestMiddleware {
                     loaderId
                 );
                 this.log('Register loader %s on current context', id);
-                namespace.set(id, loader);
+                DataLoaderMiddleware.ns.set(id, loader);
             }
             next();
         });

@@ -17,8 +17,8 @@
     "peerDependencies": {
         "@nestjs/common": "^7",
         "@nestjs/core": "^7",
-        "reflect-metadata": "^0.1.13",
-        "class-validator": "^0.13.1"
+        "class-validator": "^0.13.1",
+        "reflect-metadata": "^0.1.13"
     },
     "dependencies": {
         "class-transformer": "0.4.0",
@@ -28,19 +28,21 @@
         "global": "4.4.0",
         "lodash": "4.17.21",
         "mongodb": "3.6.6",
+        "semver": "7.3.5",
         "slugify": "1.5.0",
         "uuid": "8.3.2"
     },
     "devDependencies": {
         "@nestjs/common": "7.6.15",
         "@nestjs/core": "7.6.15",
-        "@nestjs/testing": "7.6.15",
         "@nestjs/platform-express": "7.6.15",
+        "@nestjs/testing": "7.6.15",
         "@types/cls-hooked": "4.3.3",
         "@types/debug": "4.1.5",
         "@types/jest": "26.0.22",
         "@types/lodash": "4.14.168",
         "@types/mongodb": "3.6.12",
+        "@types/semver": "^7.3.6",
         "@types/supertest": "2.0.11",
         "@typescript-eslint/eslint-plugin": "4.22.1",
         "@typescript-eslint/parser": "4.22.1",

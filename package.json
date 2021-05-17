@@ -87,9 +87,10 @@
             "^.+\\.(t|j)s$": "ts-jest"
         },
         "collectCoverageFrom": [
-            "**/*.{js,jsx,ts}",
+            "**/*.ts",
             "!index.ts",
-            "!**/test/**"
+            "!test/**",
+            "!dist/**"
         ],
         "coverageDirectory": "../coverage"
     },

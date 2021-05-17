@@ -1,13 +1,10 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsDefined, IsString } from 'class-validator';
 
 import { Collection } from '../../src/decorators';
 import { Entity } from '../../src/entity';
 import { ObjectId } from '../../src/helpers';
 import { IsValidRelationship, Relationship } from '../../src/relationship/decorators';
-import { EntityTest } from './entity';
-import { EntityNestedTest } from './entity.nested';
-import { EntityRelationship } from './entity.relationship';
+import { EntityTest } from '../entity/entity';
 
 @Collection('testchild')
 export class EntityChildTest extends Entity {
@@ -21,17 +18,4 @@ export class EntityChildTest extends Entity {
     @IsValidRelationship()
     @IsDefined()
     parentId: ObjectId;
-
-    @ValidateNested()
-    @IsOptional()
-    @Type(() => EntityNestedTest)
-    nestedEntity?: EntityNestedTest;
-
-    @IsOptional()
-    @Relationship({
-        type: () => EntityRelationship,
-        isArray: true
-    })
-    @IsValidRelationship()
-    entities?: ObjectId[];
 }

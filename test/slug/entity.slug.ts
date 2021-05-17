@@ -15,8 +15,7 @@ export class EntitySlugTest {
     public readonly lastName: string;
 
     @Slugify({
-        generate: ({ firstName, lastName }: { [key: string]: string }) =>
-            `${firstName} ${lastName}`,
+        generate: ({ firstName, lastName }: { [key: string]: string }) => `${firstName} ${lastName}`,
         expose: true,
         options: { lower: true }
     })

@@ -3,9 +3,7 @@ import { IsString } from 'class-validator';
 import { Collection } from '../../src/decorators';
 import { Entity } from '../../src/entity';
 
-export const TEST_COLLECTION_NAME = 'test';
-
-@Collection(TEST_COLLECTION_NAME)
+@Collection('entityTest')
 export class EntityTest extends Entity {
     @IsString()
     foo: string;

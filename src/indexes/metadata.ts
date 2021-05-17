@@ -1,47 +1,35 @@
 import { ClassConstructor } from 'class-transformer';
-import { find } from 'lodash';
 import { IndexSpecification } from 'mongodb';
 
 import { INDEX_METADATA_NAME } from '../constants';
 import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
-import { getChildrenRelationshipMetadata, getRelationshipMetadata } from '../relationship/metadata';
 
 export interface IndexMetadata {
     property: string;
     metadata: Partial<IndexSpecification>;
 }
 
-export function setIndexMetadata(
-    target: any,
-    property: string,
-    metadata: Partial<IndexSpecification>
-) {
-    let targetMetadata: IndexMetadata[] | undefined = Reflect.getMetadata(
-        INDEX_METADATA_NAME,
-        target.constructor
-    );
+export function setIndexMetadata(target: any, property: string, metadata: Partial<IndexSpecification>) {
+    const constructorName: string = target.constructor.name;
+    const metadataName = `${INDEX_METADATA_NAME}:${constructorName}`;
+    let targetMetadata: IndexMetadata[] | undefined = Reflect.getMetadata(metadataName, target.constructor);
     if (targetMetadata === undefined) {
         targetMetadata = [];
     }
     targetMetadata.push({ property, metadata });
-    Reflect.defineMetadata(
-        INDEX_METADATA_NAME,
-        targetMetadata,
-        target.constructor
-    );
+    Reflect.defineMetadata(metadataName, targetMetadata, target.constructor);
 }
 
-export function getIndexMetadatas(target: any): IndexMetadata[] | undefined {
-    return Reflect.getMetadata(INDEX_METADATA_NAME, target);
+export function getIndexMetadatas(target: any): IndexMetadata[] {
+    const metadataKeys: string[] = Reflect.getMetadataKeys(target).filter((p) => p.startsWith(INDEX_METADATA_NAME));
+    return metadataKeys.reduce<IndexMetadata[]>((previous, current) => {
+        return previous.concat(Reflect.getMetadata(current, target));
+    }, []);
 }
 
-export function getIndexMetadata(
-    target: any,
-    property: string
-): IndexMetadata | undefined {
-    const metas = Reflect.getMetadata(INDEX_METADATA_NAME, target);
-    return find(metas, (meta) => meta.property === property);
+export function getIndexMetadata(target: any, property: string): IndexMetadata | undefined {
+    return getIndexMetadatas(target).find((meta) => meta.property === property);
 }
 
 export async function createIndexes<Model extends EntityInterface>(
@@ -67,36 +55,14 @@ export async function createIndexes<Model extends EntityInterface>(
         }
     }
 
-    // relationship indexes
-    const props = getChildrenRelationshipMetadata(ModelClass);
-    for (const { property } of props) {
-        // get relationship metadata
-        const rel = getRelationshipMetadata(
-            new ModelClass(),
-            property,
-            manager
-        );
-        const indexName = `${ModelClass.name}_${property}_relationship`;
-        if (typeof rel.indexSpecification === 'object') {
-            indexes.push({
-                name: indexName,
-                ...rel.indexSpecification
-            });
-        } else if (rel.indexSpecification !== false) {
-            indexes.push({
-                name: indexName,
-                key: { [property]: 1 }
-            });
-        }
-    }
     if (indexes.length > 0) {
         try {
             await collection.createIndexes(indexes);
         } catch (e) {
             throw new Error(
-                `Unable to create index on collection ${
-                    collection.namespace
-                }: ${JSON.stringify(indexes)} ${e.message as string}`
+                `Unable to create index on collection ${collection.namespace}: ${JSON.stringify(indexes)} ${
+                    e.message as string
+                }`
             );
         }
     }

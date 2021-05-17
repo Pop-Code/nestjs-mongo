@@ -2,7 +2,7 @@ import { Collection } from '../../src/decorators';
 import { Entity } from '../../src/entity';
 import { Index } from '../../src/indexes/decorators';
 
-@Collection('testwithindex')
+@Collection('entityWithIndexTest')
 export class EntityWithIndexTest extends Entity {
     @Index({
         unique: true

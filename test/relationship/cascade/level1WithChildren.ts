@@ -5,7 +5,7 @@ import { Entity } from '../../../src/entity';
 import { ObjectId } from '../../../src/helpers';
 import { IsValidRelationship, Relationship } from '../../../src/relationship/decorators';
 import { CascadeType } from '../../../src/relationship/metadata';
-import { EntityTest } from '../entity';
+import { EntityTest } from '../../entity/entity';
 
 @Collection('relationshipEntityLevel1WithChildrenTest')
 export class RelationshipEntityLevel1WithChildrenTest extends Entity {

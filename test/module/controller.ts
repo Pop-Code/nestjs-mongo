@@ -5,7 +5,7 @@ import { DATA_LOADER_NAMESPACE } from '../../src/constants';
 import { InjectManager } from '../../src/decorators';
 import { ObjectId } from '../../src/helpers';
 import { MongoManager } from '../../src/manager';
-import { EntityTest } from './entity';
+import { EntityTest } from '../entity/entity';
 
 @Controller('test')
 export class TestController {

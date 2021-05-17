@@ -53,11 +53,9 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
         );
 
         if (count > 0) {
-            this.message = `An item ${
-                args.object.constructor.name
-            } with similar values already exists (${Object.keys(query).join(
-                ', '
-            )})`;
+            this.message = `An item ${args.object.constructor.name} with similar values already exists (${Object.keys(
+                query
+            ).join(', ')})`;
             return false;
         }
         return true;

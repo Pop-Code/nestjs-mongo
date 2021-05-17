@@ -118,10 +118,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="relationshiptypedescriptor" class="tsd-anchor"></a>
 					<h3>Relationship<wbr>Type<wbr>Descriptor</h3>
-					<div class="tsd-signature tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor&lt;Relationship&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor&lt;Relationship&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L22">src/relationship/metadata.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L22">src/relationship/metadata.ts:22</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -135,17 +135,17 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>obj: <span class="tsd-signature-type">unknown</span></h5>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> obj: <span class="tsd-signature-type">any</span></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></h4>
 									</li>
 								</ul>
 							</li>
@@ -161,7 +161,7 @@
 					<div class="tsd-signature tsd-kind-icon">children<wbr>Relationship<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>possibleTypes<span class="tsd-signature-symbol">?: </span><a href="../interfaces/relationship_metadata.possibletypes.html" class="tsd-signature-type" data-tsd-kind="Interface">PossibleTypes</a><span class="tsd-signature-symbol">; </span>property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L53">src/relationship/metadata.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L48">src/relationship/metadata.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,7 +171,7 @@
 					<div class="tsd-signature tsd-kind-icon">relationship<wbr>Cascades<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/relationship_metadata.relationshipcascade.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipCascade</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L49">src/relationship/metadata.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L47">src/relationship/metadata.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -188,9 +188,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L81">src/relationship/metadata.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L150">src/relationship/metadata.ts:150</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Define the child relationship</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -201,12 +206,21 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>target: <span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The entity constructor</p>
+									</div>
 								</li>
 								<li>
 									<h5>property: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The property</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/relationship_metadata.relationshipmetadataoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadataOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The relationship metadata</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -223,9 +237,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L94">src/relationship/metadata.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L168">src/relationship/metadata.ts:168</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the child relationship</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -252,7 +271,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L147">src/relationship/metadata.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L219">src/relationship/metadata.ts:219</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -281,15 +300,20 @@
 					<a name="getrelationshipmetadata" class="tsd-anchor"></a>
 					<h3>get<wbr>Relationship<wbr>Metadata</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship<wbr>Metadata&lt;R&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, em<span class="tsd-signature-symbol">?: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/relationship_metadata.relationshipmetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadata</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relationship<wbr>Metadata&lt;R&gt;<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, em<span class="tsd-signature-symbol">?: </span><a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a>, obj<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/relationship_metadata.relationshipmetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadata</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L160">src/relationship/metadata.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L89">src/relationship/metadata.ts:89</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the relationship metadata</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -299,13 +323,28 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">any</span></h5>
+									<h5>target: <span class="tsd-signature-type">Function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The entity</p>
+									</div>
 								</li>
 								<li>
-									<h5>property: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></h5>
+									<h5>property: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The property</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> em: <a href="../classes/manager.mongomanager.html" class="tsd-signature-type" data-tsd-kind="Class">MongoManager</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The entity manager</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> obj: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An instance of the entity</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/relationship_metadata.relationshipmetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadata</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -322,7 +361,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L141">src/relationship/metadata.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L213">src/relationship/metadata.ts:213</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -351,9 +390,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L58">src/relationship/metadata.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L60">src/relationship/metadata.ts:60</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set relationship metadata on the entity constructor</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -364,12 +408,21 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>target: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The entity</p>
+									</div>
 								</li>
 								<li>
 									<h5>property: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The property</p>
+									</div>
 								</li>
 								<li>
 									<h5>metadata: <a href="../interfaces/relationship_metadata.relationshipmetadataoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">RelationshipMetadataOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The relationship metadata</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -386,7 +439,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/695fe74/src/relationship/metadata.ts#L100">src/relationship/metadata.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/relationship/metadata.ts#L172">src/relationship/metadata.ts:172</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>

@@ -108,6 +108,7 @@
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongo_session_key" class="tsd-kind-icon">MONGO_<wbr>SESSION_<wbr>KEY</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongodataloader" class="tsd-kind-icon">Mongo<wbr>Dataloader</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongoexecutionoptions" class="tsd-kind-icon">Mongo<wbr>Execution<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongofeaturemodeloptions" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Model<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongofeatureoptions" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongomanager" class="tsd-kind-icon">Mongo<wbr>Manager</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#mongomodule" class="tsd-kind-icon">Mongo<wbr>Module</a></li>
@@ -160,7 +161,6 @@
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#isclass" class="tsd-kind-icon">is<wbr>Class</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#merge" class="tsd-kind-icon">merge</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#relationshipcascadesmetadata" class="tsd-kind-icon">relationship<wbr>Cascades<wbr>Metadata</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#serialize" class="tsd-kind-icon">serialize</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#setindexmetadata" class="tsd-kind-icon">set<wbr>Index<wbr>Metadata</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#setrelationshipmetadata" class="tsd-kind-icon">set<wbr>Relationship<wbr>Metadata</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="index.html#setrelationshipscascadesmetadata" class="tsd-kind-icon">set<wbr>Relationships<wbr>Cascades<wbr>Metadata</a></li>
@@ -170,6 +170,13 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter tsd-is-external"><a href="../classes/index.cursor.html" class="tsd-kind-icon">Cursor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="index.html#serialize" class="tsd-kind-icon">serialize</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="index.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 							</ul>
 						</section>
 					</div>
@@ -356,6 +363,11 @@
 					<a name="mongoexecutionoptions" class="tsd-anchor"></a>
 					<h3>Mongo<wbr>Execution<wbr>Options</h3>
 					Re-exports <a href="../interfaces/interfaces_execution_options.mongoexecutionoptions.html">MongoExecutionOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mongofeaturemodeloptions" class="tsd-anchor"></a>
+					<h3>Mongo<wbr>Feature<wbr>Model<wbr>Options</h3>
+					Re-exports <a href="../interfaces/interfaces_feature_options.mongofeaturemodeloptions.html">MongoFeatureModelOptions</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="mongofeatureoptions" class="tsd-anchor"></a>
@@ -618,11 +630,6 @@
 					Re-exports <a href="relationship_metadata.html#relationshipcascadesmetadata">relationshipCascadesMetadata</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
-					<a name="serialize" class="tsd-anchor"></a>
-					<h3>serialize</h3>
-					Re-exports <a href="serializer.html#serialize">serialize</a>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="setindexmetadata" class="tsd-anchor"></a>
 					<h3>set<wbr>Index<wbr>Metadata</h3>
 					Re-exports <a href="indexes_metadata.html#setindexmetadata">setIndexMetadata</a>
@@ -636,6 +643,55 @@
 					<a name="setrelationshipscascadesmetadata" class="tsd-anchor"></a>
 					<h3>set<wbr>Relationships<wbr>Cascades<wbr>Metadata</h3>
 					Re-exports <a href="relationship_metadata.html#setrelationshipscascadesmetadata">setRelationshipsCascadesMetadata</a>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="serialize" class="tsd-anchor"></a>
+					<h3>serialize</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">serialize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/serializer.ts#L8">src/serializer.ts:8</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Transform a class instance to plain object (ObjectIds become string)</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="tojson" class="tsd-anchor"></a>
+					<h3>toJSON</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">toJSON<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/serializer.ts#L15">src/serializer.ts:15</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Transform a class instance to json object (ObjectIds are not touched)</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{}</span></h4>
+							<ul class="tsd-parameters">
+							</ul>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -759,6 +815,9 @@
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="index.html#mongoexecutionoptions" class="tsd-kind-icon">Mongo<wbr>Execution<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="index.html#mongofeaturemodeloptions" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Model<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="index.html#mongofeatureoptions" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Options</a>
@@ -917,9 +976,6 @@
 						<a href="index.html#relationshipcascadesmetadata" class="tsd-kind-icon">relationship<wbr>Cascades<wbr>Metadata</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="index.html#serialize" class="tsd-kind-icon">serialize</a>
-					</li>
-					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="index.html#setindexmetadata" class="tsd-kind-icon">set<wbr>Index<wbr>Metadata</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
@@ -930,6 +986,12 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter tsd-is-external">
 						<a href="../classes/index.cursor.html" class="tsd-kind-icon">Cursor</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="index.html#serialize" class="tsd-kind-icon">serialize</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="index.html#tojson" class="tsd-kind-icon">toJSON</a>
 					</li>
 				</ul>
 			</nav>

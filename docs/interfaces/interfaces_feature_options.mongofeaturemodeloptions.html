@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MongoFeatureOptions | NestJS Mongo</title>
+	<title>MongoFeatureModelOptions | NestJS Mongo</title>
 	<meta name="description" content="Documentation for NestJS Mongo">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/interfaces_feature_options.html">interfaces/feature.options</a>
 				</li>
 				<li>
-					<a href="interfaces_feature_options.mongofeatureoptions.html">MongoFeatureOptions</a>
+					<a href="interfaces_feature_options.mongofeaturemodeloptions.html">MongoFeatureModelOptions</a>
 				</li>
 			</ul>
-			<h1>Interface MongoFeatureOptions</h1>
+			<h1>Interface MongoFeatureModelOptions</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">MongoFeatureOptions</span>
+						<span class="target">MongoFeatureModelOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -83,8 +83,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="interfaces_feature_options.mongofeatureoptions.html#connectionname" class="tsd-kind-icon">connection<wbr>Name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="interfaces_feature_options.mongofeatureoptions.html#models" class="tsd-kind-icon">models</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="interfaces_feature_options.mongofeaturemodeloptions.html#model" class="tsd-kind-icon">model</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="interfaces_feature_options.mongofeaturemodeloptions.html#repository" class="tsd-kind-icon">repository</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,22 +93,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="connectionname" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> connection<wbr>Name</h3>
-					<div class="tsd-signature tsd-kind-icon">connection<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="model" class="tsd-anchor"></a>
+					<h3>model</h3>
+					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Type</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces_entity.entityinterface.html" class="tsd-signature-type" data-tsd-kind="Interface">EntityInterface</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/interfaces/feature.options.ts#L12">src/interfaces/feature.options.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/interfaces/feature.options.ts#L7">src/interfaces/feature.options.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="models" class="tsd-anchor"></a>
-					<h3>models</h3>
-					<div class="tsd-signature tsd-kind-icon">models<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><a href="interfaces_feature_options.mongofeaturemodeloptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoFeatureModelOptions</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Type</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces_entity.entityinterface.html" class="tsd-signature-type" data-tsd-kind="Interface">EntityInterface</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="repository" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> repository</h3>
+					<div class="tsd-signature tsd-kind-icon">repository<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Type</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/repository.mongorepository.html" class="tsd-signature-type" data-tsd-kind="Class">MongoRepository</a><span class="tsd-signature-symbol">&lt;</span><a href="interfaces_entity.entityinterface.html" class="tsd-signature-type" data-tsd-kind="Interface">EntityInterface</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/interfaces/feature.options.ts#L13">src/interfaces/feature.options.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/e55dd7d/src/interfaces/feature.options.ts#L8">src/interfaces/feature.options.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -127,24 +127,24 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="interfaces_feature_options.mongofeaturemodeloptions.html" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Model<wbr>Options</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="interfaces_feature_options.mongofeatureoptions.html" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Options</a>
+						<a href="interfaces_feature_options.mongofeaturemodeloptions.html" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Model<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="interfaces_feature_options.mongofeatureoptions.html#connectionname" class="tsd-kind-icon">connection<wbr>Name</a>
+								<a href="interfaces_feature_options.mongofeaturemodeloptions.html#model" class="tsd-kind-icon">model</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="interfaces_feature_options.mongofeatureoptions.html#models" class="tsd-kind-icon">models</a>
+								<a href="interfaces_feature_options.mongofeaturemodeloptions.html#repository" class="tsd-kind-icon">repository</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="interfaces_feature_options.mongofeatureoptions.html" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Options</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

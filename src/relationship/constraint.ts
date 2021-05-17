@@ -2,15 +2,13 @@ import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validat
 import { first, isEmpty } from 'lodash';
 
 import { ObjectId } from '../helpers';
-import { EntityInterface } from '../interfaces/entity';
 import { MongoManager } from '../manager';
 import { ensureSequentialTransaction } from '../session/utils';
 import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
 import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
-export class IsValidRelationshipConstraint
-    implements ValidatorConstraintInterface {
+export class IsValidRelationshipConstraint implements ValidatorConstraintInterface {
     private em: MongoManager;
     private message: string;
 
@@ -18,26 +16,21 @@ export class IsValidRelationshipConstraint
         return this.message;
     }
 
-    async validate(
-        value: ObjectId | ObjectId[],
-        args: IsValidRelationshipValidationArguments
-    ) {
-        const entity = args.object as EntityInterface;
+    async validate(value: ObjectId | ObjectId[], args: IsValidRelationshipValidationArguments) {
+        const entity = args.object as any;
 
         const ctx = this.em.getSessionLoaderService().getSessionContext();
 
         try {
             const relationMetadata: RelationshipMetadata<any> = getRelationshipMetadata(
-                entity,
+                entity.constructor,
                 args.property,
-                this.em
+                this.em,
+                entity
             );
             let relationship: any;
 
-            if (
-                relationMetadata.isArray !== undefined &&
-                relationMetadata.isArray
-            ) {
+            if (relationMetadata.isArray !== undefined && relationMetadata.isArray) {
                 if (!Array.isArray(value)) {
                     throw new Error(`The ${args.property} must be an array`);
                 }
@@ -69,36 +62,24 @@ export class IsValidRelationshipConstraint
                 }
             } else {
                 if (Array.isArray(value)) {
-                    throw new Error(
-                        `The ${args.property} must not be an array`
-                    );
+                    throw new Error(`The ${args.property} must not be an array`);
                 }
 
                 relationship = await ensureSequentialTransaction(
                     ctx,
-                    async () =>
-                        await this.em.getRelationship(entity, args.property)
+                    async () => await this.em.getRelationship(entity, args.property)
                 );
 
                 if (isEmpty(relationship)) {
-                    throw new Error(
-                        `The property ${args.property} contains an invalid relationship`
-                    );
+                    throw new Error(`The property ${args.property} contains an invalid relationship`);
                 }
             }
 
             const withTestFunction = first(args.constraints);
             if (typeof withTestFunction === 'function') {
-                const withTest: WithRelationshipTest = withTestFunction.bind(
-                    args.object
-                );
+                const withTest: WithRelationshipTest = withTestFunction.bind(args.object);
 
-                const message = await withTest(
-                    args.object,
-                    relationship,
-                    this.em,
-                    ctx?.session
-                );
+                const message = await withTest(args.object, relationship, this.em, ctx?.session);
 
                 if (typeof message === 'string') {
                     throw new Error(message);

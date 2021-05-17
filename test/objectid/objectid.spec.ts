@@ -1,20 +1,8 @@
 import { ObjectId } from 'bson';
 import { plainToClass } from 'class-transformer';
 
-import { EntityTest } from './module/entity';
-import { EntityRelationship } from './module/entity.relationship';
-import { EntitySlugTest } from './module/entity.slug';
-
-describe('Slug decorator', () => {
-    test('should handle options.generate and options.keys on plainToClass', () => {
-        const target = plainToClass(EntitySlugTest, {
-            firstName: 'John',
-            lastName: 'Smith'
-        });
-        expect(target.slug).toEqual('john-smith');
-        expect(target.slug2).toEqual('john-smith');
-    });
-});
+import { EntityTest } from '../entity/entity';
+import { EntityRelationship } from '../relationship/entity.relationship';
 
 describe('TypeObjectId decorator', () => {
     test('should keep ObjectId on plainToClass', () => {
@@ -31,14 +19,14 @@ describe('TypeObjectId decorator', () => {
     });
     test('should keep ObjectId on plainToClass with relationship type', () => {
         const target = plainToClass(EntityRelationship, {
-            relationshipAsReference: new ObjectId()
+            parentAsReference: new ObjectId()
         });
-        expect(target.relationshipAsReference).toBeInstanceOf(ObjectId);
+        expect(target.parentAsReference).toBeInstanceOf(ObjectId);
     });
     test('should transform string to ObjectId on plainToClass with relationship type', () => {
         const target = plainToClass(EntityRelationship, {
-            relationshipAsReference: new ObjectId().toHexString()
+            parentAsReference: new ObjectId().toHexString()
         });
-        expect(target.relationshipAsReference).toBeInstanceOf(ObjectId);
+        expect(target.parentAsReference).toBeInstanceOf(ObjectId);
     });
 });

@@ -4,17 +4,17 @@ import { isEmpty, validate, ValidatorOptions } from 'class-validator';
 import Debug from 'debug';
 import { omit } from 'lodash';
 import {
-  ChangeStream,
-  ChangeStreamOptions,
-  ClientSession,
-  CommonOptions,
-  Cursor,
-  FindOneOptions,
-  MongoClient,
-  MongoCountPreferences,
-  ObjectId,
-  SessionOptions,
-  TransactionOptions,
+    ChangeStream,
+    ChangeStreamOptions,
+    ClientSession,
+    CommonOptions,
+    Cursor,
+    FindOneOptions,
+    MongoClient,
+    MongoCountPreferences,
+    ObjectId,
+    SessionOptions,
+    TransactionOptions,
 } from 'mongodb';
 
 import { DEBUG } from './constants';
@@ -24,12 +24,7 @@ import { getObjectName, getRepositoryToken } from './helpers';
 import { EntityInterface } from './interfaces/entity';
 import { ExceptionFactory } from './interfaces/exception';
 import { MongoExecutionOptions } from './interfaces/execution.options';
-import {
-  CascadeType,
-  getRelationshipMetadata,
-  getRelationshipsCascadesMetadata,
-  RelationshipMetadata,
-} from './relationship/metadata';
+import { CascadeType, getRelationshipMetadata, getRelationshipsCascadesMetadata } from './relationship/metadata';
 import { MongoRepository } from './repository';
 import { SessionLoaderService } from './session/service';
 import { fromPlain, merge } from './transformers/utils';
@@ -47,10 +42,7 @@ export class MongoManager {
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
-    registerModel<Model extends EntityInterface>(
-        name: string,
-        model: ClassConstructor<Model>
-    ): MongoManager {
+    registerModel<Model extends EntityInterface>(name: string, model: ClassConstructor<Model>): MongoManager {
         this.log('Add model %s as %s', model.name, name);
         this.models.set(name, model);
         return this;
@@ -64,19 +56,18 @@ export class MongoManager {
         return this.models;
     }
 
-    registerRepository<
-        Model extends EntityInterface,
-        R extends MongoRepository<Model> = MongoRepository<Model>
-    >(name: string, repository: R): MongoManager {
+    registerRepository<Model extends EntityInterface, R extends MongoRepository<Model> = MongoRepository<Model>>(
+        name: string,
+        repository: R
+    ): MongoManager {
         this.log('Add respoitory %s as %s', repository.constructor.name, name);
         this.repositories.set(name, repository);
         return this;
     }
 
-    getRepository<
-        Model extends EntityInterface,
-        R extends MongoRepository<Model> = MongoRepository<Model>
-    >(classType: ClassConstructor<Model>): R {
+    getRepository<Model extends EntityInterface, R extends MongoRepository<Model> = MongoRepository<Model>>(
+        classType: ClassConstructor<Model>
+    ): R {
         return this.repositories.get(getRepositoryToken(classType.name));
     }
 
@@ -112,26 +103,17 @@ export class MongoManager {
         this.sessionLoaderService.clearSessionContext();
     }
 
-    getCollectionName<Model extends EntityInterface>(
-        nameOrInstance: Model | ClassConstructor<Model>
-    ): string {
+    getCollectionName<Model extends EntityInterface>(nameOrInstance: Model | ClassConstructor<Model>): string {
         let name: string | undefined;
-        if (
-            typeof nameOrInstance === 'object' ||
-            typeof nameOrInstance === 'function'
-        ) {
+        if (typeof nameOrInstance === 'object' || typeof nameOrInstance === 'function') {
             name = Reflect.getMetadata(
                 'mongo:collectionName',
-                typeof nameOrInstance === 'object'
-                    ? nameOrInstance.constructor
-                    : nameOrInstance
+                typeof nameOrInstance === 'object' ? nameOrInstance.constructor : nameOrInstance
             );
         }
 
         if (name === undefined) {
-            throw new Error(
-                '@Collection decorator is required to use a class as model'
-            );
+            throw new Error('@Collection decorator is required to use a class as model');
         }
 
         return name;
@@ -141,16 +123,10 @@ export class MongoManager {
         nameOrInstance: Model | ClassConstructor<Model>,
         databaseName?: string
     ) {
-        return this.getDatabase(databaseName).collection(
-            this.getCollectionName(nameOrInstance)
-        );
+        return this.getDatabase(databaseName).collection(this.getCollectionName(nameOrInstance));
     }
 
-    async validate(
-        obj: any,
-        validatorOptions: ValidatorOptions = {},
-        throwError: boolean = false
-    ) {
+    async validate(obj: any, validatorOptions: ValidatorOptions = {}, throwError: boolean = false) {
         const errors = await validate(obj, {
             validationError: { target: true, value: true },
             whitelist: true,
@@ -173,10 +149,7 @@ export class MongoManager {
         } = {}
     ): Promise<Model> {
         const entityName = entity.constructor.name;
-        const dataloaderName =
-            typeof options.dataloader === 'string'
-                ? options.dataloader
-                : entityName;
+        const dataloaderName = typeof options.dataloader === 'string' ? options.dataloader : entityName;
 
         const ctx = this.getSessionContext();
 
@@ -199,9 +172,7 @@ export class MongoManager {
 
                 const $unset: any = {};
                 for (const p in entity) {
-                    if (
-                        Object.prototype.hasOwnProperty.call(proxy, p) === true
-                    ) {
+                    if (Object.prototype.hasOwnProperty.call(proxy, p) === true) {
                         const v: any = proxy[p];
                         if (v === undefined) {
                             $unset[p] = 1;
@@ -255,22 +226,16 @@ export class MongoManager {
         this.log('find %s %o', classType.name, query);
         const ctx = this.getSessionContext();
 
-        const cursor: Cursor<object> = this.getCollection(classType).find(
-            query,
-            {
-                ...(ctx !== undefined ? { session: ctx.session } : {}),
-                ...omit(options, 'dataloader')
-            }
-        );
+        const cursor: Cursor<object> = this.getCollection(classType).find(query, {
+            ...(ctx !== undefined ? { session: ctx.session } : {}),
+            ...omit(options, 'dataloader')
+        });
 
         const cursorMap = cursor.map((data) => {
             const entity = this.fromPlain<Model>(classType, data);
             return entity;
         });
-        const dataloaderName =
-            typeof options.dataloader === 'string'
-                ? options.dataloader
-                : classType.name;
+        const dataloaderName = typeof options.dataloader === 'string' ? options.dataloader : classType.name;
 
         this.dataloaderService.updateAll(dataloaderName, cursorMap);
         return cursorMap;
@@ -285,10 +250,7 @@ export class MongoManager {
         const ctx = this.getSessionContext();
 
         let entity: Model | undefined;
-        const dataloaderName =
-            typeof options.dataloader === 'string'
-                ? options.dataloader
-                : classType.name;
+        const dataloaderName = typeof options.dataloader === 'string' ? options.dataloader : classType.name;
         const dataloader = this.getDataloader<Model>(dataloaderName);
 
         if (dataloader !== undefined && this.isIdQuery(query)) {
@@ -297,13 +259,10 @@ export class MongoManager {
         }
 
         if (entity === undefined) {
-            const obj = await this.getCollection(classType).findOne<object>(
-                query,
-                {
-                    ...(ctx !== undefined ? { session: ctx.session } : {}),
-                    ...omit(options, 'dataloader')
-                }
-            );
+            const obj = await this.getCollection(classType).findOne<object>(query, {
+                ...(ctx !== undefined ? { session: ctx.session } : {}),
+                ...omit(options, 'dataloader')
+            });
             if (obj === undefined || obj === null) {
                 return;
             }
@@ -311,12 +270,7 @@ export class MongoManager {
         }
 
         if (dataloader !== undefined) {
-            this.log(
-                'Updating dataloader %s %s %s',
-                dataloader.uuid,
-                classType.name,
-                entity._id
-            );
+            this.log('Updating dataloader %s %s %s', dataloader.uuid, classType.name, entity._id);
             dataloader.clear(entity._id).prime(entity._id, entity);
         }
 
@@ -344,13 +298,8 @@ export class MongoManager {
         return this.isIdQuery(query) && Array.isArray(query._id.$in);
     }
 
-    protected async deleteCascade<Model extends EntityInterface>(
-        classType: ClassConstructor<Model>,
-        entity: Model
-    ) {
-        const relationshipsCascades = getRelationshipsCascadesMetadata(
-            classType
-        );
+    protected async deleteCascade<Model extends EntityInterface>(classType: ClassConstructor<Model>, entity: Model) {
+        const relationshipsCascades = getRelationshipsCascadesMetadata(classType);
 
         if (!Array.isArray(relationshipsCascades)) {
             return;
@@ -359,10 +308,7 @@ export class MongoManager {
             if (!relationshipCascades.cascade.includes(CascadeType.DELETE)) {
                 continue;
             }
-            if (
-                relationshipCascades.isArray !== undefined &&
-                !relationshipCascades.isArray
-            ) {
+            if (relationshipCascades.isArray !== undefined && !relationshipCascades.isArray) {
                 await this.deleteMany(relationshipCascades.model, {
                     [relationshipCascades.property]: entity._id
                 });
@@ -394,10 +340,7 @@ export class MongoManager {
                 ...omit(options, 'dataloader')
             }
         );
-        const dataloaderName =
-            typeof options.dataloader === 'string'
-                ? options.dataloader
-                : classType.name;
+        const dataloaderName = typeof options.dataloader === 'string' ? options.dataloader : classType.name;
         this.dataloaderService.delete(dataloaderName, entity);
 
         await this.deleteCascade(classType, entity);
@@ -421,19 +364,12 @@ export class MongoManager {
             ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...omit(options, 'dataloader')
         });
-        const dataloaderName =
-            typeof options.dataloader === 'string'
-                ? options.dataloader
-                : classType.name;
+        const dataloaderName = typeof options.dataloader === 'string' ? options.dataloader : classType.name;
         const dataloader = this.getDataloader<Model>(dataloaderName);
 
         for (const entity of entities) {
             await this.deleteCascade(classType, entity);
-            if (
-                dataloader !== undefined &&
-                result.deletedCount !== undefined &&
-                result.deletedCount > 0
-            ) {
+            if (dataloader !== undefined && result.deletedCount !== undefined && result.deletedCount > 0) {
                 dataloader.clear(entity._id);
             }
         }
@@ -454,8 +390,8 @@ export class MongoManager {
         });
     }
 
-    async getRelationship<R extends EntityInterface = any, P = Object>(
-        obj: P,
+    async getRelationship<R extends EntityInterface = any>(
+        obj: any,
         property: string,
         options: {
             dataloader?: string;
@@ -463,11 +399,7 @@ export class MongoManager {
         } = {}
     ): Promise<R | undefined> {
         this.log('getRelationship %s on %s', property, obj);
-        const relationMetadata = getRelationshipMetadata<R>(
-            obj,
-            property,
-            this
-        );
+        const relationMetadata = getRelationshipMetadata<R>(obj.constructor, property, this, obj);
         if (isEmpty(relationMetadata)) {
             throw new Error(
                 `The property ${property} metadata @Relationship must be set to call getRelationship on ${getObjectName(
@@ -476,27 +408,20 @@ export class MongoManager {
             );
         }
 
-        if (
-            relationMetadata.isArray !== undefined &&
-            relationMetadata.isArray
-        ) {
+        if (relationMetadata.isArray !== undefined && relationMetadata.isArray) {
             throw new Error(
                 `The property ${property} is defined as an array, please use getRelationships instead of getRelationship`
             );
         }
 
         const value = obj[property];
-        const relationship = await this.findOne(
-            relationMetadata.type,
-            { _id: value },
-            options
-        );
+        const relationship = await this.findOne(relationMetadata.type, { _id: value }, options);
 
         return relationship;
     }
 
-    async getRelationships<R extends EntityInterface = any, P = Object>(
-        obj: P,
+    async getRelationships<R extends EntityInterface = any>(
+        obj: any,
         property: string,
         options: {
             dataloader?: string;
@@ -505,11 +430,7 @@ export class MongoManager {
     ): Promise<Array<R | Error>> {
         this.log('getRelationships %s on %s', property, obj);
 
-        const relationMetadata = getRelationshipMetadata<R>(
-            obj,
-            property,
-            this
-        );
+        const relationMetadata = getRelationshipMetadata<R>(obj.constructor, property, this);
         if (isEmpty(relationMetadata) || relationMetadata === undefined) {
             throw new Error(
                 `The property ${property} metadata @Relationship must be set to call getRelationships on ${getObjectName(
@@ -518,10 +439,7 @@ export class MongoManager {
             );
         }
 
-        if (
-            relationMetadata?.isArray !== undefined &&
-            !relationMetadata?.isArray
-        ) {
+        if (relationMetadata?.isArray !== undefined && !relationMetadata?.isArray) {
             throw new Error(
                 `The property ${property} is not defined as an array, please use getRelationship instead of getRelationships in ${getObjectName(
                     obj
@@ -541,47 +459,6 @@ export class MongoManager {
         return await relationshipsCursor.toArray();
     }
 
-    async getInversedRelationships<
-        P extends EntityInterface = any,
-        C extends EntityInterface = any
-    >(
-        parent: P,
-        ChildType: ClassConstructor<C>,
-        property: string,
-        options: { session?: ClientSession } = {}
-    ) {
-        let relationMetadata: RelationshipMetadata<P> | undefined;
-        if (isEmpty(relationMetadata)) {
-            relationMetadata = getRelationshipMetadata<P>(
-                new ChildType(), // fix typing
-                property,
-                this
-            );
-            if (isEmpty(relationMetadata)) {
-                throw new Error(
-                    `The property ${property} metadata @Relationship must be set to call getInversedRelationships of ${getObjectName(
-                        parent
-                    )}`
-                );
-            }
-        }
-
-        if (isEmpty(relationMetadata?.inversedBy)) {
-            throw new Error('Can not get inversed metadata');
-        }
-
-        // todo set metadata for inversed side insted of using implicit _id ? ?
-        const children = await this.find(
-            ChildType,
-            {
-                [property]: parent._id
-            },
-            options
-        );
-
-        return await children.toArray();
-    }
-
     /**
      * To avoid Transaction Errors, it is important to keep a sequential approach in the way transactions are commited to the session.
      * ie: do not to use Promise.all (parallel execution) in your transaction function as it could cause inconsistencies in the order
@@ -595,17 +472,12 @@ export class MongoManager {
             sessionOptions?: SessionOptions;
         } = {}
     ): Promise<ClientSession> {
-        const session = this.getClient().startSession(
-            options.sessionOptions ?? {}
-        );
+        const session = this.getClient().startSession(options.sessionOptions ?? {});
         const useContext = options.useContext === true;
         useContext && this.setSessionContext(session);
 
         try {
-            await session.withTransaction(
-                async () => await transactionFn(session),
-                options.transactionOptions ?? {}
-            );
+            await session.withTransaction(async () => await transactionFn(session), options.transactionOptions ?? {});
         } finally {
             useContext && this.clearSessionContext();
             session.endSession();
@@ -623,11 +495,7 @@ export class MongoManager {
         return fromPlain(classType, data, options);
     }
 
-    merge<Model extends EntityInterface>(
-        entity: Model,
-        data: any,
-        options?: ClassTransformOptions
-    ): Model {
+    merge<Model extends EntityInterface>(entity: Model, data: any, options?: ClassTransformOptions): Model {
         this.log('%s transform merge', getObjectName(entity));
         return merge(data, entity, options);
     }

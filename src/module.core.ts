@@ -27,9 +27,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
     ) {}
 
     async onModuleDestroy() {
-        const connection = this.moduleRef.get<MongoClient>(
-            this.namedConnectionToken
-        );
+        const connection = this.moduleRef.get<MongoClient>(this.namedConnectionToken);
         await connection.close(true);
     }
 
@@ -45,13 +43,9 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
         await Promise.all(indexJobs);
     }
 
-    static async forRootAsync(
-        options: MongoModuleAsyncOptions
-    ): Promise<DynamicModule> {
+    static async forRootAsync(options: MongoModuleAsyncOptions): Promise<DynamicModule> {
         // define the connection token name
-        const connectionName = !isEmpty(options.connectionName)
-            ? options.connectionName
-            : DEFAULT_CONNECTION_NAME;
+        const connectionName = !isEmpty(options.connectionName) ? options.connectionName : DEFAULT_CONNECTION_NAME;
 
         const mongoConnectionToken = getConnectionToken(connectionName);
 
@@ -71,9 +65,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
         // the mongo client provider
         const mongoClientProvider = {
             provide: mongoConnectionToken,
-            useFactory: async (
-                config: MongoModuleOptions
-            ): Promise<MongoClient> => {
+            useFactory: async (config: MongoModuleOptions): Promise<MongoClient> => {
                 const { uri, exceptionFactory, ...mongoOpts } = config;
                 const client = new MongoClient(uri, {
                     useNewUrlParser: true,
@@ -105,16 +97,12 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
                 dataloaderService: DataloaderService,
                 sessionLoaderService: SessionLoaderService
             ): MongoManager => {
-                const em = new MongoManager(
-                    client,
-                    dataloaderService,
-                    sessionLoaderService,
-                    config.exceptionFactory
-                );
+                if (typeof config.exceptionFactory !== 'function') {
+                    config.exceptionFactory = (errors) => errors;
+                }
+                const em = new MongoManager(client, dataloaderService, sessionLoaderService, config.exceptionFactory);
 
-                const isValidRelationship = getFromContainer(
-                    IsValidRelationshipConstraint
-                );
+                const isValidRelationship = getFromContainer(IsValidRelationshipConstraint);
                 isValidRelationship.setEm(em);
 
                 const isUnique = getFromContainer(IsUniqueConstraint);
@@ -122,12 +110,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
 
                 return em;
             },
-            inject: [
-                mongoConnectionToken,
-                configToken,
-                DataloaderService,
-                SessionLoaderService
-            ]
+            inject: [mongoConnectionToken, configToken, DataloaderService, SessionLoaderService]
         };
 
         return {
@@ -152,17 +135,13 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
         };
     }
 
-    public static createProviders(
-        models: any[] = [],
-        connectionName: string = DEFAULT_CONNECTION_NAME
-    ) {
+    public static createProviders(models: any[] = [], connectionName: string = DEFAULT_CONNECTION_NAME) {
         const providers: any = [];
         const managerToken = getManagerToken(connectionName);
         for (const m of models) {
             const model = typeof m === 'function' ? m : m.model;
             const repoToken = getRepositoryToken(model.name, connectionName);
-            const RepoClass =
-                typeof m === 'function' ? MongoRepository : m.repository;
+            const RepoClass = typeof m === 'function' ? MongoRepository : m.repository;
             providers.push({
                 provide: repoToken,
                 inject: [managerToken],

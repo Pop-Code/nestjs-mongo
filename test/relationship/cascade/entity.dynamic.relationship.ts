@@ -1,18 +1,18 @@
 import { IsIn, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
-import { Collection } from '../../src/decorators';
-import { Entity } from '../../src/entity';
-import { Relationship } from '../../src/relationship/decorators';
-import { CascadeType } from '../../src/relationship/metadata';
+import { Collection } from '../../../src/decorators';
+import { Entity } from '../../../src/entity';
+import { Relationship } from '../../../src/relationship/decorators';
+import { CascadeType } from '../../../src/relationship/metadata';
 
-@Collection('testdynamicparentrelationship1')
+@Collection('parentDynamicRelationship1')
 export class ParentDynamicRelationship1 extends Entity {
     @IsString()
     foo: string;
 }
 
-@Collection('testdynamicparentrelationship2')
+@Collection('parentDynamicRelationship2')
 export class ParentDynamicRelationship2 extends Entity {
     @IsString()
     foo: string;
@@ -27,31 +27,24 @@ export enum DynamicRelationshipType {
 }
 
 const DynamicRelationshipDecorator = () => {
-    return Relationship({
+    return Relationship<ParentDynamicRelationship1 | ParentDynamicRelationship2>({
         cascade: [CascadeType.DELETE],
         possibleTypes: {
             property: 'parentType',
             values: Object.values(DynamicRelationshipType)
         },
         type: (obj: ChildDynamicRelationship) => {
-            if (
-                obj.parentType ===
-                DynamicRelationshipType.EntityParentDynamicRelationship1
-            ) {
+            if (obj.parentType === DynamicRelationshipType.EntityParentDynamicRelationship1) {
                 return ParentDynamicRelationship1;
-            } else if (
-                obj.parentType ===
-                DynamicRelationshipType.EntityParentDynamicRelationship2
-            ) {
+            } else if (obj.parentType === DynamicRelationshipType.EntityParentDynamicRelationship2) {
                 return ParentDynamicRelationship2;
             }
-            // always return a default value
-            return 'none' as any;
+            return false;
         }
     });
 };
 
-@Collection('testdynamicrelationship')
+@Collection('childDynamicRelationship')
 export class ChildDynamicRelationship extends Entity {
     @DynamicRelationshipDecorator()
     parentId?: ObjectId;

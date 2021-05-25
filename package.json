@@ -43,7 +43,7 @@
         "@types/mongodb": "3.6.12",
         "@types/supertest": "2.0.11",
         "@typescript-eslint/eslint-plugin": "4.23.0",
-        "@typescript-eslint/parser": "4.23.0",
+        "@typescript-eslint/parser": "4.25.0",
         "class-validator": "0.13.1",
         "eslint": "7.26.0",
         "eslint-config-prettier": "8.3.0",

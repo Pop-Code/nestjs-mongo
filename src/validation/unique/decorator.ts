@@ -1,7 +1,7 @@
 import { registerDecorator } from 'class-validator';
 import { get } from 'lodash';
 
-import { Index } from '../../indexes/decorators';
+import { Index } from '../../indexs/decorators';
 import { IsUniqueConstraint, IsUniqueOptions } from './constraint';
 
 export function IsUnique(options?: IsUniqueOptions) {

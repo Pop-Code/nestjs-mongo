@@ -1,4 +1,4 @@
-import { DynamicModule, Global, Inject, Module, OnModuleDestroy, OnModuleInit, Optional } from '@nestjs/common';
+import { DynamicModule, Global, Inject, Module, OnModuleDestroy, Optional } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
@@ -6,9 +6,7 @@ import { MongoClient } from 'mongodb';
 import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from '../constants';
 import { EntityManager } from '../entity/manager';
 import { EntityRepository } from '../entity/repository';
-import { createIndexes } from '../indexes/metadata';
 import { IsValidRelationshipConstraint } from '../relationship/constraint';
-import { setRelationshipsCascadesMetadata } from '../relationship/metadata';
 import { SessionLoaderService } from '../session/service';
 import { IsUniqueConstraint } from '../validation/unique/constraint';
 import { getConfigToken, getConnectionToken, getEntityManagerToken, getEntityRepositoryToken } from './injection';
@@ -16,7 +14,7 @@ import { MongoModuleAsyncOptions, MongoModuleOptions } from './interfaces';
 
 @Global()
 @Module({})
-export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
+export class MongoCoreModule implements OnModuleDestroy {
     constructor(
         private readonly moduleRef: ModuleRef,
         @Optional()
@@ -27,16 +25,6 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
     async onModuleDestroy() {
         const connection = this.moduleRef.get<MongoClient>(this.namedConnectionToken);
         await connection.close(true);
-    }
-
-    async onModuleInit() {
-        const managerToken = getEntityManagerToken(DEFAULT_CONNECTION_NAME);
-        const manager = this.moduleRef.get<EntityManager>(managerToken);
-        const models = manager.getModels();
-        for (const [, Model] of models.entries()) {
-            setRelationshipsCascadesMetadata(Model, manager);
-            await createIndexes(Model, manager);
-        }
     }
 
     static async forRootAsync(options: MongoModuleAsyncOptions): Promise<DynamicModule> {
@@ -131,7 +119,7 @@ export class MongoCoreModule implements OnModuleDestroy, OnModuleInit {
                 inject: [managerToken],
                 useFactory: async (em: EntityManager) => {
                     // register model on manager
-                    em.registerModel(model.name, model);
+                    await em.registerModel(model.name, model);
 
                     // register repository
                     const repo = new RepoClass(em, model);

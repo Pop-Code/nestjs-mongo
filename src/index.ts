@@ -11,5 +11,5 @@ export * from './entity';
 export * from './serializer';
 export * from './transformer';
 export * from './validation';
-export * from './indexes';
+export * from './indexs';
 export * from './history';

@@ -6,7 +6,7 @@ import { ClientSession } from 'mongodb';
 import { DEBUG } from '../constants';
 import { EntityInterface } from '../entity/interfaces';
 import { EntityManager } from '../entity/manager';
-import { IndexMetadata, setIndexMetadata } from '../indexes/metadata';
+import { IndexMetadata, setIndexMetadata } from '../indexs/metadata';
 import { TypeObjectId } from '../transformer/objectId';
 import { IsValidRelationshipConstraint } from './constraint';
 import { RelationshipMetadataOptions, RelationshipTypeDescriptor } from './interfaces';

@@ -1,9 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
-import { Collection } from '../../src/decorators';
-import { Entity } from '../../src/entity';
-import { IsValidRelationship, Relationship } from '../../src/relationship/decorators';
+import { Collection, Entity, IsValidRelationship, Relationship } from '../../src';
 import { EntityTest } from '../entity/entity';
 
 @Collection('entityRelationship')

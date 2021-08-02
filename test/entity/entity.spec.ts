@@ -1,14 +1,13 @@
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
+import { ObjectId } from 'mongodb';
 
-import { getManagerToken, ObjectId } from '../../src/helpers';
-import { MongoManager } from '../../src/manager';
-import { MongoModule } from '../../src/module';
+import { EntityManager, getEntityManagerToken, MongoModule } from '../../src';
 import { DBTEST } from '../constants';
 import { EntityTest } from './entity';
 
 let app: NestApplication;
-let em: MongoManager;
+let em: EntityManager;
 const uri = DBTEST + '-entity';
 
 beforeAll(async () => {
@@ -27,7 +26,7 @@ beforeAll(async () => {
     }).compile();
     app = mod.createNestApplication();
     await app.init();
-    em = app.get(getManagerToken());
+    em = app.get(getEntityManagerToken());
 });
 
 describe('Entity', () => {

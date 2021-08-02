@@ -4,19 +4,21 @@ import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createNamespace } from 'cls-hooked';
 import { MongoClient } from 'mongodb';
-import request from 'supertest';
 
-import { DEFAULT_CONNECTION_NAME, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../../src/constants';
-import { DataloaderService } from '../../src/dataloader/service';
-import { getConnectionToken, getManagerToken, getRepositoryToken } from '../../src/helpers';
-import { MongoManager } from '../../src/manager';
-import { MongoModule } from '../../src/module';
-import { MongoCoreModule } from '../../src/module.core';
-import { MongoRepository } from '../../src/repository';
+import {
+    DEFAULT_CONNECTION_NAME,
+    EntityManager,
+    EntityRepository,
+    getConnectionToken,
+    getEntityManagerToken,
+    MONGO_SESSION_KEY,
+    MongoCoreModule,
+    MongoModule,
+    SESSION_LOADER_NAMESPACE,
+} from '../../src';
 import { DBTEST } from '../constants';
 import { EntityTest } from '../entity/entity';
 import { EntityChildTest } from './child';
-import { TestController } from './controller';
 import { MongoDbModuleTest } from './module';
 
 let mod: TestingModule;
@@ -29,7 +31,9 @@ beforeAll(async () => {
             MongoModule.forRootAsync({
                 useFactory: () => ({
                     uri,
-                    exceptionFactory: (errors) => new BadRequestException(errors)
+                    exceptionFactory: (errors) => {
+                        return new BadRequestException(errors);
+                    }
                 })
             }),
             MongoDbModuleTest
@@ -55,80 +59,26 @@ describe('forRootAsync', () => {
 
 describe('forFeature', () => {
     it('should get the entity manager', () => {
-        const manager = mod.get<MongoManager>(getManagerToken());
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
         expect(manager).toBeDefined();
-        expect(manager).toBeInstanceOf(MongoManager);
+        expect(manager).toBeInstanceOf(EntityManager);
     });
     it('should get a repository', () => {
         const mongoModuleTest = mod.get<MongoDbModuleTest>(MongoDbModuleTest);
         expect(mongoModuleTest).toBeDefined();
         expect(mongoModuleTest.repo).toBeDefined();
-        expect(mongoModuleTest.repo).toBeInstanceOf(MongoRepository);
+        expect(mongoModuleTest.repo).toBeInstanceOf(EntityRepository);
     });
     it('should get the collection name from the Collection decorator', () => {
-        const manager = mod.get<MongoManager>(getManagerToken());
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
         const name = manager.getCollectionName<EntityTest>(EntityTest);
         expect(name).toEqual('entityTest');
     });
 });
 
-describe('Dataloader', () => {
-    let uuid: string;
-    it('should not have a dataloader outside a request', async () => {
-        const em = mod.get<MongoManager>(getManagerToken());
-        // get the dataloader and check that he is empty, outside a request
-        // no loader is used and must bbe created manualy
-        const dataloaderService = mod.get(DataloaderService);
-        let loader = dataloaderService.get('EntityTest');
-        expect(loader).not.toBeDefined();
-
-        const loaderUuid = '12345';
-        loader = dataloaderService.create(EntityTest, em, loaderUuid);
-        expect(loader).toBeDefined();
-        expect(loader.uuid).toEqual(loaderUuid);
-    });
-
-    it('should use the same dataloader inside a request', async () => {
-        const repo = mod.get<MongoRepository<EntityTest>>(getRepositoryToken(EntityTest.name));
-
-        const entity = new EntityTest();
-        entity.foo = 'test';
-        entity.bar = 'dataloader';
-        await repo.save(entity);
-
-        const ctrl = mod.get(TestController);
-        ctrl.entityTestId = entity._id;
-
-        await request(app.getHttpServer())
-            .get('/test')
-            .expect((res) => {
-                expect(res.body).toBeDefined();
-                expect(res.body.item).toBeDefined();
-                expect(res.body.item._id).toStrictEqual(entity._id.toHexString());
-                expect(res.body.uuid).toBeDefined();
-                expect(res.body.reqUuid).toBeDefined();
-                expect(res.body.reqUuid).toEqual(res.body.uuid);
-                uuid = res.body.uuid;
-            });
-
-        await request(app.getHttpServer())
-            .get('/test')
-            .expect((res) => {
-                expect(res.body).toBeDefined();
-                expect(res.body.item).toBeDefined();
-                expect(res.body.item._id).toStrictEqual(entity._id.toHexString());
-                expect(res.body.uuid).toBeDefined();
-                expect(res.body.reqUuid).toBeDefined();
-                expect(res.body.reqUuid).toEqual(res.body.uuid);
-                // should not match previous request
-                expect(res.body.uuid).not.toEqual(uuid);
-            });
-    });
-});
-
 describe('Mongo sessions loader', () => {
     it('should set / clear session object on namespace', (done) => {
-        const manager = mod.get<MongoManager>(getManagerToken());
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
         const sessionLoaderService = manager.getSessionLoaderService();
 
         const ns = createNamespace(SESSION_LOADER_NAMESPACE);
@@ -142,83 +92,83 @@ describe('Mongo sessions loader', () => {
             sessionLoaderService.clearSessionContext();
             expect(ns.get(MONGO_SESSION_KEY)?.session).not.toBeDefined();
 
-            session.endSession();
-            done();
-        });
-    });
-
-    it('should throw while attempting to read a relationship created during a session if session is cleared', (done) => {
-        const manager = mod.get<MongoManager>(getManagerToken());
-        const session = manager.getClient().startSession();
-
-        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
-
-        namespace.run(() => {
             session
-                .withTransaction(
-                    async () => {
-                        manager.setSessionContext(session);
-
-                        const entity = new EntityTest();
-                        entity.foo = 'bar';
-                        entity.bar = 'foo';
-                        await manager.save(entity);
-
-                        manager.clearSessionContext();
-
-                        const child = new EntityChildTest();
-                        child.foo = 'child';
-                        child.parentId = entity._id;
-
-                        await manager.save(child);
-                    },
-                    {
-                        readPreference: 'primary',
-                        readConcern: { level: 'local' },
-                        writeConcern: { w: 'majority' }
-                    }
-                )
+                .endSession()
+                .then(() => done())
                 .catch((e) => {
-                    expect(e).toBeDefined();
-                })
-                .finally(() => {
-                    session.endSession();
+                    console.error(e);
                     done();
                 });
         });
     });
-    it('should resolve a relationship created during a session', (done) => {
-        const manager = mod.get<MongoManager>(getManagerToken());
+
+    it('should throw while attempting to read a relationship created during a session if session is cleared', (done) => {
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
         const session = manager.getClient().startSession();
+
         const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
+
         namespace.run(() => {
             session
-                .withTransaction(
-                    async () => {
-                        manager.setSessionContext(session);
+                .withTransaction(async () => {
+                    manager.setSessionContext(session);
 
-                        const entity = new EntityTest();
-                        entity.foo = 'bar';
-                        entity.bar = 'foo';
-                        await manager.save<EntityTest>(entity);
+                    const entity = new EntityTest();
+                    entity.foo = 'bar';
+                    entity.bar = 'foo';
+                    await manager.save(entity);
 
-                        const child = new EntityChildTest();
-                        child.foo = 'child';
-                        child.parentId = entity._id;
-                        await manager.save(child);
-                    },
-                    {
-                        readPreference: 'primary',
-                        readConcern: { level: 'local' },
-                        writeConcern: { w: 'majority' }
-                    }
-                )
+                    manager.clearSessionContext();
+
+                    const child = new EntityChildTest();
+                    child.foo = 'child';
+                    child.parentId = entity._id;
+
+                    await manager.save(child);
+                })
+                .catch((e) => {
+                    expect(e).toBeDefined();
+                })
+                .finally(() => {
+                    session
+                        .endSession()
+                        .catch((e) => {
+                            console.error(e);
+                        })
+                        .finally(() => done());
+                });
+        });
+    });
+    it('should resolve a relationship created during a session', (done) => {
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
+        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
+        namespace.run(() => {
+            const session = manager.getClient().startSession();
+            manager.setSessionContext(session);
+            session
+                .withTransaction(async () => {
+                    const entity = new EntityTest();
+                    entity.foo = 'bar';
+                    entity.bar = 'foo';
+                    await manager.save(entity, { session });
+
+                    const child = new EntityChildTest();
+                    child.foo = 'child';
+                    child.parentId = entity._id;
+
+                    await manager.save(child, { session });
+                })
                 .then(async (value) => {
                     expect(value).toBeTruthy();
                 })
                 .finally(() => {
-                    session.endSession();
-                    done();
+                    session
+                        .endSession()
+                        .then(() => done())
+                        .catch((e) => {
+                            console.error(e);
+                            done();
+                        });
                 });
         });
     });
@@ -226,7 +176,7 @@ describe('Mongo sessions loader', () => {
 
 afterAll(async () => {
     try {
-        const em = mod.get<MongoManager>(getManagerToken());
+        const em = mod.get<EntityManager>(getEntityManagerToken());
         await em.getDatabase().dropDatabase();
         await mod.close();
     } catch (e) {

@@ -1,23 +1,24 @@
 import { ClassConstructor } from 'class-transformer';
-import { IndexSpecification } from 'mongodb';
+import { CreateIndexesOptions, IndexDescription } from 'mongodb';
 
 import { INDEX_METADATA_NAME } from '../constants';
-import { EntityInterface } from '../interfaces/entity';
-import { MongoManager } from '../manager';
+import { EntityInterface } from '../entity/interfaces';
+import { EntityManager } from '../entity/manager';
 
 export interface IndexMetadata {
     property: string;
-    metadata: Partial<IndexSpecification>;
+    // TODO in next mongodb release, IndexDescription is extending CreateIndexesOptions
+    description?: Partial<IndexDescription> & CreateIndexesOptions;
 }
 
-export function setIndexMetadata(target: any, property: string, metadata: Partial<IndexSpecification>) {
+export function setIndexMetadata(target: any, metadata: IndexMetadata) {
     const constructorName: string = target.constructor.name;
     const metadataName = `${INDEX_METADATA_NAME}:${constructorName}`;
     let targetMetadata: IndexMetadata[] | undefined = Reflect.getMetadata(metadataName, target.constructor);
     if (targetMetadata === undefined) {
         targetMetadata = [];
     }
-    targetMetadata.push({ property, metadata });
+    targetMetadata.push(metadata);
     Reflect.defineMetadata(metadataName, targetMetadata, target.constructor);
 }
 
@@ -29,41 +30,38 @@ export function getIndexMetadatas(target: any): IndexMetadata[] {
 }
 
 export function getIndexMetadata(target: any, property: string): IndexMetadata | undefined {
-    return getIndexMetadatas(target).find((meta) => meta.property === property);
+    return getIndexMetadatas(target).find((metadata) => metadata.property === property);
 }
 
 export async function createIndexes<Model extends EntityInterface>(
     ModelClass: ClassConstructor<Model>,
-    manager: MongoManager
+    manager: EntityManager
 ) {
-    const indexes: IndexSpecification[] = [];
-
     // declared indexes
     const indexesMetadata = getIndexMetadatas(ModelClass);
     const collection = manager.getCollection(ModelClass);
 
     if (indexesMetadata !== undefined) {
+        const createIndexs: IndexDescription[] = [];
         for (const index of indexesMetadata) {
-            const mongoIndex = {
-                ...index.metadata,
+            let indexDescription: IndexDescription = {
                 key: {
-                    [index.property]: 1,
-                    ...index.metadata.key
+                    [index.property]: 1
                 }
             };
-            indexes.push(mongoIndex);
+            if (index.description !== undefined) {
+                indexDescription = { ...indexDescription, ...index.description };
+            }
+            createIndexs.push(indexDescription);
         }
-    }
-
-    if (indexes.length > 0) {
-        try {
-            await collection.createIndexes(indexes);
-        } catch (e) {
-            throw new Error(
-                `Unable to create index on collection ${collection.namespace}: ${JSON.stringify(indexes)} ${
-                    e.message as string
-                }`
-            );
+        if (createIndexs.length > 0) {
+            try {
+                return await collection.createIndexes(createIndexs);
+            } catch (e) {
+                console.error(
+                    new Error(`Unable to create index on collection ${collection.namespace} ${e.message as string}`)
+                );
+            }
         }
     }
 }

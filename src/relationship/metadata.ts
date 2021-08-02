@@ -1,48 +1,18 @@
 import { ClassConstructor } from 'class-transformer';
 import { isEmpty } from 'class-validator';
 import { cloneDeep, find, first } from 'lodash';
-import { IndexSpecification } from 'mongodb';
 
 import { RELATIONSHIP_METADATA_NAME } from '../constants';
+import { EntityInterface } from '../entity/interfaces';
+import { EntityManager } from '../entity/manager';
 import { isClass } from '../helpers';
-import { EntityInterface } from '../interfaces/entity';
-import { MongoManager } from '../manager';
-
-export enum CascadeType {
-    DELETE = 'DELETE'
-}
-
-export interface RelationshipCascade<Child extends EntityInterface = any> {
-    model: Child;
-    cascade: CascadeType[];
-    property: string;
-    isArray?: boolean;
-}
-
-export type RelationshipTypeDescriptor<Relationship extends EntityInterface> = (
-    obj?: any
-) => ClassConstructor<Relationship> | false;
-
-export interface PossibleTypes {
-    property: string;
-    values: string[];
-}
-
-export interface BaseRelationshipMetadata {
-    isArray?: boolean;
-    inversedBy?: string;
-    cascade?: CascadeType[];
-    indexSpecification?: IndexSpecification | false;
-    possibleTypes?: PossibleTypes;
-}
-
-export interface RelationshipMetadataOptions<R extends EntityInterface> extends BaseRelationshipMetadata {
-    type: RelationshipTypeDescriptor<R> | ClassConstructor<R> | string;
-}
-
-export interface RelationshipMetadata<R extends EntityInterface> extends BaseRelationshipMetadata {
-    type: ClassConstructor<R>;
-}
+import {
+    PossibleTypes,
+    RelationshipCascade,
+    RelationshipMetadata,
+    RelationshipMetadataOptions,
+    RelationshipTypeDescriptor,
+} from './interfaces';
 
 export const relationshipCascadesMetadata = new Map<ClassConstructor<any>, RelationshipCascade[]>();
 export const childrenRelationshipMetadata = new Map<
@@ -89,7 +59,7 @@ export function setRelationshipMetadata<R extends EntityInterface = any>(
 export function getRelationshipMetadata<R extends EntityInterface = any>(
     target: Function,
     property: string,
-    em?: MongoManager,
+    em?: EntityManager,
     obj?: any
 ): RelationshipMetadata<R> {
     const constructorName: string = target.name;
@@ -125,7 +95,7 @@ export function getRelationshipMetadata<R extends EntityInterface = any>(
     if (typeof metadata.type === 'string') {
         if (em === undefined) {
             throw new Error(
-                `MongoManager parameter is required to get relationship metadata for property ${property.toString()} in object ${
+                `EntityManager parameter is required to get relationship metadata for property ${property.toString()} in object ${
                     target.name
                 }`
             );
@@ -171,7 +141,7 @@ export function getChildrenRelationshipMetadata<P = any>(target: ClassConstructo
 
 export function setRelationshipsCascadesMetadata<Child extends EntityInterface = any>(
     ChildClass: ClassConstructor<Child>,
-    manager: MongoManager
+    manager: EntityManager
 ) {
     const props = getChildrenRelationshipMetadata(ChildClass);
     if (Array.isArray(props)) {

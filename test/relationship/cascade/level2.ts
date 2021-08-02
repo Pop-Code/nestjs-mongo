@@ -1,10 +1,7 @@
 import { IsDefined } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
-import { Collection } from '../../../src/decorators';
-import { Entity } from '../../../src/entity';
-import { ObjectId } from '../../../src/helpers';
-import { IsValidRelationship, Relationship } from '../../../src/relationship/decorators';
-import { CascadeType } from '../../../src/relationship/metadata';
+import { CascadeType, Collection, Entity, IsValidRelationship, Relationship } from '../../../src';
 import { RelationshipEntityLevel1Test } from './level1';
 
 @Collection('relationshipEntityLevel2Test')

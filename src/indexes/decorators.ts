@@ -1,13 +1,10 @@
-import { IndexSpecification } from 'mongodb';
+import { CreateIndexesOptions, IndexDescription } from 'mongodb';
 
 import { setIndexMetadata } from './metadata';
 
-export function Index(metadata?: Partial<IndexSpecification>) {
+// TODO next release, change IndexDescription> & CreateIndexesOptions to Partial<IndexDescription>
+export function Index(metadata?: Partial<IndexDescription> & CreateIndexesOptions) {
     return function (target: any, property: string) {
-        setIndexMetadata(
-            target,
-            property,
-            metadata === undefined ? {} : metadata
-        );
+        setIndexMetadata(target, { property, description: metadata ?? {} });
     };
 }

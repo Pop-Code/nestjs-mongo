@@ -1,8 +1,7 @@
 import { IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
-import { ObjectId } from '../../src';
-import { Collection, TypeObjectId } from '../../src/decorators';
-import { Entity } from '../../src/entity';
+import { Collection, Entity, TypeObjectId } from '../../src';
 
 @Collection('entitySerializerTest')
 export class EntitySerializerTest extends Entity {

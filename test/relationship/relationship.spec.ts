@@ -2,18 +2,19 @@ import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { ClassConstructor } from 'class-transformer';
 import { ValidationError } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
-import { getManagerToken, ObjectId } from '../../src/helpers';
-import { EntityInterface } from '../../src/interfaces/entity';
-import { MongoManager } from '../../src/manager';
-import { MongoModule } from '../../src/module';
 import {
     CascadeType,
+    EntityInterface,
+    EntityManager,
     getChildrenRelationshipMetadata,
+    getEntityManagerToken,
     getRelationshipCascadesMetadata,
     getRelationshipMetadata,
     getRelationshipsCascadesMetadata,
-} from '../../src/relationship/metadata';
+    MongoModule,
+} from '../../src';
 import { DBTEST } from '../constants';
 import { EntityTest } from '../entity/entity';
 import {
@@ -31,7 +32,7 @@ import { EntityRelationshipBar } from './entity.relationship.bar';
 import { EntityRelationshipFoo } from './entity.relationship.foo';
 
 let app: NestApplication;
-let em: MongoManager;
+let em: EntityManager;
 const uri = DBTEST + '-relationship';
 
 beforeAll(async () => {
@@ -62,7 +63,7 @@ beforeAll(async () => {
     }).compile();
     app = mod.createNestApplication();
     await app.init();
-    em = app.get(getManagerToken());
+    em = app.get(getEntityManagerToken());
 });
 
 function testEntityRelationship(Model: ClassConstructor<EntityInterface>) {
@@ -196,6 +197,7 @@ describe('Relationship', () => {
                     await em.save(entityRelationShip);
 
                     const found = await em.findOne(EntityRelationship, { property: entityRelationShip.property });
+
                     expect(found?._id.toHexString()).toBe(entityRelationShip._id.toHexString());
 
                     const relations = await em.getRelationships<EntityTest>(found, 'children');

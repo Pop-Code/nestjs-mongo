@@ -1,11 +1,8 @@
-import { Collection } from '../../src/decorators';
-import { Entity } from '../../src/entity';
-import { Index } from '../../src/indexes/decorators';
+import { Collection, Index } from '../../src';
+import { Entity } from '../../src/entity/entity';
 
 @Collection('entityWithIndexTest')
 export class EntityWithIndexTest extends Entity {
-    @Index({
-        unique: true
-    })
+    @Index({ unique: true })
     foo: string;
 }

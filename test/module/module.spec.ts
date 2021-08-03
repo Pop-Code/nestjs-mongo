@@ -12,7 +12,6 @@ import {
     getConnectionToken,
     getEntityManagerToken,
     MONGO_SESSION_KEY,
-    MongoCoreModule,
     MongoModule,
     SESSION_LOADER_NAMESPACE,
 } from '../../src';
@@ -44,13 +43,8 @@ beforeAll(async () => {
 });
 
 describe('forRootAsync', () => {
-    it('should get the default connection', () => {
-        const mongoModule = mod.get<MongoModule>(MongoModule);
-        expect(mongoModule).toBeDefined();
-        const core = mod.get<MongoCoreModule>(MongoCoreModule);
+    it('should get the mongo client', () => {
         const namedConnectionToken = getConnectionToken(DEFAULT_CONNECTION_NAME);
-        expect(core.namedConnectionToken).toBe(namedConnectionToken);
-
         const client = mod.get<MongoClient>(namedConnectionToken);
         expect(client).toBeDefined();
         expect(client).toBeInstanceOf(MongoClient);
@@ -112,7 +106,6 @@ describe('Mongo sessions loader', () => {
             session
                 .withTransaction(async () => {
                     manager.setSessionContext(session);
-
                     const entity = new EntityTest();
                     entity.foo = 'bar';
                     entity.bar = 'foo';

@@ -22,15 +22,10 @@ import {
 
 import { DEBUG } from '../constants';
 import { getObjectName } from '../helpers';
-import { createIndexes } from '../indexs';
 import { getEntityRepositoryToken, InjectMongoClient } from '../module/injection';
 import { ExceptionFactory } from '../module/interfaces';
 import { CascadeType } from '../relationship/interfaces';
-import {
-    getRelationshipMetadata,
-    getRelationshipsCascadesMetadata,
-    setRelationshipsCascadesMetadata,
-} from '../relationship/metadata';
+import { getRelationshipMetadata, getRelationshipsCascadesMetadata } from '../relationship/metadata';
 import { SessionLoaderService } from '../session/service';
 import { fromPlain, merge } from '../transformer/utils';
 import { EntityInterface } from './interfaces';
@@ -48,19 +43,9 @@ export class EntityManager {
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
-    async registerModel<Model extends EntityInterface>(
-        name: string,
-        model: ClassConstructor<Model>
-    ): Promise<EntityManager> {
+    registerModel<Model extends EntityInterface>(name: string, model: ClassConstructor<Model>): EntityManager {
         this.log('Add model %s as %s', model.name, name);
         this.models.set(name, model);
-
-        // set relationship metadata
-        setRelationshipsCascadesMetadata(model, this);
-
-        // this should create the collection, then create index if required
-        await createIndexes(model, this);
-
         return this;
     }
 

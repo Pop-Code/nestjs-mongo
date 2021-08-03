@@ -1,30 +1,40 @@
-import { DynamicModule, Global, Inject, Module, OnModuleDestroy, Optional } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
+import { DynamicModule, Global, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
 
 import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from '../constants';
 import { EntityManager } from '../entity/manager';
 import { EntityRepository } from '../entity/repository';
+import { createIndexes } from '../indexs';
+import { setRelationshipsCascadesMetadata } from '../relationship';
 import { IsValidRelationshipConstraint } from '../relationship/constraint';
 import { SessionLoaderService } from '../session/service';
 import { IsUniqueConstraint } from '../validation/unique/constraint';
-import { getConfigToken, getConnectionToken, getEntityManagerToken, getEntityRepositoryToken } from './injection';
-import { MongoModuleAsyncOptions, MongoModuleOptions } from './interfaces';
+import {
+    getConfigToken,
+    getConnectionToken,
+    getEntityManagerToken,
+    getEntityRepositoryToken,
+    InjectEntityManager,
+} from './injection';
+import { MongoFeatureOptions, MongoModuleAsyncOptions, MongoModuleOptions } from './interfaces';
 
 @Global()
 @Module({})
-export class MongoCoreModule implements OnModuleDestroy {
-    constructor(
-        private readonly moduleRef: ModuleRef,
-        @Optional()
-        @Inject(NAMED_CONNECTION_TOKEN)
-        public readonly namedConnectionToken: string
-    ) {}
+export class MongoModule implements OnModuleDestroy, OnModuleInit {
+    constructor(@InjectEntityManager() private readonly em: EntityManager) {}
 
     async onModuleDestroy() {
-        const connection = this.moduleRef.get<MongoClient>(this.namedConnectionToken);
-        await connection.close(true);
+        await this.em.getClient().close();
+    }
+
+    async onModuleInit() {
+        for (const [, model] of this.em.getModels()) {
+            // set relationship metadata
+            setRelationshipsCascadesMetadata(model, this.em);
+            // this should create the collection, then create index if required
+            await createIndexes(model, this.em);
+        }
     }
 
     static async forRootAsync(options: MongoModuleAsyncOptions): Promise<DynamicModule> {
@@ -88,7 +98,7 @@ export class MongoCoreModule implements OnModuleDestroy {
         };
 
         return {
-            module: MongoCoreModule,
+            module: MongoModule,
             imports: options.imports,
             providers: [
                 mongoConnectionNameProvider,
@@ -107,19 +117,20 @@ export class MongoCoreModule implements OnModuleDestroy {
         };
     }
 
-    public static createProviders(models: any[] = [], connectionName: string = DEFAULT_CONNECTION_NAME) {
+    protected static createProviders(models: any[] = [], connectionName: string = DEFAULT_CONNECTION_NAME) {
         const providers: any = [];
         const managerToken = getEntityManagerToken(connectionName);
         for (const m of models) {
             const model = typeof m === 'function' ? m : m.model;
             const repoToken = getEntityRepositoryToken(model.name, connectionName);
             const RepoClass = typeof m === 'function' ? EntityRepository : m.repository;
+
             providers.push({
                 provide: repoToken,
                 inject: [managerToken],
                 useFactory: async (em: EntityManager) => {
                     // register model on manager
-                    await em.registerModel(model.name, model);
+                    em.registerModel(model.name, model);
 
                     // register repository
                     const repo = new RepoClass(em, model);
@@ -130,5 +141,14 @@ export class MongoCoreModule implements OnModuleDestroy {
         }
 
         return providers;
+    }
+
+    static forFeature(options: MongoFeatureOptions): DynamicModule {
+        const providers = MongoModule.createProviders(options.models, options.connectionName);
+        return {
+            module: MongoModule,
+            providers,
+            exports: providers
+        };
     }
 }

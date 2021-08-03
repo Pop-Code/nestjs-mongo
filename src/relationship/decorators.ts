@@ -53,7 +53,7 @@ export function Relationship<R extends EntityInterface = any>(
     const typeObjectIdDecorator = TypeObjectId(typeof options === 'object' ? options.isArray : false);
 
     const relationshipDecorator = (target: any, property: string) => {
-        debug('Register relationship metadata %o', options);
+        debug('Register relationship metadata %o on %s', options, target);
         const indexMetadata: IndexMetadata = {
             property,
             description: {

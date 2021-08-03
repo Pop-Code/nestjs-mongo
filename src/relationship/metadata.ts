@@ -1,60 +1,52 @@
 import { ClassConstructor } from 'class-transformer';
 import { isEmpty } from 'class-validator';
-import { cloneDeep, find, first } from 'lodash';
+import { cloneDeep, find, uniqBy } from 'lodash';
 
-import { RELATIONSHIP_METADATA_NAME } from '../constants';
+import { RELATIONSHIP_LIST_METADATA_NAME, RELATIONSHIP_METADATA_NAME } from '../constants';
 import { EntityInterface } from '../entity/interfaces';
 import { EntityManager } from '../entity/manager';
 import { isClass } from '../helpers';
 import {
-    PossibleTypes,
+    ChildRelationshipMetadata,
     RelationshipCascade,
     RelationshipMetadata,
     RelationshipMetadataOptions,
     RelationshipTypeDescriptor,
 } from './interfaces';
 
-export const relationshipCascadesMetadata = new Map<ClassConstructor<any>, RelationshipCascade[]>();
-export const childrenRelationshipMetadata = new Map<
-    ClassConstructor<any>,
-    Array<{ property: string; possibleTypes?: PossibleTypes }>
->();
-
 /**
- * Set relationship metadata on the entity constructor
- *
- * @param target The entity
- * @param property The property
- * @param metadata The relationship metadata
+ * Set relationship metadata
+ * @private
+ * @param target An instance of an object
+ * @param property The property to set as relationship
+ * @param metadata The metadata defining the relationship
  */
 export function setRelationshipMetadata<R extends EntityInterface = any>(
     target: any,
     property: string,
     metadata: RelationshipMetadataOptions<R>
 ) {
-    const constructorName: string = target.constructor.name;
-    const metadataName = `${RELATIONSHIP_METADATA_NAME}:${constructorName}`;
-
+    const model = target.constructor;
     if (isEmpty(metadata.type)) {
-        throw new Error(`"type" property is required in setRelationshipMetadata for ${metadataName}`);
+        throw new Error(`"type" property is required in setRelationshipMetadata for ${model.name as string}`);
     }
 
     if (isEmpty(metadata.isArray)) {
         metadata.isArray = false;
     }
 
-    addChildRelationshipMetadata(target.constructor, property, metadata);
-    Reflect.defineMetadata(metadataName, metadata, target.constructor, property);
+    addRelationshipMetadata(model, property, metadata);
+
+    Reflect.defineMetadata(RELATIONSHIP_METADATA_NAME, metadata, model, property);
 }
 
 /**
- * Get the relationship metadata
+ * Get relationship metadata
  *
- * @param target The entity
- * @param property The property
- * @param em The entity manager
- * @param obj An instance of the entity
- * @returns
+ * @param target A class constructor
+ * @param property The property that was set as relationship
+ * @param em The entity manager (only required if the relationship target type is set as a string)
+ * @param obj The instance of the entity (only required if the type of the relationship is dynamic)
  */
 export function getRelationshipMetadata<R extends EntityInterface = any>(
     target: Function,
@@ -62,23 +54,14 @@ export function getRelationshipMetadata<R extends EntityInterface = any>(
     em?: EntityManager,
     obj?: any
 ): RelationshipMetadata<R> {
-    const constructorName: string = target.name;
-    const metadataName = `${RELATIONSHIP_METADATA_NAME}:${constructorName}`;
-
-    const metadataKeys: string[] = Reflect.getMetadataKeys(target, property).filter((p) =>
-        p.startsWith(RELATIONSHIP_METADATA_NAME)
-    );
-
-    const metadata = first(
-        metadataKeys.reduce<Array<RelationshipMetadataOptions<R>>>((previous, current) => {
-            return previous.concat(Reflect.getMetadata(current, target, property));
-        }, [])
+    const metadata: RelationshipMetadataOptions<R> | undefined = Reflect.getMetadata(
+        RELATIONSHIP_METADATA_NAME,
+        target,
+        property
     );
 
     if (metadata === undefined) {
-        throw new Error(
-            `Can not get relationship metadata for property "${property.toString()}" from metadata "${metadataName}"`
-        );
+        throw new Error(`Can not get relationship metadata for property "${property.toString()}" on "${target.name}"`);
     }
 
     const metadataDefinition = cloneDeep(metadata) as RelationshipMetadata<R>;
@@ -111,39 +94,49 @@ export function getRelationshipMetadata<R extends EntityInterface = any>(
 }
 
 /**
- * Define the child relationship
+ * WRTIE DEF
  *
- * @param target The entity constructor
- * @param property The property
- * @param metadata The relationship metadata
+ * @private
+ * @param target A class constructor
+ * @param property The property containing the child
+ * @param metadata
  */
-export function addChildRelationshipMetadata<P = any>(
+export function addRelationshipMetadata<P = any>(
     target: ClassConstructor<P>,
     property: string,
     metadata: RelationshipMetadataOptions<any>
 ) {
-    const relationsMetadata = getChildrenRelationshipMetadata(target);
+    const relationsMetadata = getRelationshipMetadataList(target);
     relationsMetadata.push({
         property,
         possibleTypes: metadata.possibleTypes
     });
-    childrenRelationshipMetadata.set(target, relationsMetadata);
+    Reflect.defineMetadata(
+        RELATIONSHIP_LIST_METADATA_NAME,
+        uniqBy(relationsMetadata, (r: any) => r.property),
+        target
+    );
 }
 
 /**
- * Get the child relationship
- * @param target
+ *
+ * @param target The class constructor of an entity
  * @returns
  */
-export function getChildrenRelationshipMetadata<P = any>(target: ClassConstructor<P>) {
-    return childrenRelationshipMetadata.get(target) ?? [];
+export function getRelationshipMetadataList<P = any>(target: ClassConstructor<P>): ChildRelationshipMetadata[] {
+    return (Reflect.getMetadata(RELATIONSHIP_LIST_METADATA_NAME, target) ?? []).slice();
 }
 
+/**
+ *
+ * @param ChildClass
+ * @param manager
+ */
 export function setRelationshipsCascadesMetadata<Child extends EntityInterface = any>(
     ChildClass: ClassConstructor<Child>,
     manager: EntityManager
 ) {
-    const props = getChildrenRelationshipMetadata(ChildClass);
+    const props = getRelationshipMetadataList(ChildClass);
     if (Array.isArray(props)) {
         for (const prop of props) {
             const _setMetadata = (c: Child) => {
@@ -155,7 +148,7 @@ export function setRelationshipsCascadesMetadata<Child extends EntityInterface =
                         owner = ChildClass;
                         target = relationshipMetadata.type;
                     }
-                    const parentMeta = relationshipCascadesMetadata.get(owner) ?? [];
+                    const parentMeta = getRelationshipsCascadesMetadata(owner);
                     const cascadeOP: RelationshipCascade = {
                         model: target,
                         cascade: relationshipMetadata.cascade,
@@ -163,7 +156,12 @@ export function setRelationshipsCascadesMetadata<Child extends EntityInterface =
                         isArray: relationshipMetadata.isArray
                     };
                     parentMeta.push(cascadeOP);
-                    relationshipCascadesMetadata.set(owner, parentMeta);
+
+                    Reflect.defineMetadata(
+                        'CASCADE',
+                        uniqBy(parentMeta, (m: any) => m.property),
+                        owner
+                    );
                 }
             };
             if (prop.possibleTypes !== undefined) {
@@ -180,17 +178,28 @@ export function setRelationshipsCascadesMetadata<Child extends EntityInterface =
     }
 }
 
+/**
+ *
+ * @param target
+ * @returns
+ */
 export function getRelationshipsCascadesMetadata<Parent extends EntityInterface = any>(
     target: ClassConstructor<Parent>
 ) {
-    return relationshipCascadesMetadata.get(target);
+    return (Reflect.getMetadata('CASCADE', target) ?? []).slice();
 }
 
+/**
+ *
+ * @param parent
+ * @param relationshipType
+ * @returns
+ */
 export function getRelationshipCascadesMetadata<
     Parent extends EntityInterface = any,
     Child extends EntityInterface = any
 >(parent: ClassConstructor<Parent>, relationshipType: ClassConstructor<Child>): RelationshipCascade<Child> | undefined {
-    const relCascades = getRelationshipsCascadesMetadata<Parent>(parent);
+    const relCascades = (getRelationshipsCascadesMetadata<Parent>(parent) ?? []).slice();
     return find(relCascades, (cs) => {
         return cs.model === relationshipType;
     });

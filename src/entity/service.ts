@@ -92,9 +92,6 @@ export abstract class EntityService<
         }
     }
 
-    /**
-     * Subscribe to a a change stream.
-     */
     subscribe(onData: EventCallback<Model>) {
         return this.repository
             .watch([], { fullDocument: 'updateLookup' })

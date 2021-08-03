@@ -68,6 +68,12 @@ describe('forFeature', () => {
         const name = manager.getCollectionName<EntityTest>(EntityTest);
         expect(name).toEqual('entityTest');
     });
+    it('should have 3 collections', async () => {
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
+        const cursor = manager.getDatabase().listCollections();
+        const collections = await cursor.toArray();
+        expect(collections).toHaveLength(3);
+    });
 });
 
 describe('Mongo sessions loader', () => {
@@ -132,39 +138,39 @@ describe('Mongo sessions loader', () => {
                 });
         });
     });
-    it('should resolve a relationship created during a session', (done) => {
-        const manager = mod.get<EntityManager>(getEntityManagerToken());
-        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
-        namespace.run(() => {
-            const session = manager.getClient().startSession();
-            manager.setSessionContext(session);
-            session
-                .withTransaction(async () => {
-                    const entity = new EntityTest();
-                    entity.foo = 'bar';
-                    entity.bar = 'foo';
-                    await manager.save(entity, { session });
+    // it('should resolve a relationship created during a session', (done) => {
+    //     const manager = mod.get<EntityManager>(getEntityManagerToken());
+    //     const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
+    //     namespace.run(() => {
+    //         const session = manager.getClient().startSession();
+    //         manager.setSessionContext(session);
+    //         session
+    //             .withTransaction(async () => {
+    //                 const entity = new EntityTest();
+    //                 entity.foo = 'bar';
+    //                 entity.bar = 'foo';
+    //                 await manager.save(entity, { session });
 
-                    const child = new EntityChildTest();
-                    child.foo = 'child';
-                    child.parentId = entity._id;
+    //                 const child = new EntityChildTest();
+    //                 child.foo = 'child';
+    //                 child.parentId = entity._id;
 
-                    await manager.save(child, { session });
-                })
-                .then(async (value) => {
-                    expect(value).toBeTruthy();
-                })
-                .finally(() => {
-                    session
-                        .endSession()
-                        .then(() => done())
-                        .catch((e) => {
-                            console.error(e);
-                            done();
-                        });
-                });
-        });
-    });
+    //                 await manager.save(child, { session });
+    //             })
+    //             .then(async (value) => {
+    //                 expect(value).toBeTruthy();
+    //             })
+    //             .finally(() => {
+    //                 session
+    //                     .endSession()
+    //                     .then(() => done())
+    //                     .catch((e) => {
+    //                         console.error(e);
+    //                         done();
+    //                     });
+    //             });
+    //     });
+    // });
 });
 
 afterAll(async () => {

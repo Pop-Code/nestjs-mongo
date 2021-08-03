@@ -11,7 +11,6 @@ export class EntityChildTest extends Entity {
 
     @Relationship({
         type: () => EntityTest
-        // inversedBy: 'children'
     })
     @IsValidRelationship()
     parentId: ObjectId;

@@ -13,6 +13,7 @@ import {
     Filter,
     FindCursor,
     FindOptions,
+    IndexDescription,
     InsertOneOptions,
     MongoClient,
     ObjectId,
@@ -22,10 +23,15 @@ import {
 
 import { DEBUG } from '../constants';
 import { getObjectName } from '../helpers';
+import { getIndexMetadatas } from '../indexs';
 import { getEntityRepositoryToken, InjectMongoClient } from '../module/injection';
 import { ExceptionFactory } from '../module/interfaces';
 import { CascadeType } from '../relationship/interfaces';
-import { getRelationshipMetadata, getRelationshipsCascadesMetadata } from '../relationship/metadata';
+import {
+    getRelationshipMetadata,
+    getRelationshipsCascadesMetadata,
+    setRelationshipsCascadesMetadata,
+} from '../relationship/metadata';
 import { SessionLoaderService } from '../session/service';
 import { fromPlain, merge } from '../transformer/utils';
 import { EntityInterface } from './interfaces';
@@ -43,9 +49,24 @@ export class EntityManager {
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
-    registerModel<Model extends EntityInterface>(name: string, model: ClassConstructor<Model>): EntityManager {
+    async registerModel<Model extends EntityInterface>(
+        name: string,
+        model: ClassConstructor<Model>
+    ): Promise<EntityManager> {
         this.log('Add model %s as %s', model.name, name);
         this.models.set(name, model);
+
+        // create collection (this will ensure we can directly use transactions, as mongo@=4.2 can not create collection during tx)
+        const collectionName = this.getCollectionName(model);
+        const cursor = this.getDatabase().listCollections({ name: collectionName });
+        if ((await cursor.toArray()).length === 0) {
+            this.log('Creating collection %s for model %s', collectionName, name);
+            await this.getDatabase().createCollection(collectionName);
+        }
+
+        setRelationshipsCascadesMetadata(model, this);
+        await this.createIndexs(model);
+
         return this;
     }
 
@@ -444,5 +465,35 @@ export class EntityManager {
     merge<Model extends EntityInterface>(entity: Model, data: Model, options?: ClassTransformOptions) {
         this.log('%s transform merge', getObjectName(entity));
         return merge(entity, data, options);
+    }
+
+    async createIndexs<Model extends EntityInterface>(model: ClassConstructor<Model>) {
+        this.log('Creating indexs for model %s', model.name);
+        const indexesMetadata = getIndexMetadatas(model);
+        const collection = this.getCollection(model);
+
+        if (indexesMetadata !== undefined) {
+            const createIndexs: IndexDescription[] = [];
+            for (const index of indexesMetadata) {
+                let indexDescription: IndexDescription = {
+                    key: {
+                        [index.property]: 1
+                    }
+                };
+                if (index.description !== undefined) {
+                    indexDescription = { ...indexDescription, ...index.description };
+                }
+                createIndexs.push(indexDescription);
+            }
+            if (createIndexs.length > 0) {
+                try {
+                    return await collection.createIndexes(createIndexs);
+                } catch (e) {
+                    console.error(
+                        new Error(`Unable to create index on collection ${collection.namespace} ${e.message as string}`)
+                    );
+                }
+            }
+        }
     }
 }

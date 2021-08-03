@@ -51,7 +51,6 @@ export interface ChildRelationshipMetadata {
  */
 export interface BaseRelationshipMetadata {
     isArray?: boolean;
-    inversedBy?: string;
     cascade?: CascadeType[];
     index?: { description?: IndexDescription & CreateIndexesOptions };
     possibleTypes?: PossibleTypes;

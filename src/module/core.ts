@@ -1,40 +1,23 @@
-import { DynamicModule, Global, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { DynamicModule, Global, Module, OnModuleDestroy } from '@nestjs/common';
 import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
 
 import { DEFAULT_CONNECTION_NAME, NAMED_CONNECTION_TOKEN } from '../constants';
 import { EntityManager } from '../entity/manager';
-import { EntityRepository } from '../entity/repository';
-import { createIndexes } from '../indexs';
-import { setRelationshipsCascadesMetadata } from '../relationship';
 import { IsValidRelationshipConstraint } from '../relationship/constraint';
 import { SessionLoaderService } from '../session/service';
 import { IsUniqueConstraint } from '../validation/unique/constraint';
-import {
-    getConfigToken,
-    getConnectionToken,
-    getEntityManagerToken,
-    getEntityRepositoryToken,
-    InjectEntityManager,
-} from './injection';
+import { MongoFeatureModule } from './feature';
+import { getConfigToken, getConnectionToken, getEntityManagerToken, InjectEntityManager } from './injection';
 import { MongoFeatureOptions, MongoModuleAsyncOptions, MongoModuleOptions } from './interfaces';
 
 @Global()
 @Module({})
-export class MongoModule implements OnModuleDestroy, OnModuleInit {
+export class MongoModule implements OnModuleDestroy {
     constructor(@InjectEntityManager() private readonly em: EntityManager) {}
 
     async onModuleDestroy() {
         await this.em.getClient().close();
-    }
-
-    async onModuleInit() {
-        for (const [, model] of this.em.getModels()) {
-            // set relationship metadata
-            setRelationshipsCascadesMetadata(model, this.em);
-            // this should create the collection, then create index if required
-            await createIndexes(model, this.em);
-        }
     }
 
     static async forRootAsync(options: MongoModuleAsyncOptions): Promise<DynamicModule> {
@@ -117,38 +100,7 @@ export class MongoModule implements OnModuleDestroy, OnModuleInit {
         };
     }
 
-    protected static createProviders(models: any[] = [], connectionName: string = DEFAULT_CONNECTION_NAME) {
-        const providers: any = [];
-        const managerToken = getEntityManagerToken(connectionName);
-        for (const m of models) {
-            const model = typeof m === 'function' ? m : m.model;
-            const repoToken = getEntityRepositoryToken(model.name, connectionName);
-            const RepoClass = typeof m === 'function' ? EntityRepository : m.repository;
-
-            providers.push({
-                provide: repoToken,
-                inject: [managerToken],
-                useFactory: async (em: EntityManager) => {
-                    // register model on manager
-                    em.registerModel(model.name, model);
-
-                    // register repository
-                    const repo = new RepoClass(em, model);
-                    em.registerRepository(repoToken, repo);
-                    return repo;
-                }
-            });
-        }
-
-        return providers;
-    }
-
     static forFeature(options: MongoFeatureOptions): DynamicModule {
-        const providers = MongoModule.createProviders(options.models, options.connectionName);
-        return {
-            module: MongoModule,
-            providers,
-            exports: providers
-        };
+        return MongoFeatureModule.forFeature(options);
     }
 }

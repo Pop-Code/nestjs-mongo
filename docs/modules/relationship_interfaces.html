@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>relationship/interfaces | NestJS Mongo</title>
-	<meta name="description" content="Documentation for NestJS Mongo">
+	<title>relationship/interfaces | NestJS Mongo - v0.12.0</title>
+	<meta name="description" content="Documentation for NestJS Mongo - v0.12.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">NestJS Mongo</a>
+					<a href="../index.html" class="title">NestJS Mongo - v0.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">NestJS Mongo</a>
+					<a href="../modules.html">NestJS Mongo - v0.12.0</a>
 				</li>
 				<li>
 					<a href="relationship_interfaces.html">relationship/interfaces</a>
@@ -79,6 +79,7 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/relationship_interfaces.BaseRelationshipMetadata.html" class="tsd-kind-icon">Base<wbr>Relationship<wbr>Metadata</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/relationship_interfaces.ChildRelationshipMetadata.html" class="tsd-kind-icon">Child<wbr>Relationship<wbr>Metadata</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/relationship_interfaces.PossibleTypes.html" class="tsd-kind-icon">Possible<wbr>Types</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/relationship_interfaces.RelationshipCascade.html" class="tsd-kind-icon">Relationship<wbr>Cascade</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/relationship_interfaces.RelationshipMetadata.html" class="tsd-kind-icon">Relationship<wbr>Metadata</a></li>
@@ -102,7 +103,7 @@
 					<div class="tsd-signature tsd-kind-icon">Relationship<wbr>Type<wbr>Descriptor&lt;Relationship&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">ClassConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Relationship</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ff25d62/src/relationship/interfaces.ts#L17">src/relationship/interfaces.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/relationship/interfaces.ts#L29">src/relationship/interfaces.ts:29</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -120,6 +121,11 @@
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>The signature of the function used to determine the type of a relationship target</p>
+											</div>
+										</div>
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
@@ -153,6 +159,9 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/relationship_interfaces.BaseRelationshipMetadata.html" class="tsd-kind-icon">Base<wbr>Relationship<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/relationship_interfaces.ChildRelationshipMetadata.html" class="tsd-kind-icon">Child<wbr>Relationship<wbr>Metadata</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/relationship_interfaces.PossibleTypes.html" class="tsd-kind-icon">Possible<wbr>Types</a>

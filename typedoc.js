@@ -4,5 +4,7 @@ module.exports = {
     theme: 'default',
     name: 'NestJS Mongo',
     excludePrivate: false,
-    hideGenerator: true
+    hideGenerator: true,
+    entryPoints: ['src/index.ts'],
+    includeVersion: true
 };

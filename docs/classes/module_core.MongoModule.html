@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MongoModule | NestJS Mongo</title>
-	<meta name="description" content="Documentation for NestJS Mongo">
+	<title>MongoModule | NestJS Mongo - v0.12.0</title>
+	<meta name="description" content="Documentation for NestJS Mongo - v0.12.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">NestJS Mongo</a>
+					<a href="../index.html" class="title">NestJS Mongo - v0.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,13 +52,13 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">NestJS Mongo</a>
+					<a href="../modules.html">NestJS Mongo - v0.12.0</a>
 				</li>
 				<li>
-					<a href="../modules/module_module.html">module/module</a>
+					<a href="../modules/module_core.html">module/core</a>
 				</li>
 				<li>
-					<a href="module_module.MongoModule.html">MongoModule</a>
+					<a href="module_core.MongoModule.html">MongoModule</a>
 				</li>
 			</ul>
 			<h1>Class MongoModule</h1>
@@ -76,6 +76,12 @@
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><span class="tsd-signature-type">OnModuleDestroy</span></li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -83,14 +89,15 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="module_module.MongoModule.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="module_core.MongoModule.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="module_module.MongoModule.html#forFeature" class="tsd-kind-icon">for<wbr>Feature</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="module_module.MongoModule.html#forRootAsync" class="tsd-kind-icon">for<wbr>Root<wbr>Async</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="module_core.MongoModule.html#onModuleDestroy" class="tsd-kind-icon">on<wbr>Module<wbr>Destroy</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="module_core.MongoModule.html#forFeature" class="tsd-kind-icon">for<wbr>Feature</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="module_core.MongoModule.html#forRootAsync" class="tsd-kind-icon">for<wbr>Root<wbr>Async</a></li>
 							</ul>
 						</section>
 					</div>
@@ -102,19 +109,46 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Module<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="module_module.MongoModule.html" class="tsd-signature-type" data-tsd-kind="Class">MongoModule</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Module<span class="tsd-signature-symbol">(</span>em<span class="tsd-signature-symbol">: </span><a href="entity_manager.EntityManager.html" class="tsd-signature-type" data-tsd-kind="Class">EntityManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="module_core.MongoModule.html" class="tsd-signature-type" data-tsd-kind="Class">MongoModule</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/module/core.ts#L17">src/module/core.ts:17</a></li>
+								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="module_module.MongoModule.html" class="tsd-signature-type" data-tsd-kind="Class">MongoModule</a></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>em: <a href="entity_manager.EntityManager.html" class="tsd-signature-type" data-tsd-kind="Class">EntityManager</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="module_core.MongoModule.html" class="tsd-signature-type" data-tsd-kind="Class">MongoModule</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="onModuleDestroy" class="tsd-anchor"></a>
+					<h3>on<wbr>Module<wbr>Destroy</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Module<wbr>Destroy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of OnModuleDestroy.onModuleDestroy</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/module/core.ts#L19">src/module/core.ts:19</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="forFeature" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> for<wbr>Feature</h3>
@@ -125,7 +159,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ff25d62/src/module/module.ts#L15">src/module/module.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/module/core.ts#L103">src/module/core.ts:103</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -142,13 +176,13 @@
 					<a name="forRootAsync" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> for<wbr>Root<wbr>Async</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">for<wbr>Root<wbr>Async<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/module_interfaces.MongoModuleAsyncOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoModuleAsyncOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DynamicModule</span></li>
+						<li class="tsd-signature tsd-kind-icon">for<wbr>Root<wbr>Async<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/module_interfaces.MongoModuleAsyncOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoModuleAsyncOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DynamicModule</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ff25d62/src/module/module.ts#L8">src/module/module.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/module/core.ts#L23">src/module/core.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -157,7 +191,7 @@
 									<h5>options: <a href="../interfaces/module_interfaces.MongoModuleAsyncOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoModuleAsyncOptions</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DynamicModule</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DynamicModule</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -170,7 +204,7 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/module_module.html">module/module</a>
+						<a href="../modules/module_core.html">module/core</a>
 					</li>
 				</ul>
 			</nav>
@@ -179,16 +213,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="module_module.MongoModule.html" class="tsd-kind-icon">Mongo<wbr>Module</a>
+						<a href="module_core.MongoModule.html" class="tsd-kind-icon">Mongo<wbr>Module</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="module_module.MongoModule.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="module_core.MongoModule.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="module_core.MongoModule.html#onModuleDestroy" class="tsd-kind-icon">on<wbr>Module<wbr>Destroy</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="module_module.MongoModule.html#forFeature" class="tsd-kind-icon">for<wbr>Feature</a>
+								<a href="module_core.MongoModule.html#forFeature" class="tsd-kind-icon">for<wbr>Feature</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="module_module.MongoModule.html#forRootAsync" class="tsd-kind-icon">for<wbr>Root<wbr>Async</a>
+								<a href="module_core.MongoModule.html#forRootAsync" class="tsd-kind-icon">for<wbr>Root<wbr>Async</a>
 							</li>
 						</ul>
 					</li>
@@ -214,6 +251,7 @@
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>

@@ -5,3 +5,4 @@ export * from './service';
 export * from './filter';
 export * from './paginated';
 export * from './decorators';
+export * from './manager';

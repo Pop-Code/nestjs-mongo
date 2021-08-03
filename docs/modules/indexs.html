@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>indexes/decorators | NestJS Mongo</title>
-	<meta name="description" content="Documentation for NestJS Mongo">
+	<title>indexs | NestJS Mongo - v0.12.0</title>
+	<meta name="description" content="Documentation for NestJS Mongo - v0.12.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">NestJS Mongo</a>
+					<a href="../index.html" class="title">NestJS Mongo - v0.12.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,13 +52,13 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">NestJS Mongo</a>
+					<a href="../modules.html">NestJS Mongo - v0.12.0</a>
 				</li>
 				<li>
-					<a href="indexes_decorators.html">indexes/decorators</a>
+					<a href="indexs.html">indexs</a>
 				</li>
 			</ul>
-			<h1>Module indexes/decorators</h1>
+			<h1>Module indexs</h1>
 		</div>
 	</div>
 </header>
@@ -70,59 +70,44 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Functions</h3>
+							<h3>References</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="indexes_decorators.html#Index" class="tsd-kind-icon">Index</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="indexs.html#Index" class="tsd-kind-icon">Index</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="indexs.html#IndexMetadata" class="tsd-kind-icon">Index<wbr>Metadata</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="indexs.html#getIndexMetadata" class="tsd-kind-icon">get<wbr>Index<wbr>Metadata</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="indexs.html#getIndexMetadatas" class="tsd-kind-icon">get<wbr>Index<wbr>Metadatas</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="indexs.html#setIndexMetadata" class="tsd-kind-icon">set<wbr>Index<wbr>Metadata</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="Index" class="tsd-anchor"></a>
 					<h3>Index</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">Index<span class="tsd-signature-symbol">(</span>metadata<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IndexDescription</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">CreateIndexesOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/ff25d62/src/indexes/decorators.ts#L6">src/indexes/decorators.ts:6</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> metadata: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IndexDescription</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">CreateIndexesOptions</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter-signature">
-									<ul class="tsd-signatures tsd-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-									</ul>
-									<ul class="tsd-descriptions">
-										<li class="tsd-description">
-											<h4 class="tsd-parameters-title">Parameters</h4>
-											<ul class="tsd-parameters">
-												<li>
-													<h5>target: <span class="tsd-signature-type">any</span></h5>
-												</li>
-												<li>
-													<h5>property: <span class="tsd-signature-type">string</span></h5>
-												</li>
-											</ul>
-											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
+					Re-exports <a href="indexs_decorators.html#Index">Index</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="IndexMetadata" class="tsd-anchor"></a>
+					<h3>Index<wbr>Metadata</h3>
+					Re-exports <a href="../interfaces/indexs_metadata.IndexMetadata.html">IndexMetadata</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getIndexMetadata" class="tsd-anchor"></a>
+					<h3>get<wbr>Index<wbr>Metadata</h3>
+					Re-exports <a href="indexs_metadata.html#getIndexMetadata">getIndexMetadata</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="getIndexMetadatas" class="tsd-anchor"></a>
+					<h3>get<wbr>Index<wbr>Metadatas</h3>
+					Re-exports <a href="indexs_metadata.html#getIndexMetadatas">getIndexMetadatas</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="setIndexMetadata" class="tsd-anchor"></a>
+					<h3>set<wbr>Index<wbr>Metadata</h3>
+					Re-exports <a href="indexs_metadata.html#setIndexMetadata">setIndexMetadata</a>
 				</section>
 			</section>
 		</div>
@@ -133,14 +118,26 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="indexes_decorators.html">indexes/decorators</a>
+						<a href="indexs.html">indexs</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="indexes_decorators.html#Index" class="tsd-kind-icon">Index</a>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="indexs.html#Index" class="tsd-kind-icon">Index</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="indexs.html#IndexMetadata" class="tsd-kind-icon">Index<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="indexs.html#getIndexMetadata" class="tsd-kind-icon">get<wbr>Index<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="indexs.html#getIndexMetadatas" class="tsd-kind-icon">get<wbr>Index<wbr>Metadatas</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="indexs.html#setIndexMetadata" class="tsd-kind-icon">set<wbr>Index<wbr>Metadata</a>
 					</li>
 				</ul>
 			</nav>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>helpers | NestJS Mongo - v0.12.0</title>
+	<title>indexs/metadata | NestJS Mongo - v0.12.0</title>
 	<meta name="description" content="Documentation for NestJS Mongo - v0.12.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">NestJS Mongo - v0.12.0</a>
 				</li>
 				<li>
-					<a href="helpers.html">helpers</a>
+					<a href="indexs_metadata.html">indexs/metadata</a>
 				</li>
 			</ul>
-			<h1>Module helpers</h1>
+			<h1>Module indexs/metadata</h1>
 		</div>
 	</div>
 </header>
@@ -70,10 +70,17 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-kind-icon">Index<wbr>Metadata</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="helpers.html#getObjectName" class="tsd-kind-icon">get<wbr>Object<wbr>Name</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="helpers.html#isClass" class="tsd-kind-icon">is<wbr>Class</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="indexs_metadata.html#getIndexMetadata" class="tsd-kind-icon">get<wbr>Index<wbr>Metadata</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="indexs_metadata.html#getIndexMetadatas" class="tsd-kind-icon">get<wbr>Index<wbr>Metadatas</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="indexs_metadata.html#setIndexMetadata" class="tsd-kind-icon">set<wbr>Index<wbr>Metadata</a></li>
 							</ul>
 						</section>
 					</div>
@@ -82,48 +89,77 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="getObjectName" class="tsd-anchor"></a>
-					<h3>get<wbr>Object<wbr>Name</h3>
+					<a name="getIndexMetadata" class="tsd-anchor"></a>
+					<h3>get<wbr>Index<wbr>Metadata</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Object<wbr>Name<span class="tsd-signature-symbol">(</span>o<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Index<wbr>Metadata<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexMetadata</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/helpers.ts#L3">src/helpers.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/indexs/metadata.ts#L29">src/indexs/metadata.ts:29</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>o: <span class="tsd-signature-type">Object</span></h5>
+									<h5>target: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>property: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexMetadata</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="isClass" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>Class</h3>
+					<a name="getIndexMetadatas" class="tsd-anchor"></a>
+					<h3>get<wbr>Index<wbr>Metadatas</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Class<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Index<wbr>Metadatas<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexMetadata</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/helpers.ts#L1">src/helpers.ts:1</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/indexs/metadata.ts#L22">src/indexs/metadata.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>fn: <span class="tsd-signature-type">any</span></h5>
+									<h5>target: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexMetadata</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="setIndexMetadata" class="tsd-anchor"></a>
+					<h3>set<wbr>Index<wbr>Metadata</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Index<wbr>Metadata<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexMetadata</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/indexs/metadata.ts#L11">src/indexs/metadata.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>metadata: <a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexMetadata</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -136,17 +172,23 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="helpers.html">helpers</a>
+						<a href="indexs_metadata.html">indexs/metadata</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="helpers.html#getObjectName" class="tsd-kind-icon">get<wbr>Object<wbr>Name</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/indexs_metadata.IndexMetadata.html" class="tsd-kind-icon">Index<wbr>Metadata</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="helpers.html#isClass" class="tsd-kind-icon">is<wbr>Class</a>
+						<a href="indexs_metadata.html#getIndexMetadata" class="tsd-kind-icon">get<wbr>Index<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="indexs_metadata.html#getIndexMetadatas" class="tsd-kind-icon">get<wbr>Index<wbr>Metadatas</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="indexs_metadata.html#setIndexMetadata" class="tsd-kind-icon">set<wbr>Index<wbr>Metadata</a>
 					</li>
 				</ul>
 			</nav>

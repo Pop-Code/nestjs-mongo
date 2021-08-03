@@ -4,7 +4,6 @@ export * from './session/service';
 export * from './session/utils';
 export * from './helpers';
 export * from './event';
-export * from './entity/manager';
 export * from './module';
 export * from './relationship';
 export * from './entity';

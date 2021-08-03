@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SessionLoaderMiddleware | NestJS Mongo - v0.12.0</title>
+	<title>MongoFeatureModule | NestJS Mongo - v0.12.0</title>
 	<meta name="description" content="Documentation for NestJS Mongo - v0.12.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">NestJS Mongo - v0.12.0</a>
 				</li>
 				<li>
-					<a href="../modules/session_middleware.html">session/middleware</a>
+					<a href="../modules/module_feature.html">module/feature</a>
 				</li>
 				<li>
-					<a href="session_middleware.SessionLoaderMiddleware.html">SessionLoaderMiddleware</a>
+					<a href="module_feature.MongoFeatureModule.html">MongoFeatureModule</a>
 				</li>
 			</ul>
-			<h1>Class SessionLoaderMiddleware</h1>
+			<h1>Class MongoFeatureModule</h1>
 		</div>
 	</div>
 </header>
@@ -72,14 +72,8 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">SessionLoaderMiddleware</span>
+						<span class="target">MongoFeatureModule</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><span class="tsd-signature-type">NestMiddleware</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -89,20 +83,13 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="session_middleware.SessionLoaderMiddleware.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-private-protected">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="session_middleware.SessionLoaderMiddleware.html#log" class="tsd-kind-icon">log</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-static"><a href="session_middleware.SessionLoaderMiddleware.html#ns" class="tsd-kind-icon">ns</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="module_feature.MongoFeatureModule.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="session_middleware.SessionLoaderMiddleware.html#use" class="tsd-kind-icon">use</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="module_feature.MongoFeatureModule.html#forFeature" class="tsd-kind-icon">for<wbr>Feature</a></li>
 							</ul>
 						</section>
 					</div>
@@ -114,69 +101,48 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Session<wbr>Loader<wbr>Middleware<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="session_middleware.SessionLoaderMiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderMiddleware</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Mongo<wbr>Feature<wbr>Module<span class="tsd-signature-symbol">(</span>em<span class="tsd-signature-symbol">: </span><a href="entity_manager.EntityManager.html" class="tsd-signature-type" data-tsd-kind="Class">EntityManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="module_feature.MongoFeatureModule.html" class="tsd-signature-type" data-tsd-kind="Class">MongoFeatureModule</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="session_middleware.SessionLoaderMiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">SessionLoaderMiddleware</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="log" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> log</h3>
-					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Debugger</span><span class="tsd-signature-symbol"> = ...</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/session/middleware.ts#L10">src/session/middleware.ts:10</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-static">
-					<a name="ns" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> ns</h3>
-					<div class="tsd-signature tsd-kind-icon">ns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Namespace</span><span class="tsd-signature-symbol"> = ...</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/session/middleware.ts#L11">src/session/middleware.ts:11</a></li>
-						</ul>
-					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="use" class="tsd-anchor"></a>
-					<h3>use</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">use<span class="tsd-signature-symbol">(</span>_<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, __<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of NestMiddleware.use</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/session/middleware.ts#L13">src/session/middleware.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/module/feature.ts#L11">src/module/feature.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>_: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>__: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>next: <span class="tsd-signature-type">Function</span></h5>
+									<h5>em: <a href="entity_manager.EntityManager.html" class="tsd-signature-type" data-tsd-kind="Class">EntityManager</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="module_feature.MongoFeatureModule.html" class="tsd-signature-type" data-tsd-kind="Class">MongoFeatureModule</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="forFeature" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> for<wbr>Feature</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">for<wbr>Feature<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/module_interfaces.MongoFeatureOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoFeatureOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DynamicModule</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Pop-Code/nestjs-mongo/blob/7c4700d/src/module/feature.ts#L21">src/module/feature.ts:21</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <a href="../interfaces/module_interfaces.MongoFeatureOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MongoFeatureOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DynamicModule</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -189,7 +155,7 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/session_middleware.html">session/middleware</a>
+						<a href="../modules/module_feature.html">module/feature</a>
 					</li>
 				</ul>
 			</nav>
@@ -198,19 +164,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="session_middleware.SessionLoaderMiddleware.html" class="tsd-kind-icon">Session<wbr>Loader<wbr>Middleware</a>
+						<a href="module_feature.MongoFeatureModule.html" class="tsd-kind-icon">Mongo<wbr>Feature<wbr>Module</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="session_middleware.SessionLoaderMiddleware.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="module_feature.MongoFeatureModule.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="session_middleware.SessionLoaderMiddleware.html#log" class="tsd-kind-icon">log</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected tsd-is-static">
-								<a href="session_middleware.SessionLoaderMiddleware.html#ns" class="tsd-kind-icon">ns</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="session_middleware.SessionLoaderMiddleware.html#use" class="tsd-kind-icon">use</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="module_feature.MongoFeatureModule.html#forFeature" class="tsd-kind-icon">for<wbr>Feature</a>
 							</li>
 						</ul>
 					</li>
@@ -236,7 +196,6 @@
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
@@ -246,7 +205,7 @@
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

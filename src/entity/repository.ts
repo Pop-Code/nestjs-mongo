@@ -1,6 +1,6 @@
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
-import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Filter, FindOptions, ObjectId } from 'mongodb';
+import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Filter, FindOptions } from 'mongodb';
 
 import { EntityInterface } from './interfaces';
 import { EntityManager } from './manager';
@@ -34,14 +34,6 @@ export class EntityRepository<Model extends EntityInterface> {
 
     async findOne(query: Filter<Model>, options: FindOptions = {}) {
         return await this.em.findOne(this.classType, query, options);
-    }
-
-    /**
-     * @deprecated
-     */
-    async findById(ids: ObjectId[], options: FindOptions<Model> = {}) {
-        const query: Filter<any> = { _id: { $in: ids } };
-        return await this.find(query, options);
     }
 
     async deleteOne(query: Filter<Model>, options: DeleteOptions = {}) {

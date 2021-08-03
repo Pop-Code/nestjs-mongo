@@ -6,8 +6,8 @@ import {
     ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { Entity } from '../../entity';
-import { MongoManager } from '../../manager';
+import { Entity } from '../../entity/entity';
+import { EntityManager } from '../../entity/manager';
 import { ensureSequentialTransaction } from '../../session/utils';
 
 export type IsUniqueOptions = ValidationOptions & {
@@ -18,7 +18,7 @@ export type IsUniqueOptions = ValidationOptions & {
 
 @ValidatorConstraint({ name: 'IsUnique', async: true })
 export class IsUniqueConstraint implements ValidatorConstraintInterface {
-    private em: MongoManager;
+    private em: EntityManager;
     private message: string;
 
     defaultMessage?(args?: ValidationArguments): string {
@@ -61,7 +61,7 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
         return true;
     }
 
-    setEm(em: MongoManager): IsUniqueConstraint {
+    setEm(em: EntityManager): IsUniqueConstraint {
         this.em = em;
         return this;
     }

@@ -3,10 +3,7 @@ import 'reflect-metadata';
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 
-import { getManagerToken } from '../../src/helpers';
-import { getIndexMetadatas } from '../../src/indexes/metadata';
-import { MongoManager } from '../../src/manager';
-import { MongoModule } from '../../src/module';
+import { EntityManager, getEntityManagerToken, getIndexMetadatas, MongoModule } from '../../src';
 import { DBTEST } from '../constants';
 import { EntityTest } from '../entity/entity';
 import { EntityRelationship } from '../relationship/entity.relationship';
@@ -17,7 +14,7 @@ import { EntityWithIndexChildTest } from './entity.index.child';
 import { EntityWithIndexChild2Test } from './entity.index.child2';
 
 let app: NestApplication;
-let em: MongoManager;
+let em: EntityManager;
 const uri = DBTEST + '-index';
 beforeAll(async () => {
     const mod = await Test.createTestingModule({
@@ -43,7 +40,7 @@ beforeAll(async () => {
     }).compile();
     app = mod.createNestApplication();
     await app.init();
-    em = app.get(getManagerToken());
+    em = app.get(getEntityManagerToken());
 });
 describe('Indexes', () => {
     describe('Metadata', () => {
@@ -51,47 +48,42 @@ describe('Indexes', () => {
             const indexs = getIndexMetadatas(EntityWithIndexTest);
             expect(indexs).toHaveLength(1);
             expect(indexs[0].property).toBe('foo');
-            expect(indexs[0].metadata).toHaveProperty('unique');
-            expect(indexs[0].metadata.unique).toBe(true);
+            expect(indexs[0].description).toHaveProperty('unique', true);
         });
         describe('Indexes on extended classes', () => {
             it('EntityWithIndexChildTest should have an 2 indexs defined', () => {
                 const indexs = getIndexMetadatas(EntityWithIndexChildTest);
                 expect(indexs).toHaveLength(2);
-
                 expect(indexs[0].property).toBe('bar');
-                expect(JSON.stringify(indexs[0].metadata)).toBe('{}');
+                expect(JSON.stringify(indexs[0].description)).toBe('{}');
 
                 expect(indexs[1].property).toBe('foo');
-                expect(indexs[1].metadata).toHaveProperty('unique');
-                expect(indexs[1].metadata.unique).toBe(true);
+                expect(indexs[1].description).toHaveProperty('unique', true);
             });
             it('EntityWithIndexChild2Test should have an 2 indexs defined', () => {
                 const indexs = getIndexMetadatas(EntityWithIndexChild2Test);
                 expect(indexs).toHaveLength(4);
 
                 expect(indexs[0].property).toBe('bar2');
-                expect(indexs[0].metadata).toHaveProperty('unique');
-                expect(indexs[0].metadata.unique).toBe(true);
+                expect(indexs[0].description).toHaveProperty('unique', true);
 
                 expect(indexs[1].property).toBe('parent');
-                expect(indexs[1].metadata.key).toHaveProperty('parent');
-                expect(indexs[1].metadata.name).toBe('EntityWithIndexChild2Test_parent_relationship');
-                expect(indexs[1].metadata.unique).toBe(true);
+                expect(indexs[1].description?.key).toHaveProperty('parent');
+                expect(indexs[1].description?.name).toBe('EntityWithIndexChild2Test_parent_relationship');
+                expect(indexs[1].description?.unique).toBe(true);
 
                 expect(indexs[2].property).toBe('parent2');
-                expect(indexs[2].metadata.key).toHaveProperty('parent2');
-                expect(indexs[2].metadata.name).toBe('EntityWithIndexChild2Test_parent2_relationship');
+                expect(indexs[2].description?.key).toHaveProperty('parent2');
+                expect(indexs[2].description?.name).toBe('EntityWithIndexChild2Test_parent2_relationship');
 
                 expect(indexs[3].property).toBe('foo');
-                expect(indexs[3].metadata).toHaveProperty('unique');
-                expect(indexs[3].metadata.unique).toBe(true);
+                expect(indexs[3].description).toHaveProperty('unique', true);
             });
         });
     });
     describe('MongoDB', () => {
         it('should create indexs on EntityWithIndexTest collection', async () => {
-            const indexes = await em.getCollection(EntityWithIndexTest).indexes();
+            const indexes = await em.getCollection(EntityWithIndexTest).indexes({ full: true });
             expect(indexes).toHaveLength(2); // _id and foo
             expect(indexes[0].name).toBe('_id_');
 

@@ -1,7 +1,6 @@
 import { IsString } from 'class-validator';
 
-import { Collection } from '../../src/decorators';
-import { Entity } from '../../src/entity';
+import { Collection, Entity } from '../../src';
 
 @Collection('entityTest')
 export class EntityTest extends Entity {

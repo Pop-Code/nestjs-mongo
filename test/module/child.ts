@@ -1,9 +1,7 @@
-import { IsDefined, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
-import { Collection } from '../../src/decorators';
-import { Entity } from '../../src/entity';
-import { ObjectId } from '../../src/helpers';
-import { IsValidRelationship, Relationship } from '../../src/relationship/decorators';
+import { Collection, Entity, IsValidRelationship, Relationship } from '../../src';
 import { EntityTest } from '../entity/entity';
 
 @Collection('testchild')
@@ -12,10 +10,8 @@ export class EntityChildTest extends Entity {
     foo: string;
 
     @Relationship({
-        type: () => EntityTest,
-        inversedBy: 'children'
+        type: () => EntityTest
     })
     @IsValidRelationship()
-    @IsDefined()
     parentId: ObjectId;
 }

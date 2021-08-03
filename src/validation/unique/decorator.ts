@@ -1,28 +1,27 @@
 import { registerDecorator } from 'class-validator';
 import { get } from 'lodash';
 
-import { Index } from '../../indexes/decorators';
+import { Index } from '../../indexs/decorators';
 import { IsUniqueConstraint, IsUniqueOptions } from './constraint';
 
 export function IsUnique(options?: IsUniqueOptions) {
-    return (object: any, propertyName: string) => {
-        const noIndex = get(options, 'noIndex', false);
-        if (!noIndex) {
+    return (target: any, propertyName: string) => {
+        if (options?.noIndex !== true) {
             const optionsKeys = get(options, 'keys', []);
-            const keys: { [key: string]: 1 | -1 } = {};
+            const keys: { [key: string]: 1 | -1 } = { [propertyName]: 1 };
             for (const optionsKey of optionsKeys) {
                 keys[optionsKey] = 1;
             }
             Index({
                 key: keys,
                 unique: true,
-                sparse: get(options, 'sparse', false)
-            })(object, propertyName);
+                sparse: options?.sparse ?? false
+            })(target, propertyName);
         }
 
         return registerDecorator({
             validator: IsUniqueConstraint,
-            target: object.constructor,
+            target: target.constructor,
             propertyName,
             options: options,
             constraints: [

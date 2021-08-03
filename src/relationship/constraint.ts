@@ -1,15 +1,16 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { first, isEmpty } from 'lodash';
+import { ObjectId } from 'mongodb';
 
-import { ObjectId } from '../helpers';
-import { MongoManager } from '../manager';
+import { EntityManager } from '../entity/manager';
 import { ensureSequentialTransaction } from '../session/utils';
 import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
-import { getRelationshipMetadata, RelationshipMetadata } from './metadata';
+import { RelationshipMetadata } from './interfaces';
+import { getRelationshipMetadata } from './metadata';
 
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
 export class IsValidRelationshipConstraint implements ValidatorConstraintInterface {
-    private em: MongoManager;
+    private em: EntityManager;
     private message: string;
 
     defaultMessage?(args?: IsValidRelationshipValidationArguments): string {
@@ -18,7 +19,6 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
 
     async validate(value: ObjectId | ObjectId[], args: IsValidRelationshipValidationArguments) {
         const entity = args.object as any;
-
         const ctx = this.em.getSessionLoaderService().getSessionContext();
 
         try {
@@ -64,7 +64,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
                 if (Array.isArray(value)) {
                     throw new Error(`The ${args.property} must not be an array`);
                 }
-
+                // console.log('Validate', entity, args);
                 relationship = await ensureSequentialTransaction(
                     ctx,
                     async () => await this.em.getRelationship(entity, args.property)
@@ -78,9 +78,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
             const withTestFunction = first(args.constraints);
             if (typeof withTestFunction === 'function') {
                 const withTest: WithRelationshipTest = withTestFunction.bind(args.object);
-
                 const message = await withTest(args.object, relationship, this.em, ctx?.session);
-
                 if (typeof message === 'string') {
                     throw new Error(message);
                 }
@@ -92,7 +90,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
         }
     }
 
-    setEm(em: MongoManager): IsValidRelationshipConstraint {
+    setEm(em: EntityManager): IsValidRelationshipConstraint {
         this.em = em;
         return this;
     }

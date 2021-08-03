@@ -1,5 +1,4 @@
-import { Collection } from '../../src/decorators';
-import { Index } from '../../src/indexes/decorators';
+import { Collection, Index } from '../../src';
 import { EntityWithIndexTest } from './entity.index';
 
 @Collection('entityWithIndexChildTest')

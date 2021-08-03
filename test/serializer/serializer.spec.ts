@@ -1,15 +1,14 @@
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { validate } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
-import { getManagerToken, ObjectId } from '../../src/helpers';
-import { MongoManager } from '../../src/manager';
-import { MongoModule } from '../../src/module';
+import { EntityManager, getEntityManagerToken, MongoModule } from '../../src';
 import { DBTEST } from '../constants';
 import { EntitySerializerTest } from './entity.serializer';
 
 let app: NestApplication;
-let em: MongoManager;
+let em: EntityManager;
 const uri = DBTEST + '-serializer';
 
 beforeAll(async () => {
@@ -28,7 +27,7 @@ beforeAll(async () => {
     }).compile();
     app = mod.createNestApplication();
     await app.init();
-    em = app.get(getManagerToken());
+    em = app.get(getEntityManagerToken());
 });
 
 describe('Entity', () => {
@@ -59,6 +58,7 @@ describe('Entity', () => {
         });
         it('should transform an entity to plain object (toJSON)', async () => {
             const obj: any = entity.toJSON();
+
             expect(obj._id).toBeDefined();
             expect(typeof obj._id).toEqual('string');
             expect(obj.foo).toBe('foo');

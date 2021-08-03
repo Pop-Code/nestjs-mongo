@@ -16,31 +16,23 @@ export class SessionLoaderService {
     }
 
     getSessionContext(): ClientSessionContext {
-        const session = this.getSession();
-        return session?.get?.(MONGO_SESSION_KEY);
+        return this.getSession()?.get?.(MONGO_SESSION_KEY);
     }
 
     setSessionContext(mongoClientSession: ClientSession): void {
-        this.log(
-            'Registering mongo session on namespace %s',
-            SESSION_LOADER_NAMESPACE
-        );
+        this.log('Registering mongo session on namespace %s', SESSION_LOADER_NAMESPACE);
 
-        const session = this.getSession();
+        const context = this.getSession();
         const orchestrator = new TransactionsOrchestrator(this.log);
 
-        session?.set?.(MONGO_SESSION_KEY, {
+        context?.set?.(MONGO_SESSION_KEY, {
             session: mongoClientSession,
             orchestrator
         });
     }
 
     clearSessionContext(): void {
-        this.log(
-            'Clearing mongo session on namespace %s',
-            SESSION_LOADER_NAMESPACE
-        );
-        const session = this.getSession();
-        session?.set?.(MONGO_SESSION_KEY, undefined);
+        this.log('Clearing mongo session on namespace %s', SESSION_LOADER_NAMESPACE);
+        this.getSession()?.set?.(MONGO_SESSION_KEY, undefined);
     }
 }

@@ -1,6 +1,4 @@
-import { Relationship } from '../../src';
-import { Collection } from '../../src/decorators';
-import { Index } from '../../src/indexes/decorators';
+import { Collection, Index, Relationship } from '../../src';
 import { EntityWithIndexTest } from './entity.index';
 import { EntityWithIndexChildTest } from './entity.index.child';
 
@@ -13,9 +11,8 @@ export class EntityWithIndexChild2Test extends EntityWithIndexTest {
 
     @Relationship({
         type: () => EntityWithIndexTest,
-        indexSpecification: {
-            key: { parent: 1 },
-            unique: true
+        index: {
+            description: { key: { parent: 1 }, unique: true }
         }
     })
     parent: EntityWithIndexTest;

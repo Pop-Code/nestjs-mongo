@@ -185,7 +185,7 @@ export function setRelationshipsCascadesMetadata<Child extends EntityInterface =
  */
 export function getRelationshipsCascadesMetadata<Parent extends EntityInterface = any>(
     target: ClassConstructor<Parent>
-) {
+): RelationshipCascade[] {
     return (Reflect.getMetadata('CASCADE', target) ?? []).slice();
 }
 

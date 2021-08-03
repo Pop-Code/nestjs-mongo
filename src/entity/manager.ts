@@ -385,7 +385,7 @@ export class EntityManager {
         }
 
         const value = obj[property];
-        const relationship = await this.findOne(relationMetadata.type, { _id: value }, options);
+        const relationship = await this.findOne<R>(relationMetadata.type, { _id: value }, options);
 
         return relationship;
     }

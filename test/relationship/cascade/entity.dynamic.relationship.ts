@@ -34,7 +34,7 @@ const DynamicRelationshipDecorator = () => {
             if (obj.parentType === DynamicRelationshipType.EntityParentDynamicRelationship1) {
                 return ParentDynamicRelationship1;
             } else if (obj.parentType === DynamicRelationshipType.EntityParentDynamicRelationship2) {
-                return ParentDynamicRelationship2;
+                return 'ParentDynamicRelationship2';
             }
             return false;
         }

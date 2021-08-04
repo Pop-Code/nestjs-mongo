@@ -40,6 +40,22 @@ export function setRelationshipMetadata<R extends EntityInterface = any>(
     Reflect.defineMetadata(RELATIONSHIP_METADATA_NAME, metadata, model, property);
 }
 
+export function getRelationFromModelName(modelName: string, target: Function, property: string, em?: EntityManager) {
+    if (em === undefined) {
+        throw new Error(
+            `EntityManager parameter is required to get relationship metadata for property ${property.toString()} in object ${
+                target.name
+            }`
+        );
+    }
+    const model = em.getModel(modelName);
+    if (model === undefined) {
+        throw new Error(`Can not get model ${modelName}`);
+    }
+
+    return model;
+}
+
 /**
  * Get relationship metadata
  *
@@ -69,25 +85,17 @@ export function getRelationshipMetadata<R extends EntityInterface = any>(
     if (!isClass(metadata.type) && typeof metadata.type === 'function') {
         const type = metadata.type as RelationshipTypeDescriptor<R>;
         const dynamicType = type(obj);
+
         if (dynamicType === false) {
             throw new Error(`Can not get the dynamic type of ${target.name} ${property} property`);
         }
-        metadataDefinition.type = dynamicType;
+
+        metadataDefinition.type =
+            typeof dynamicType === 'string' ? getRelationFromModelName(dynamicType, target, property, em) : dynamicType;
     }
 
     if (typeof metadata.type === 'string') {
-        if (em === undefined) {
-            throw new Error(
-                `EntityManager parameter is required to get relationship metadata for property ${property.toString()} in object ${
-                    target.name
-                }`
-            );
-        }
-        const model = em.getModel(metadata.type);
-        if (model === undefined) {
-            throw new Error(`Can not get model ${metadata.type}`);
-        }
-        metadataDefinition.type = model;
+        metadataDefinition.type = getRelationFromModelName(metadata.type, target, property, em);
     }
 
     return metadataDefinition;
@@ -164,6 +172,7 @@ export function setRelationshipsCascadesMetadata<Child extends EntityInterface =
                     );
                 }
             };
+
             if (prop.possibleTypes !== undefined) {
                 for (const typeValue of prop.possibleTypes.values) {
                     const c = new ChildClass();

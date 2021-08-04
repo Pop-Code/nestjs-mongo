@@ -28,7 +28,7 @@ export interface RelationshipCascade<Child extends EntityInterface = any> {
  */
 export type RelationshipTypeDescriptor<Relationship extends EntityInterface> = (
     obj?: any
-) => ClassConstructor<Relationship> | false;
+) => ClassConstructor<Relationship> | string | false;
 
 /**
  * Define a list of possible values (as string) for a property used to defined a dynamic type

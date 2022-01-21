@@ -34,7 +34,7 @@
         "@nestjs/common": "8.0.5",
         "@nestjs/core": "8.0.5",
         "@nestjs/testing": "8.0.5",
-        "@nestjs/platform-express": "8.0.5",
+        "@nestjs/platform-express": "8.2.6",
         "@types/cls-hooked": "4.3.3",
         "@types/debug": "4.1.7",
         "@types/jest": "26.0.24",

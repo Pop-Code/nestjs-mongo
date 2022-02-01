@@ -1,6 +1,6 @@
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
-import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Filter, FindOptions } from 'mongodb';
+import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Document, Filter, FindOptions } from 'mongodb';
 
 import { EntityInterface } from './interfaces';
 import { EntityManager } from './manager';
@@ -56,7 +56,7 @@ export class EntityRepository<Model extends EntityInterface> {
         object: Model,
         property: string,
         options: FindOptions = {}
-    ): Promise<Array<E | Error>> {
+    ): Promise<E[]> {
         return await this.em.getRelationships<E>(object, property, options);
     }
 

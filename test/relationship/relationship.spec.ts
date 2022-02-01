@@ -13,7 +13,7 @@ import {
     getRelationshipMetadata,
     getRelationshipMetadataList,
     getRelationshipsCascadesMetadata,
-    MongoModule,
+    MongoModule
 } from '../../src';
 import { DBTEST } from '../constants';
 import { EntityTest } from '../entity/entity';
@@ -21,7 +21,7 @@ import {
     ChildDynamicRelationship,
     DynamicRelationshipType,
     ParentDynamicRelationship1,
-    ParentDynamicRelationship2,
+    ParentDynamicRelationship2
 } from './cascade/entity.dynamic.relationship';
 import { RelationshipEntityLevel1Test } from './cascade/level1';
 import { RelationshipEntityLevel1WithChildrenTest } from './cascade/level1WithChildren';
@@ -157,6 +157,7 @@ describe('Relationship', () => {
                     const entityTest = new EntityTest();
                     entityTest.foo = 'foo';
                     entityTest.bar = 'bar';
+
                     await em.save(entityTest);
 
                     const entityRelationShip = new EntityRelationship();

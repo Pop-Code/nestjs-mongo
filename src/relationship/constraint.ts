@@ -30,7 +30,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
             );
             let relationship: any;
 
-            if (relationMetadata.isArray !== undefined && relationMetadata.isArray) {
+            if (relationMetadata?.isArray === true) {
                 if (!Array.isArray(value)) {
                     throw new Error(`The ${args.property} must be an array`);
                 }
@@ -64,7 +64,6 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
                 if (Array.isArray(value)) {
                     throw new Error(`The ${args.property} must not be an array`);
                 }
-                // console.log('Validate', entity, args);
                 relationship = await ensureSequentialTransaction(
                     ctx,
                     async () => await this.em.getRelationship(entity, args.property)

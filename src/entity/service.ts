@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { isEmpty } from 'class-validator';
 import Debug from 'debug';
 import { camelCase } from 'lodash';
-import { ChangeStreamDocument, ObjectId } from 'mongodb';
+import { ChangeStreamDocument, Filter as MongoFilter, ObjectId } from 'mongodb';
 
 import { DEBUG } from '../constants';
 import { EventCallback } from '../event/event';
@@ -45,7 +45,9 @@ export abstract class EntityService<
     }
 
     async get(itemId: ObjectId, ...rest: any[]): Promise<Model> {
-        const item = await this.repository.findOne({ _id: itemId }, ...rest);
+        const filter: MongoFilter<Model> = {};
+        filter._id = itemId;
+        const item = await this.repository.findOne(filter, ...rest);
         if (item === undefined) {
             throw new NotFoundException();
         }
@@ -81,12 +83,9 @@ export abstract class EntityService<
     }
 
     async delete(itemId: ObjectId, ...rest: any[]): Promise<void> {
-        const { deletedCount } = await this.repository.deleteOne(
-            {
-                _id: itemId
-            },
-            ...rest
-        );
+        const filter: MongoFilter<Model> = {};
+        filter._id = itemId;
+        const { deletedCount } = await this.repository.deleteOne(filter, ...rest);
         if (deletedCount !== 1) {
             throw new NotFoundException();
         }

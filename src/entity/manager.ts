@@ -18,7 +18,7 @@ import {
     MongoClient,
     ObjectId,
     TransactionOptions,
-    UpdateOptions,
+    UpdateOptions
 } from 'mongodb';
 
 import { DEBUG } from '../constants';
@@ -30,7 +30,7 @@ import { CascadeType } from '../relationship/interfaces';
 import {
     getRelationshipMetadata,
     getRelationshipsCascadesMetadata,
-    setRelationshipsCascadesMetadata,
+    setRelationshipsCascadesMetadata
 } from '../relationship/metadata';
 import { SessionLoaderService } from '../session/service';
 import { fromPlain, merge } from '../transformer/utils';
@@ -185,6 +185,7 @@ export class EntityManager {
             if (!isEmpty(proxy._id)) {
                 proxy.updatedAt = new Date();
                 const $unset: any = {};
+                // must be done in a recursive way to allow to delete props from subobject
                 for (const p in entity) {
                     if (Object.prototype.hasOwnProperty.call(proxy, p) === true) {
                         const v: any = proxy[p];
@@ -215,7 +216,7 @@ export class EntityManager {
             // merge the proxy changes back to the entity
             this.merge(entity, proxy);
 
-            this.log('%s %s saved', Model.name, entity._id.toHexString());
+            this.log('%s %s saved', Model.name, entity._id?.toHexString());
             return entity;
         } catch (e) {
             this.log('error saving %s', entityName);
@@ -234,10 +235,7 @@ export class EntityManager {
             ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...options
         });
-        return cursor.map((data) => {
-            const entity = this.fromPlain<Model>(classType, data);
-            return entity;
-        });
+        return cursor.map((data) => this.fromPlain<Model>(classType, data));
     }
 
     async findOne<Model extends EntityInterface>(
@@ -251,7 +249,7 @@ export class EntityManager {
             ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...options
         });
-        if (obj !== undefined) {
+        if (obj !== null) {
             return this.fromPlain<Model>(classType, obj);
         }
     }
@@ -384,8 +382,10 @@ export class EntityManager {
             );
         }
 
-        const value = obj[property];
-        const relationship = await this.findOne<R>(relationMetadata.type, { _id: value }, options);
+        const id: ObjectId = obj[property];
+        const filter: Filter<R> = {};
+        filter._id = id;
+        const relationship = await this.findOne<R>(relationMetadata.type, filter);
 
         return relationship;
     }
@@ -394,7 +394,7 @@ export class EntityManager {
         obj: any,
         property: string,
         options: FindOptions = {}
-    ): Promise<Array<R | Error>> {
+    ): Promise<R[]> {
         this.log('getRelationships %s on %s', property, obj);
 
         const relationMetadata = getRelationshipMetadata<R>(obj.constructor, property, this);
@@ -415,7 +415,7 @@ export class EntityManager {
         }
 
         const value = obj[property];
-        const relationshipsCursor = await this.find(
+        const relationshipsCursor = await this.find<R>(
             relationMetadata.type,
             {
                 _id: { $in: value }

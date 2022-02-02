@@ -32,4 +32,6 @@ export class EntityRelationship extends Entity {
         isArray: true
     })
     childrenAsReference?: ObjectId[];
+
+    __shouldBeExcluded?: string;
 }

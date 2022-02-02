@@ -18,7 +18,8 @@ import {
     MongoClient,
     ObjectId,
     TransactionOptions,
-    UpdateOptions
+    UpdateOptions,
+    WithId
 } from 'mongodb';
 
 import { DEBUG } from '../constants';
@@ -140,7 +141,11 @@ export class EntityManager {
         return this.getDatabase(databaseName).collection(this.getCollectionName(nameOrInstance));
     }
 
-    async validate(obj: any, validatorOptions: ValidatorOptions = {}, throwError: boolean = false) {
+    async validate<Model extends EntityInterface = any>(
+        obj: Model,
+        validatorOptions: ValidatorOptions = {},
+        throwError: boolean = false
+    ) {
         const errors = await validate(obj, {
             validationError: { target: true, value: true },
             whitelist: true,
@@ -155,12 +160,12 @@ export class EntityManager {
     }
 
     async save<Model extends EntityInterface>(
-        entity: Model,
+        entity: Model | WithId<Model>,
         options: (InsertOneOptions | UpdateOptions) & {
             skipValidation?: boolean;
             validatorOptions?: ValidatorOptions;
         } = {}
-    ): Promise<Model> {
+    ): Promise<WithId<Model>> {
         const entityName = entity.constructor.name;
         const ctx = this.getSessionContext();
         try {
@@ -174,8 +179,8 @@ export class EntityManager {
             if (Model === undefined) {
                 throw new Error(`Can not find model ${entityName}`);
             }
-            const proxy = new Model();
-            this.merge(proxy, entity);
+
+            const proxy = this.merge(new Model(), entity);
 
             const operationOptions = {
                 ...(ctx !== undefined ? { session: ctx.session } : {}),
@@ -217,7 +222,7 @@ export class EntityManager {
             this.merge(entity, proxy);
 
             this.log('%s %s saved', Model.name, entity._id?.toHexString());
-            return entity;
+            return entity as WithId<Model>;
         } catch (e) {
             this.log('error saving %s', entityName);
             throw e;
@@ -228,21 +233,21 @@ export class EntityManager {
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
         options: FindOptions<Model> = {}
-    ): Promise<FindCursor<Model>> {
+    ): Promise<FindCursor<WithId<Model>>> {
         this.log('find %s %o', classType.name, query);
         const ctx = this.getSessionContext();
         const cursor = this.getCollection(classType).find(query, {
             ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...options
         });
-        return cursor.map((data) => this.fromPlain<Model>(classType, data));
+        return cursor.map((data) => this.fromPlain(classType, data) as WithId<Model>);
     }
 
     async findOne<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
         options: FindOptions = {}
-    ): Promise<Model | undefined> {
+    ): Promise<WithId<Model> | undefined> {
         this.log('findOne %s %o', classType.name, query, options);
         const ctx = this.getSessionContext();
         const obj = await this.getCollection(classType).findOne(query, {
@@ -250,7 +255,7 @@ export class EntityManager {
             ...options
         });
         if (obj !== null) {
-            return this.fromPlain<Model>(classType, obj);
+            return this.fromPlain<Model>(classType, obj) as WithId<Model>;
         }
     }
 
@@ -269,14 +274,17 @@ export class EntityManager {
     }
 
     isIdQuery(query: any): boolean {
-        return Object.keys(query).length === 1 && query._id;
+        return Object.keys(query).length === 1 && query._id instanceof ObjectId;
     }
 
     isIdsQuery(query: any): boolean {
         return this.isIdQuery(query) && Array.isArray(query._id.$in);
     }
 
-    protected async deleteCascade<Model extends EntityInterface>(classType: ClassConstructor<Model>, entity: Model) {
+    protected async deleteCascade<Model extends EntityInterface>(
+        classType: ClassConstructor<Model>,
+        entity: WithId<Model>
+    ) {
         const relationshipsCascades = getRelationshipsCascadesMetadata(classType);
 
         if (!Array.isArray(relationshipsCascades)) {
@@ -326,7 +334,7 @@ export class EntityManager {
 
     async deleteMany<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
-        query: any,
+        query: Filter<Model>,
         options: DeleteOptions = {}
     ) {
         this.log('deleteMany %s %o', classType.name, query);
@@ -355,7 +363,7 @@ export class EntityManager {
     ) {
         this.log('watch %o', pipes);
         const ctx = this.getSessionContext();
-        return this.getCollection(classType).watch<Model>(pipes, {
+        return this.getCollection(classType).watch<WithId<Model>>(pipes, {
             ...(ctx !== undefined ? { session: ctx.session } : {}),
             ...options
         });
@@ -365,7 +373,7 @@ export class EntityManager {
         obj: any,
         property: string,
         options: FindOptions = {}
-    ): Promise<R | undefined> {
+    ): Promise<WithId<R> | undefined> {
         this.log('getRelationship %s on %s', property, obj);
         const relationMetadata = getRelationshipMetadata<R>(obj.constructor, property, this, obj);
         if (isEmpty(relationMetadata)) {
@@ -385,7 +393,7 @@ export class EntityManager {
         const id: ObjectId = obj[property];
         const filter: Filter<R> = {};
         filter._id = id;
-        const relationship = await this.findOne<R>(relationMetadata.type, filter);
+        const relationship = await this.findOne<R>(relationMetadata.type, filter, options);
 
         return relationship;
     }
@@ -394,7 +402,7 @@ export class EntityManager {
         obj: any,
         property: string,
         options: FindOptions = {}
-    ): Promise<R[]> {
+    ): Promise<Array<WithId<R>>> {
         this.log('getRelationships %s on %s', property, obj);
 
         const relationMetadata = getRelationshipMetadata<R>(obj.constructor, property, this);
@@ -457,14 +465,14 @@ export class EntityManager {
         classType: ClassConstructor<Model>,
         data: object,
         options?: ClassTransformOptions
-    ) {
+    ): Model {
         this.log('transform fromPlain %s', classType.name);
-        return fromPlain(classType, data, options);
+        return fromPlain<Model>(classType, data, options);
     }
 
-    merge<Model extends EntityInterface>(entity: Model, data: Model, options?: ClassTransformOptions) {
+    merge<Model extends EntityInterface>(entity: Model, data: Model, excludePrefixes?: string[]) {
         this.log('%s transform merge', getObjectName(entity));
-        return merge(entity, data, options);
+        return merge(entity, data, excludePrefixes);
     }
 
     async createIndexs<Model extends EntityInterface>(model: ClassConstructor<Model>) {

@@ -56,11 +56,13 @@ describe('merge', () => {
         entity1._id = id;
         entity1.property = 'test';
         entity1.children = [id2, id3];
+        entity1.__shouldBeExcluded = 'shouldbeexcluded';
 
         const entity2 = new EntityRelationship();
         entity2.property = 'bad';
+        entity2.__shouldBeExcluded = 'shouldbeexcluded';
 
-        merge(entity2, entity1);
+        merge(entity2, entity1, ['__']);
 
         expect(entity1._id.equals(id)).toBe(true);
         expect(entity1).toHaveProperty('property', 'test');
@@ -80,5 +82,6 @@ describe('merge', () => {
         }
         expect(entity2.children[0].equals(id2)).toBe(true);
         expect(entity2.children[1].equals(id3)).toBe(true);
+        expect(entity2).toHaveProperty('__shouldBeExcluded', undefined);
     });
 });

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { isEmpty } from 'class-validator';
 import Debug from 'debug';
 import { camelCase } from 'lodash';
-import { ChangeStreamDocument, Filter as MongoFilter, ObjectId } from 'mongodb';
+import { ChangeStreamDocument, Filter as MongoFilter, ObjectId, WithId } from 'mongodb';
 
 import { DEBUG } from '../constants';
 import { EventCallback } from '../event/event';
@@ -36,7 +36,7 @@ export abstract class EntityService<
         return this.repository;
     }
 
-    async create(data: any, save = false, ...rest: any[]): Promise<Model> {
+    async create(data: any, save = false, ...rest: any[]): Promise<WithId<Model> | Model> {
         const item = this.repository.fromPlain(data);
         if (save) {
             return await this.repository.save(item, ...rest);
@@ -44,7 +44,7 @@ export abstract class EntityService<
         return item;
     }
 
-    async get(itemId: ObjectId, ...rest: any[]): Promise<Model> {
+    async get(itemId: ObjectId, ...rest: any[]): Promise<WithId<Model>> {
         const filter: MongoFilter<Model> = {};
         filter._id = itemId;
         const item = await this.repository.findOne(filter, ...rest);
@@ -73,7 +73,7 @@ export abstract class EntityService<
         return res;
     }
 
-    async update(itemId: ObjectId, data: any, save = false, ...rest: any[]): Promise<Model> {
+    async update(itemId: ObjectId, data: any, save = false, ...rest: any[]): Promise<WithId<Model> | Model> {
         const entity = await this.get(itemId);
         const item = this.repository.merge(entity, data);
         if (save) {
@@ -91,24 +91,27 @@ export abstract class EntityService<
         }
     }
 
-    subscribe(onData: EventCallback<Model>) {
+    subscribe(onData: EventCallback<WithId<Model>>) {
         return this.repository
             .watch([], { fullDocument: 'updateLookup' })
-            .on('change', (change: ChangeStreamDocument<Model>) => {
+            .on('change', (change: ChangeStreamDocument<WithId<Model>>) => {
                 this.onData(change, onData).catch((e) => {
                     throw e;
                 });
             });
     }
 
-    protected readonly onData = async (change: ChangeStreamDocument<Model>, onData: EventCallback<Model>) => {
+    protected readonly onData = async (
+        change: ChangeStreamDocument<WithId<Model>>,
+        onData: EventCallback<WithId<Model>>
+    ) => {
         try {
             const em = this.repository.getEm();
             const classType = this.repository.getClassType();
             const eventName = camelCase(`on_${change.operationType}_${classType.name}`);
             this.log('Event:%s for %s:%s', eventName, classType.name, change.documentKey);
             if (change.fullDocument !== undefined) {
-                change.fullDocument = em.fromPlain<Model>(classType, change.fullDocument);
+                change.fullDocument = em.fromPlain(classType, change.fullDocument) as WithId<Model>;
             }
             onData(eventName, change);
         } catch (e) {

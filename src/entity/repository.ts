@@ -1,6 +1,6 @@
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
-import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Document, Filter, FindOptions } from 'mongodb';
+import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Document, Filter, FindOptions, WithId } from 'mongodb';
 
 import { EntityInterface } from './interfaces';
 import { EntityManager } from './manager';
@@ -16,7 +16,7 @@ export class EntityRepository<Model extends EntityInterface> {
         return this.em;
     }
 
-    async save(entity: Model, ...args: any[]) {
+    async save(entity: Model | WithId<Model>, ...args: any[]): Promise<WithId<Model>> {
         return await this.em.save(entity, ...args);
     }
 
@@ -40,7 +40,7 @@ export class EntityRepository<Model extends EntityInterface> {
         return await this.em.deleteOne(this.classType, query, options);
     }
 
-    async deleteMany(query: any, ...args: any) {
+    async deleteMany(query: Filter<Model>, ...args: any) {
         return await this.em.deleteMany(this.classType, query, ...args);
     }
 
@@ -48,7 +48,7 @@ export class EntityRepository<Model extends EntityInterface> {
         object: Model,
         property: string,
         options: FindOptions = {}
-    ): Promise<E | undefined> {
+    ): Promise<WithId<E> | undefined> {
         return await this.em.getRelationship<E>(object, property, options);
     }
 
@@ -56,7 +56,7 @@ export class EntityRepository<Model extends EntityInterface> {
         object: Model,
         property: string,
         options: FindOptions = {}
-    ): Promise<E[]> {
+    ): Promise<Array<WithId<E>>> {
         return await this.em.getRelationships<E>(object, property, options);
     }
 
@@ -64,8 +64,8 @@ export class EntityRepository<Model extends EntityInterface> {
         return this.em.fromPlain<Model>(this.classType, data, options);
     }
 
-    merge(entity: Model, data: Model, options?: ClassTransformOptions) {
-        return this.em.merge<Model>(entity, data, options);
+    merge(entity: Model | WithId<Model>, data: Model | WithId<Model>, excludePrefixes?: string[]) {
+        return this.em.merge(entity, data, excludePrefixes);
     }
 
     async validate(entity: Model, validatorOptions: ValidatorOptions = {}, throwError: boolean = false) {

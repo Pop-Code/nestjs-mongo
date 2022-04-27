@@ -8,7 +8,7 @@ export function toJSON() {
     const proto = Object.getPrototypeOf(this);
 
     const json = Object.entries(Object.getOwnPropertyDescriptors(proto))
-        .filter(([_, { get }]) => typeof get === 'function')
+        .filter(([, { get }]) => typeof get === 'function')
         .reduce(
             (obj, [key]) => ({
                 ...obj,

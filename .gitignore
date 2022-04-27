@@ -3,3 +3,5 @@ coverage/
 dist/
 *.tgz
 .DS_Store
+.yarn/install-state.gz
+.yarn/cache

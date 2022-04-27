@@ -21,14 +21,14 @@ export interface MongoModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'>
     inject?: any[];
 }
 
-export interface MongoFeatureModelOptions {
-    model: Type<EntityInterface>;
-    repository?: Type<EntityRepository<EntityInterface>>;
+export interface MongoFeatureModelOptions<Model extends EntityInterface, Repository extends EntityRepository<Model>> {
+    model: Type<Model>;
+    repository?: Type<Repository>;
 }
 
 export interface MongoFeatureOptions {
     connectionName?: string;
-    models: Array<MongoFeatureModelOptions | Type<EntityInterface>>;
+    models: Array<MongoFeatureModelOptions<any, any> | Type<EntityInterface>>;
 }
 
 export type ExceptionFactory = (errors: ValidationError[]) => any;

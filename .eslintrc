@@ -5,8 +5,16 @@
     "parserOptions": {
         "project": "./tsconfig.json"
     },
-    "ignorePatterns": ["typedoc.js", "docs/*"],
-    "extends": ["standard-with-typescript", "prettier"],
+    "ignorePatterns": [
+        "typedoc.js",
+        "docs/*"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+    ],
     "root": true,
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",

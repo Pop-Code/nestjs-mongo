@@ -11,7 +11,7 @@ import {
     RelationshipCascade,
     RelationshipMetadata,
     RelationshipMetadataOptions,
-    RelationshipTypeDescriptor,
+    RelationshipTypeDescriptor
 } from './interfaces';
 
 /**
@@ -49,7 +49,7 @@ export function setRelationshipMetadata<R extends EntityInterface = any>(
  * @param obj The instance of the entity (only required if the type of the relationship is dynamic)
  */
 export function getRelationshipMetadata<R extends EntityInterface = any>(
-    target: Function,
+    target: any,
     property: string,
     em?: EntityManager,
     obj?: any

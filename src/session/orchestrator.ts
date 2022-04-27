@@ -7,13 +7,11 @@ import { Debugger } from 'debug';
  */
 export class TransactionsOrchestrator {
     protected readonly jobs: Array<Promise<any>> = [];
-    protected current: number = 0;
+    protected current = 0;
 
     constructor(protected readonly log: Debugger) {}
 
-    async addJob<F extends () => Promise<any>>(
-        jobFunc: F
-    ): Promise<ReturnType<F>> {
+    async addJob<F extends () => Promise<any>>(jobFunc: F): Promise<ReturnType<F>> {
         const current = this.current;
         this.log('Registering job %s on orchestrator', current);
 

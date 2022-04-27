@@ -43,6 +43,7 @@ export class MongoModule implements OnModuleDestroy {
         const mongoClientProvider = {
             provide: mongoConnectionToken,
             useFactory: async (config: MongoModuleOptions): Promise<MongoClient> => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { uri, exceptionFactory, ...mongoOpts } = config;
                 const client = new MongoClient(uri, mongoOpts);
                 return await client.connect();

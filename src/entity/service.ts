@@ -55,7 +55,7 @@ export abstract class EntityService<
     }
 
     async list(filter: Filter, ResponseType: any, ...rest: any[]): Promise<PaginatedData<Model>> {
-        const cursor = await this.repository.find(filter.toQuery());
+        const cursor = await this.repository.find(filter.toQuery(), ...rest);
 
         if (!isEmpty(filter.orderBy)) {
             cursor.sort(filter.getSort());

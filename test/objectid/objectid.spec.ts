@@ -1,5 +1,5 @@
-import { ObjectId } from 'bson';
 import { plainToClass } from 'class-transformer';
+import { ObjectId } from 'mongodb';
 
 import { EntityTest } from '../entity/entity';
 import { EntityRelationship } from '../relationship/entity.relationship';

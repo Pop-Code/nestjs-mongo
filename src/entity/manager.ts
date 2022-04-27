@@ -144,7 +144,7 @@ export class EntityManager {
     async validate<Model extends EntityInterface = any>(
         obj: Model,
         validatorOptions: ValidatorOptions = {},
-        throwError: boolean = false
+        throwError = false
     ) {
         const errors = await validate(obj, {
             validationError: { target: true, value: true },

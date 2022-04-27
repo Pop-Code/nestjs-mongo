@@ -13,7 +13,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
     private em: EntityManager;
     private message: string;
 
-    defaultMessage?(args?: IsValidRelationshipValidationArguments): string {
+    defaultMessage?(): string {
         return this.message;
     }
 

@@ -19,3 +19,5 @@ renovate.json
 .github/
 dist/test/
 coverage/
+.yarn*
+CHANGELOG.md

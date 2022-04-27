@@ -68,7 +68,7 @@ export class EntityRepository<Model extends EntityInterface> {
         return this.em.merge(entity, data, excludePrefixes);
     }
 
-    async validate(entity: Model, validatorOptions: ValidatorOptions = {}, throwError: boolean = false) {
+    async validate(entity: Model, validatorOptions: ValidatorOptions = {}, throwError = false) {
         return await this.em.validate(entity, validatorOptions, throwError);
     }
 }

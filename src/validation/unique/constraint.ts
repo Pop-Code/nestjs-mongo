@@ -3,7 +3,7 @@ import {
     ValidationArguments,
     ValidationOptions,
     ValidatorConstraint,
-    ValidatorConstraintInterface,
+    ValidatorConstraintInterface
 } from 'class-validator';
 
 import { Entity } from '../../entity/entity';
@@ -21,7 +21,7 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
     private em: EntityManager;
     private message: string;
 
-    defaultMessage?(args?: ValidationArguments): string {
+    defaultMessage?(): string {
         return this.message;
     }
 

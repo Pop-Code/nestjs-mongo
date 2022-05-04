@@ -390,7 +390,10 @@ export class EntityManager {
             );
         }
 
-        const id: ObjectId = obj[property];
+        const id: ObjectId | undefined | null = obj[property];
+        if (!(id instanceof ObjectId)) {
+            return;
+        }
         const filter: Filter<R> = {};
         filter._id = id;
         const relationship = await this.findOne<R>(relationMetadata.type, filter, options);
@@ -423,6 +426,9 @@ export class EntityManager {
         }
 
         const value = obj[property];
+        if (!Array.isArray(value)) {
+            return [];
+        }
         const relationshipsCursor = await this.find<R>(
             relationMetadata.type,
             {

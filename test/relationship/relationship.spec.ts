@@ -216,6 +216,23 @@ describe('Relationship', () => {
                         )
                     ).toHaveLength(2);
                 });
+
+                it('should return undefined for single relationship', async () => {
+                    const entityRelationShip = new EntityRelationship();
+                    entityRelationShip.property = 'test_with_no_parent';
+
+                    const notFound = await em.getRelationship(entityRelationShip, 'parent');
+                    expect(notFound).toBeUndefined();
+                });
+
+                it('should return undefined for multiple children relationships', async () => {
+                    const entityRelationShip = new EntityRelationship();
+                    entityRelationShip.property = 'test_with_no_children';
+
+                    const notFound = await em.getRelationships(entityRelationShip, 'children');
+                    expect(notFound).toBeInstanceOf(Array);
+                    expect(notFound).toHaveLength(0);
+                });
             });
         });
     });

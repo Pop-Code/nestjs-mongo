@@ -1,6 +1,14 @@
 import { ClassConstructor, ClassTransformOptions } from 'class-transformer';
 import { ValidatorOptions } from 'class-validator';
-import { ChangeStreamOptions, CountDocumentsOptions, DeleteOptions, Document, Filter, FindOptions, WithId } from 'mongodb';
+import {
+    ChangeStreamOptions,
+    CountDocumentsOptions,
+    DeleteOptions,
+    Document,
+    Filter,
+    FindOptions,
+    WithId
+} from 'mongodb';
 
 import { EntityInterface } from './interfaces';
 import { EntityManager } from './manager';
@@ -22,6 +30,10 @@ export class EntityRepository<Model extends EntityInterface> {
 
     watch(pipes?: Document[], options: ChangeStreamOptions = {}) {
         return this.em.watch(this.classType, pipes, options);
+    }
+
+    getCollection() {
+        return this.em.getCollection(this.getClassType());
     }
 
     async find(query: Filter<Model>, options: FindOptions<Model> = {}) {

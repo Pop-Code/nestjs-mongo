@@ -170,17 +170,16 @@ export class EntityManager {
         const ctx = this.getSessionContext();
         try {
             this.log('saving %s', entityName);
-            if (options.skipValidation !== true) {
-                await this.validate(entity, options.validatorOptions, true);
-            }
             const collection = this.getCollection(entity);
-
             const Model = this.getModel(entityName);
             if (Model === undefined) {
                 throw new Error(`Can not find model ${entityName}`);
             }
-
             const proxy = this.merge(new Model(), entity);
+
+            if (options.skipValidation !== true) {
+                await this.validate(proxy, options.validatorOptions, true);
+            }
 
             const operationOptions = {
                 ...(ctx !== undefined ? { session: ctx.session } : {}),

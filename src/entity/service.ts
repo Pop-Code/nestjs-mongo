@@ -56,20 +56,15 @@ export abstract class EntityService<
 
     async list(filter: Filter, ResponseType: any, ...rest: any[]): Promise<PaginatedData<Model>> {
         const cursor = await this.repository.find(filter.toQuery(), ...rest);
-
         if (!isEmpty(filter.orderBy)) {
             cursor.sort(filter.getSort());
         }
-
-        const count = await cursor.count();
-
+        const count = await this.repository.getCollection().countDocuments(filter);
         cursor.skip(filter.skip).limit(filter.limit);
         const data = await cursor.toArray();
-
         const res = new ResponseType();
         res.count = count;
         res.data = data;
-
         return res;
     }
 
@@ -109,9 +104,11 @@ export abstract class EntityService<
             const em = this.repository.getEm();
             const classType = this.repository.getClassType();
             const eventName = camelCase(`on_${change.operationType}_${classType.name}`);
-            this.log('Event:%s for %s:%s', eventName, classType.name, change.documentKey);
-            if (change.fullDocument !== undefined) {
-                change.fullDocument = em.fromPlain(classType, change.fullDocument) as WithId<Model>;
+            this.log('Event:%s for %s:%s', eventName, classType.name, change['documentKey']);
+            if (change.operationType !== 'drop') {
+                if (change['fullDocument'] !== undefined) {
+                    change['fullDocument'] = em.fromPlain(classType, change['fullDocument']) as WithId<Model>;
+                }
             }
             onData(eventName, change);
         } catch (e) {

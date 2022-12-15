@@ -59,7 +59,7 @@ export abstract class EntityService<
         if (!isEmpty(filter.orderBy)) {
             cursor.sort(filter.getSort());
         }
-        const count = await this.repository.getCollection().countDocuments(filter);
+        const count = await this.repository.getCollection().countDocuments(filter.toQuery());
         cursor.skip(filter.skip).limit(filter.limit);
         const data = await cursor.toArray();
         const res = new ResponseType();

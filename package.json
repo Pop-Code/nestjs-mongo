@@ -28,7 +28,7 @@
         "global": "4.4.0",
         "lodash": "4.17.21",
         "slugify": "1.6.5",
-        "uuid": "8.3.2"
+        "uuid": "9.0.0"
     },
     "devDependencies": {
         "@nestjs/common": "^9.2.1",

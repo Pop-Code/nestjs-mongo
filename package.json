@@ -82,7 +82,7 @@
       "!test/**",
       "!dist/**"
     ],
-    "coverageDirectory": "../coverage"
+    "coverageDirectory": "./coverage"
   },
   "engines": {
     "node": ">=0.14"

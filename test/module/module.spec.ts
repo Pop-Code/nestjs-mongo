@@ -23,7 +23,7 @@ import { MongoDbModuleTest } from './module'
 let mod: TestingModule
 let app: INestApplication
 const uri = (process.env.DBTEST ?? DBTEST).replace('nestjs-mongo', 'nestjs-mongo-module')
-console.log('URIIII', uri)
+
 beforeAll(async () => {
   mod = await Test.createTestingModule({
     imports: [

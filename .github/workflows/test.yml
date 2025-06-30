@@ -39,11 +39,11 @@ jobs:
       - name: test
         run: |
           yarn run test:cov
+        env:
+          DBTEST: 'mongodb://test:test@localhost/nestjs-mongo?replicaSet=rs0&authSource=admin&authMechanism=SCRAM-SHA-256'
       - name: build
         run: |
           yarn run build
-        env:
-          DBTEST: 'mongodb://test:test@localhost/nestjs-mongo?replicaSet=rs0&authSource=admin&authMechanism=SCRAM-SHA-256'
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:

@@ -30,6 +30,8 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-replica-set: test-rs
+          mongodb-username: test
+          mongodb-password: test
       - name: install, build, and test
         run: |
           yarn install

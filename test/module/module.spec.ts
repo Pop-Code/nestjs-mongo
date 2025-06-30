@@ -138,6 +138,7 @@ describe('Mongo sessions loader', () => {
         })
     })
   })
+
   // it('should resolve a relationship created during a session', (done) => {
   //     const manager = mod.get<EntityManager>(getEntityManagerToken());
   //     const namespace = createNamespace(SESSION_LOADER_NAMESPACE);

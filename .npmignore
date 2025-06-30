@@ -6,6 +6,7 @@ test/
 .gitignore
 tsconfig.json
 tsconfig.build.json
+tsconfig.build.tsbuildinfo
 typedoc.js
 yarn.lock
 renovate.json

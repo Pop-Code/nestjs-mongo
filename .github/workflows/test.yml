@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x, 22.x]
-        mongodb-version: ['6.0']
+        mongodb-version: ['8.0']
 
     steps:
       - uses: actions/checkout@v2
@@ -30,16 +30,20 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-replica-set: test-rs
-          mongodb-username: test
-          mongodb-password: test
-      - name: install, build, and test
+      - name: install
         run: |
           yarn install
+      - name: lint
+        run: |
           yarn run lint
-          yarn run build
+      - name: test
+        run: |
           yarn run test:cov
+      - name: build
+        run: |
+          yarn run build
         env:
-          DBTEST: 'mongodb://test:test@127.0.0.1:27017/nestjs-mongo?directConnection=true'
+          DBTEST: 'mongodb://127.0.0.1:27017'
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:

@@ -12,6 +12,8 @@ on:
 
 jobs:
   build:
+    env:
+      DBTEST: 'mongodb://test:test@localhost/nestjs-mongo?authSource=admin'
     runs-on: ubuntu-latest
 
     strategy:
@@ -33,8 +35,6 @@ jobs:
           mongodb-username: test
           mongodb-password: test
       - name: install, build, and test
-        env:
-          DBTEST: 'mongodb://test:test@localhost'
         run: |
           yarn install
           yarn run lint

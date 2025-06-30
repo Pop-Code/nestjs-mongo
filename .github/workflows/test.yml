@@ -29,7 +29,9 @@ jobs:
         uses: supercharge/mongodb-github-action@1.12.0
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-replica-set: test-rs
+          mongodb-replica-set: rs0
+          mongodb-username: test
+          mongodb-password: test
       - name: install
         run: |
           yarn install
@@ -43,7 +45,7 @@ jobs:
         run: |
           yarn run build
         env:
-          DBTEST: 'mongodb://127.0.0.1:27017/nestjs-mongo?replicaSet=test-rs'
+          DBTEST: 'mongodb://test:test@localhost/nestjs-mongo?replicaSet=rs0&authSource=admin&authMechanism=SCRAM-SHA-256'
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:

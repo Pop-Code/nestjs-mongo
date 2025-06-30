@@ -1,0 +1,26 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": ["import", "react", "typescript", "unicorn"],
+    "globals": {},
+    "settings": {},
+    "ignorePatterns": ["dist/", "node_modules/", "build/", "coverage/", "docs/", "logs/", "tmp/"],
+    "rules": {
+        "eqeqeq": "warn",
+        "import/no-cycle": "error",
+        "react/self-closing-comp": [
+            "error",
+            {
+                "html": false
+            }
+        ],
+        "@typescript-eslint/no-unsafe-declaration-merging": "off"
+    },
+    "overrides": [
+        {
+            "files": ["*.test.ts", "*.spec.ts"],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "off"
+            }
+        }
+    ]
+}

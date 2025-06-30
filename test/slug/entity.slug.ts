@@ -1,30 +1,30 @@
-import { Type } from 'class-transformer';
+import { Type } from 'class-transformer'
 
-import { Slugify } from '../../src/transformer/slug';
+import { Slugify } from '../../src/transformer/slug'
 
 export class EntitySlugTest {
-    constructor(firstName: string, lastName: string) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+  constructor(firstName: string, lastName: string) {
+    this.firstName = firstName
+    this.lastName = lastName
+  }
 
-    @Type(() => String)
-    public readonly firstName: string;
+  @Type(() => String)
+  public readonly firstName: string
 
-    @Type(() => String)
-    public readonly lastName: string;
+  @Type(() => String)
+  public readonly lastName: string
 
-    @Slugify({
-        generate: ({ firstName, lastName }: { [key: string]: string }) => `${firstName} ${lastName}`,
-        expose: true,
-        options: { lower: true }
-    })
-    slug: string;
+  @Slugify({
+    generate: ({ firstName, lastName }: { [key: string]: string }) => `${firstName} ${lastName}`,
+    expose: true,
+    options: { lower: true }
+  })
+  slug: string
 
-    @Slugify<EntitySlugTest>({
-        keys: ['firstName', 'lastName'],
-        expose: true,
-        options: { lower: true }
-    })
-    slug2: string;
+  @Slugify<EntitySlugTest>({
+    keys: ['firstName', 'lastName'],
+    expose: true,
+    options: { lower: true }
+  })
+  slug2: string
 }

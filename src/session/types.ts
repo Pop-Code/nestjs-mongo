@@ -1,10 +1,10 @@
-import { ClientSession } from 'mongodb';
+import { ClientSession } from 'mongodb'
 
-import { TransactionsOrchestrator } from './orchestrator';
+import { TransactionsOrchestrator } from './orchestrator'
 
 export type ClientSessionContext =
-    | {
-          session: ClientSession;
-          orchestrator: TransactionsOrchestrator;
-      }
-    | undefined;
+  | {
+      session: ClientSession
+      orchestrator: TransactionsOrchestrator
+    }
+  | undefined

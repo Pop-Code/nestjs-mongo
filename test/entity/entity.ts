@@ -1,12 +1,12 @@
-import { IsString } from 'class-validator';
+import { IsString } from 'class-validator'
 
-import { Collection, Entity } from '../../src';
+import { Collection, Entity } from '../../src'
 
 @Collection('entityTest')
 export class EntityTest extends Entity {
-    @IsString()
-    foo: string;
+  @IsString()
+  foo: string
 
-    @IsString()
-    bar: string;
+  @IsString()
+  bar: string
 }

@@ -1,17 +1,17 @@
-import { IsString } from 'class-validator';
-import { ObjectId } from 'mongodb';
+import { IsString } from 'class-validator'
+import { ObjectId } from 'mongodb'
 
-import { Collection, Relationship } from '../../src';
-import { EntityTest } from '../entity/entity';
-import { EntityRelationship } from './entity.relationship';
+import { Collection, Relationship } from '../../src'
+import { EntityTest } from '../entity/entity'
+import { EntityRelationship } from './entity.relationship'
 
 @Collection('entityRelationshipFoo')
 export class EntityRelationshipFoo extends EntityRelationship {
-    @IsString()
-    foo: string;
+  @IsString()
+  foo: string
 
-    @Relationship({
-        type: () => EntityTest
-    })
-    extendedFoo?: ObjectId;
+  @Relationship({
+    type: () => EntityTest
+  })
+  extendedFoo?: ObjectId
 }

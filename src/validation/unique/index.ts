@@ -1,2 +1,2 @@
-export * from './decorator';
-export * from './constraint';
+export * from './decorator'
+export * from './constraint'

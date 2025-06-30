@@ -1,14 +1,14 @@
-import { IsDate, IsString } from 'class-validator';
+import { IsDate, IsString } from 'class-validator'
 
 export class HistoryAction {
-    @IsString()
-    action: string;
+  @IsString()
+  action: string
 
-    @IsDate()
-    date: Date;
+  @IsDate()
+  date: Date
 
-    constructor(action: string, date: Date) {
-        this.action = action;
-        this.date = date;
-    }
+  constructor(action: string, date: Date) {
+    this.action = action
+    this.date = date
+  }
 }

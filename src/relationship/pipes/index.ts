@@ -1,2 +1,2 @@
-export * from './relationship';
-export * from './required.relationship';
+export * from './relationship'
+export * from './required.relationship'

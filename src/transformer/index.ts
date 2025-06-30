@@ -1,3 +1,3 @@
-export * from './objectId';
-export * from './utils';
-export * from './slug';
+export * from './objectId'
+export * from './utils'
+export * from './slug'

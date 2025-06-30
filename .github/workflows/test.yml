@@ -39,7 +39,7 @@ jobs:
           yarn run build
           yarn run test:cov
         env:
-          DBTEST: 'mongodb://test:test@127.0.0.1:2701/nestjs-mongo?directConnection=true'
+          DBTEST: 'mongodb://test:test@127.0.0.1:27017/nestjs-mongo?directConnection=true'
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:

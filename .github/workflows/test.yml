@@ -12,8 +12,6 @@ on:
 
 jobs:
   build:
-    env:
-      DBTEST: 'mongodb://test:test@localhost/nestjs-mongo?authSource=admin'
     runs-on: ubuntu-latest
 
     strategy:
@@ -40,6 +38,8 @@ jobs:
           yarn run lint
           yarn run build
           yarn run test:cov
+        env:
+          DBTEST: 'mongodb://test:test@localhost/nestjs-mongo?authSource=admin'
       - name: Codecov
         uses: codecov/codecov-action@v2
         with:

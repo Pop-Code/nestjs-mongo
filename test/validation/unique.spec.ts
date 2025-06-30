@@ -10,7 +10,7 @@ import { EntityUniqueTest } from './entity.unique'
 
 let app: NestApplication
 let em: EntityManager
-const uri = DBTEST.replace('nestjs-mongo', 'nestjs-mongo-unique')
+const uri = (process.env.DBTEST ?? DBTEST).replace('nestjs-mongo', 'nestjs-mongo-unique')
 
 beforeAll(async () => {
   const mod = await Test.createTestingModule({

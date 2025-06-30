@@ -33,7 +33,7 @@ import { EntityRelationshipFoo } from './entity.relationship.foo'
 
 let app: NestApplication
 let em: EntityManager
-const uri = DBTEST.replace('nestjs-mongo', 'nestjs-mongo-relationship')
+const uri = (process.env.DBTEST ?? DBTEST).replace('nestjs-mongo', 'nestjs-mongo-relationship')
 
 beforeAll(async () => {
   const mod = await Test.createTestingModule({

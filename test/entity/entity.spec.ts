@@ -8,7 +8,7 @@ import { EntityTest } from './entity'
 
 let app: NestApplication
 let em: EntityManager
-const uri = DBTEST.replace('nestjs-mongo', 'nestjs-mongo-entity')
+const uri = (process.env.DBTEST ?? DBTEST).replace('nestjs-mongo', 'nestjs-mongo-entity')
 
 beforeAll(async () => {
   const mod = await Test.createTestingModule({

@@ -9,7 +9,7 @@ import { EntitySerializerTest } from './entity.serializer'
 
 let app: NestApplication
 let em: EntityManager
-const uri = DBTEST.replace('nestjs-mongo', 'nestjs-mongo-serializer')
+const uri = (process.env.DBTEST ?? DBTEST).replace('nestjs-mongo', 'nestjs-mongo-serializer')
 
 beforeAll(async () => {
   const mod = await Test.createTestingModule({

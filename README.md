@@ -27,6 +27,7 @@ It does not hide the driver: queries are plain mongodb filters, and cursors are 
 
 | nestjs-mongo | NestJS     | mongodb driver | MongoDB server | Node.js  |
 | ------------ | ---------- | -------------- | -------------- | -------- |
+| 0.17.x       | 10, 11, 12 | 7.x            | 4.4 to 9.0     | >= 22.12 |
 | 0.16.x       | 10, 11, 12 | 7.x            | 4.4 to 9.0     | >= 22.12 |
 | 0.15.x       | 11         | 6.x            | 4.0 to 8.0     | >= 20    |
 | 0.14.x       | 8, 9       | 4.x            | 3.6 to 6.0     | >= 14    |

@@ -15,7 +15,7 @@ A small ORM-like module for [NestJS](https://nestjs.com), built with TypeScript 
 - Transactions shared by all the operations of a request, and `@Transactional()` methods
 - Pagination (`paginate`, `paginateByCursor`)
 - `@Index` (property and compound indexes, index synchronization), `@IsUnique`, and a `$jsonSchema` validator generated from the validation decorators
-- Migrations (`MigrationRunner`)
+- Migrations (`MigrationRunner`, and the `nestjs-mongo migrate up|down|status` command line)
 - NestJS exceptions: `EntityNotFoundException`, `DuplicateKeyException`, `OptimisticLockException`, `EntityValidationException`
 - A `@nestjs/terminus` health indicator (`nestjs-mongo/terminus`)
 - Change streams, route parameter pipes, serialization helpers

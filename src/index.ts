@@ -20,3 +20,4 @@ export * from './errors';
 export * from './mapping';
 export * from './schema';
 export * from './migration';
+export * from './cli';

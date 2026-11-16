@@ -1,5 +1,9 @@
 # nestjs-mongo
 
+<p align="center">
+    <img src="assets/banner.png" alt="nestjs-mongo: NestJS × MongoDB, a TypeScript NestJS module providing an ORM layer built on the Node.js MongoDB driver" width="800" />
+</p>
+
 [![Test](https://github.com/Pop-Code/nestjs-mongo/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/Pop-Code/nestjs-mongo/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/nestjs-mongo.svg)][npm]
 [![codecov](https://codecov.io/gh/Pop-Code/nestjs-mongo/branch/master/graph/badge.svg)](https://codecov.io/gh/Pop-Code/nestjs-mongo)

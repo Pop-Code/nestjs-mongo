@@ -6,11 +6,17 @@
 
 A small ORM-like module for [NestJS](https://nestjs.com), built with TypeScript on top of the official [mongodb driver](https://www.mongodb.com/docs/drivers/node/current/).
 
-- Models as classes, transformed with class-transformer and validated with class-validator on save
+- Models as classes, validated with class-validator on save, with embedded documents (`@Embedded`)
 - An entity manager per connection, and an injectable repository per model
-- Relationships with validation, loading helpers and cascade delete
-- `@Index` and `@IsUnique` decorators
-- Transactions shared by all the operations of a request
+- Typed queries and updates: `find`, `findById`, `findOneOrFail`, `exists`, `distinct`, `aggregate`, `updateOne`, `updateMany`, `findOneAndUpdate`, `upsert`, `bulkWrite`, `insertMany`
+- Partial updates (`patch`), optimistic locking (`@Version`), soft delete (`@DeletedAt`)
+- Lifecycle hooks (`@BeforeInsert`, `@AfterUpdate`, `@AfterLoad`, ...)
+- Relationships with validation, cascade delete, and loading in one query (`populate`, `findWithRelationships`)
+- Transactions shared by all the operations of a request, and `@Transactional()` methods
+- Pagination (`paginate`, `paginateByCursor`)
+- `@Index` (property and compound indexes, index synchronization), `@IsUnique`, and a `$jsonSchema` validator generated from the validation decorators
+- Migrations (`MigrationRunner`)
+- NestJS exceptions: `EntityNotFoundException`, `DuplicateKeyException`, `OptimisticLockException`, `EntityValidationException`
 - Change streams, route parameter pipes, serialization helpers
 
 It does not hide the driver: queries are plain mongodb filters, and cursors are native cursors.
@@ -39,12 +45,7 @@ yarn add nestjs-mongo mongodb class-validator
 // app.module.ts
 @Module({
     imports: [
-        MongoModule.forRootAsync({
-            useFactory: () => ({
-                uri: 'mongodb://localhost:27017/my-app',
-                exceptionFactory: (errors) => new BadRequestException(errors)
-            })
-        }),
+        MongoModule.forRoot({ uri: 'mongodb://localhost:27017/my-app' }),
         MongoModule.forFeature({ models: [User] })
     ],
     providers: [UserService]
@@ -73,6 +74,11 @@ export class UserService {
 
     async findByEmail(email: string) {
         return await this.users.findOne({ email }); // a User instance, or undefined
+    }
+
+    async rename(id: string, name: string) {
+        const user = await this.users.findOneOrFail({ _id: new ObjectId(id) }); // 404 when not found
+        return await this.users.patch(user, { name }); // validated, then only name is written
     }
 }
 ```

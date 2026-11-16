@@ -1,11 +1,10 @@
-import { CreateIndexesOptions, IndexDescription } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 import { INDEX_METADATA_NAME } from '../constants';
 
 export interface IndexMetadata {
     property: string;
-    // TODO in next mongodb release, IndexDescription is extending CreateIndexesOptions
-    description?: Partial<IndexDescription> & CreateIndexesOptions;
+    description?: Partial<IndexDescription>;
 }
 
 export function setIndexMetadata(target: any, metadata: IndexMetadata) {

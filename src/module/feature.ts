@@ -2,22 +2,16 @@ import { DynamicModule, Global, Module } from '@nestjs/common';
 
 import { EntityManager } from '../entity/manager';
 import { EntityRepository } from '../entity/repository';
-import { getEntityManagerToken, getEntityRepositoryToken, InjectEntityManager } from './injection';
+import { getEntityManagerToken, getEntityRepositoryToken } from './injection';
 import { MongoFeatureOptions } from './interfaces';
 
 @Global()
 @Module({})
 export class MongoFeatureModule {
-    constructor(@InjectEntityManager() private readonly em: EntityManager) {}
-
-    // async onModuleInit() {
-    //     console.log('INIT models', this.em.getModels());
-    //     for (const [, model] of this.em.getModels()) {
-    //         setRelationshipsCascadesMetadata(model, this.em);
-    //         await this.em.createIndexes(model, this.em);
-    //     }
-    // }
-
+    /**
+     * Register models on a connection and create one repository provider per model.
+     * Inject a repository with {@link InjectEntityRepository}.
+     */
     static forFeature(options: MongoFeatureOptions): DynamicModule {
         const { connectionName, models } = options;
         const providers: any = [];

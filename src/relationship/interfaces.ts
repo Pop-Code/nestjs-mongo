@@ -1,5 +1,5 @@
 import { ClassConstructor } from 'class-transformer';
-import { CreateIndexesOptions, IndexDescription } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 import { EntityInterface } from '../entity/interfaces';
 
@@ -52,7 +52,7 @@ export interface ChildRelationshipMetadata {
 export interface BaseRelationshipMetadata {
     isArray?: boolean;
     cascade?: CascadeType[];
-    index?: { description?: IndexDescription & CreateIndexesOptions };
+    index?: { description?: Partial<IndexDescription> };
     possibleTypes?: PossibleTypes;
 }
 

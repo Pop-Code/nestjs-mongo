@@ -3,8 +3,17 @@ module.exports = {
     exclude: ['**/test/**/*'],
     theme: 'default',
     name: 'NestJS Mongo',
-    excludePrivate: false,
+    readme: 'README.md',
+    excludePrivate: true,
     hideGenerator: true,
     entryPoints: ['src/index.ts'],
+    projectDocuments: ['wiki/Home.md'],
+    navigationLinks: {
+        GitHub: 'https://github.com/Pop-Code/nestjs-mongo',
+        npm: 'https://www.npmjs.com/package/nestjs-mongo'
+    },
+    externalSymbolLinkMappings: {
+        '@types/node': { '"node:tls".connect': 'https://nodejs.org/api/tls.html#tlsconnectoptions-callback' }
+    },
     includeVersion: true
 };

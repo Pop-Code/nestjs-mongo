@@ -13,9 +13,10 @@
         "sourceMap": true,
         "allowJs": true,
         "outDir": "dist",
-        "lib": ["es7"],
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
+        "rootDir": ".",
+        "types": ["node", "jest"],
+        "lib": ["es7", "DOM"],
+        "strict": false,
         "strictNullChecks": true
     }
 }

@@ -8,6 +8,11 @@ import { EntityInterface } from './interfaces';
 
 export interface Entity extends SerializableInterface {}
 
+/**
+ * The base class of a model: an `_id`, a `createdAt` and an optional `updatedAt`.
+ *
+ * Use it with {@link Collection}.
+ */
 @Serializable()
 export abstract class Entity implements EntityInterface {
     @TypeObjectId()

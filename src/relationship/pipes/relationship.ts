@@ -5,6 +5,12 @@ import { ObjectId } from 'mongodb';
 import { EntityManager } from '../../entity/manager';
 import { InjectEntityManager } from '../../module/injection';
 
+/**
+ * Load an entity from a route parameter. The entity class is the type of the parameter.
+ * Resolves to `undefined` when the entity does not exist.
+ *
+ * @throws BadRequestException when the value is not an ObjectId
+ */
 @Injectable()
 export class RelationshipPipe implements PipeTransform {
     constructor(@InjectEntityManager() protected readonly em: EntityManager) {}

@@ -13,8 +13,18 @@ import {
 import { EntityInterface } from './interfaces';
 import { EntityManager } from './manager';
 
+/**
+ * A repository for a single model. Every method delegates to the {@link EntityManager}.
+ *
+ * A repository is created for each model registered with `MongoModule.forFeature()`.
+ * Inject it with {@link InjectEntityRepository}. Extend it to add your own queries, and register
+ * your class with `{ model, repository }` in `forFeature()`.
+ */
 export class EntityRepository<Model extends EntityInterface> {
-    constructor(protected readonly em: EntityManager, protected readonly classType: ClassConstructor<Model>) {}
+    constructor(
+        protected readonly em: EntityManager,
+        protected readonly classType: ClassConstructor<Model>
+    ) {}
 
     getClassType() {
         return this.classType;
@@ -36,7 +46,7 @@ export class EntityRepository<Model extends EntityInterface> {
         return this.em.getCollection(this.getClassType());
     }
 
-    async find(query: Filter<Model>, options: FindOptions<Model> = {}) {
+    async find(query: Filter<Model>, options: FindOptions = {}) {
         return await this.em.find(this.classType, query, options);
     }
 

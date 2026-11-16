@@ -4,6 +4,12 @@ import { get } from 'lodash';
 import { Index } from '../../indexs/decorators';
 import { IsUniqueConstraint, IsUniqueOptions } from './constraint';
 
+/**
+ * Validate that no other entity has the same value, and create a unique index (unless `noIndex` is true).
+ *
+ * @param options class-validator options, plus `keys` (other properties of a compound unique key),
+ * `sparse` and `noIndex`.
+ */
 export function IsUnique(options?: IsUniqueOptions) {
     return (target: any, propertyName: string) => {
         if (options?.noIndex !== true) {

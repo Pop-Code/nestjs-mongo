@@ -1,0 +1,91 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Validation and indexes | NestJS Mongo - v0.15.0</title><meta name="description" content="Documentation for NestJS Mongo"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">NestJS Mongo - v0.15.0</a>
+<div id="tsd-toolbar-links"><a href="https://github.com/Pop-Code/nestjs-mongo">GitHub</a><a href="https://www.npmjs.com/package/nestjs-mongo">npm</a></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="Guides.html">Guides</a></li>
+<li><a href="" aria-current="page">Validation and indexes</a></li></ul></div>
+<div class="tsd-panel tsd-typography"><h1 id="validation-and-indexes" class="tsd-anchor-link">Validation and indexes<a href="#validation-and-indexes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="validation-on-save" class="tsd-anchor-link">Validation on save<a href="#validation-on-save" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><code>save()</code> validates the entity with class-validator before writing it:</p>
+<ul>
+<li>with <code>whitelist: true</code>: properties without a class-validator decorator are removed (use <code>@Allow()</code> to keep one without rules),</li>
+<li>when it is invalid, <code>save()</code> throws <code>exceptionFactory(errors)</code>. Set the factory in the module options:</li>
+</ul>
+<pre><code class="ts"><span class="hl-4">MongoModule</span><span class="hl-1">.</span><span class="hl-0">forRootAsync</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-0">useFactory</span><span class="hl-4">:</span><span class="hl-1"> () </span><span class="hl-5">=&gt;</span><span class="hl-1"> ({</span><br/><span class="hl-1">        </span><span class="hl-4">uri:</span><span class="hl-1"> </span><span class="hl-2">&#39;mongodb://localhost:27017/my-app&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-0">exceptionFactory</span><span class="hl-4">:</span><span class="hl-1"> (</span><span class="hl-4">errors</span><span class="hl-1">) </span><span class="hl-5">=&gt;</span><span class="hl-1"> </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-0">BadRequestException</span><span class="hl-1">(</span><span class="hl-4">errors</span><span class="hl-1">)</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Without a factory, the <code>ValidationError[]</code> array is thrown.</p>
+<p>Per call options:</p>
+<pre><code class="ts"><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-4">em</span><span class="hl-1">.</span><span class="hl-0">save</span><span class="hl-1">(</span><span class="hl-4">entity</span><span class="hl-1">, { </span><span class="hl-4">skipValidation:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1"> });</span><br/><span class="hl-6">await</span><span class="hl-1"> </span><span class="hl-4">em</span><span class="hl-1">.</span><span class="hl-0">save</span><span class="hl-1">(</span><span class="hl-4">entity</span><span class="hl-1">, { </span><span class="hl-4">validatorOptions:</span><span class="hl-1"> { </span><span class="hl-4">groups:</span><span class="hl-1"> [</span><span class="hl-2">&#39;admin&#39;</span><span class="hl-1">], </span><span class="hl-4">skipMissingProperties:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1"> } });</span>
+</code><button type="button">Copy</button></pre>
+
+<p>You can also validate without saving: <code>await em.validate(entity)</code> returns the errors, <code>await em.validate(entity, {}, true)</code> throws them.</p>
+<h2 id="_" class="tsd-anchor-link"><code>@IsUnique</code><a href="#_" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Checks that no other entity has the same value, and creates a unique index on the property:</p>
+<pre><code class="ts"><span class="hl-1">@</span><span class="hl-0">Collection</span><span class="hl-1">(</span><span class="hl-2">&#39;users&#39;</span><span class="hl-1">)</span><br/><span class="hl-6">export</span><span class="hl-1"> </span><span class="hl-5">class</span><span class="hl-1"> </span><span class="hl-7">User</span><span class="hl-1"> </span><span class="hl-5">extends</span><span class="hl-1"> </span><span class="hl-7">Entity</span><span class="hl-1"> {</span><br/><span class="hl-1">    @</span><span class="hl-0">IsEmail</span><span class="hl-1">()</span><br/><span class="hl-1">    @</span><span class="hl-0">IsUnique</span><span class="hl-1">()</span><br/><span class="hl-1">    </span><span class="hl-4">email</span><span class="hl-1">: </span><span class="hl-7">string</span><span class="hl-1">;</span><br/><br/><span class="hl-1">    </span><span class="hl-3">// unique per tenant: compound unique index { slug: 1, tenantId: 1 }</span><br/><span class="hl-1">    @</span><span class="hl-0">IsString</span><span class="hl-1">()</span><br/><span class="hl-1">    @</span><span class="hl-0">IsUnique</span><span class="hl-1">({ </span><span class="hl-4">keys:</span><span class="hl-1"> [</span><span class="hl-2">&#39;tenantId&#39;</span><span class="hl-1">] })</span><br/><span class="hl-1">    </span><span class="hl-4">slug</span><span class="hl-1">: </span><span class="hl-7">string</span><span class="hl-1">;</span><br/><br/><span class="hl-1">    @</span><span class="hl-0">TypeObjectId</span><span class="hl-1">()</span><br/><span class="hl-1">    </span><span class="hl-4">tenantId</span><span class="hl-1">: </span><span class="hl-7">ObjectId</span><span class="hl-1">;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keys</code></td>
+<td>other properties of a compound unique key</td>
+</tr>
+<tr>
+<td><code>sparse</code></td>
+<td>creates a sparse index, and treats an empty key as &quot;the key does not exist&quot;</td>
+</tr>
+<tr>
+<td><code>noIndex</code></td>
+<td>validates only, without creating the index</td>
+</tr>
+</tbody>
+</table>
+<p>plus every class-validator option (<code>message</code>, <code>groups</code>...). The check ignores the entity itself (on update), and runs in the session of the context (<a href="Guides.Transactions.html">Transactions</a>).</p>
+<p>The validation gives a readable error, but it can not prevent a race between two concurrent saves: keep the index (the default), it is what guarantees uniqueness.</p>
+<h2 id="_-1" class="tsd-anchor-link"><code>@Index</code><a href="#_-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Declares an index on a property:</p>
+<pre><code class="ts"><span class="hl-1">@</span><span class="hl-0">Collection</span><span class="hl-1">(</span><span class="hl-2">&#39;events&#39;</span><span class="hl-1">)</span><br/><span class="hl-6">export</span><span class="hl-1"> </span><span class="hl-5">class</span><span class="hl-1"> </span><span class="hl-7">Event</span><span class="hl-1"> </span><span class="hl-5">extends</span><span class="hl-1"> </span><span class="hl-7">Entity</span><span class="hl-1"> {</span><br/><span class="hl-1">    @</span><span class="hl-0">Index</span><span class="hl-1">() </span><span class="hl-3">// { name: 1 }</span><br/><span class="hl-1">    @</span><span class="hl-0">IsString</span><span class="hl-1">()</span><br/><span class="hl-1">    </span><span class="hl-4">name</span><span class="hl-1">: </span><span class="hl-7">string</span><span class="hl-1">;</span><br/><br/><span class="hl-1">    @</span><span class="hl-0">Index</span><span class="hl-1">({ </span><span class="hl-4">unique:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1">, </span><span class="hl-4">sparse:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1"> })</span><br/><span class="hl-1">    @</span><span class="hl-0">IsString</span><span class="hl-1">()</span><br/><span class="hl-1">    @</span><span class="hl-0">IsOptional</span><span class="hl-1">()</span><br/><span class="hl-1">    </span><span class="hl-4">externalId</span><span class="hl-1">?: </span><span class="hl-7">string</span><span class="hl-1">;</span><br/><br/><span class="hl-1">    @</span><span class="hl-0">Index</span><span class="hl-1">({ </span><span class="hl-4">key:</span><span class="hl-1"> { </span><span class="hl-4">date:</span><span class="hl-1"> -</span><span class="hl-10">1</span><span class="hl-1">, </span><span class="hl-4">name:</span><span class="hl-1"> </span><span class="hl-10">1</span><span class="hl-1"> } }) </span><span class="hl-3">// compound index</span><br/><span class="hl-1">    @</span><span class="hl-0">IsDate</span><span class="hl-1">()</span><br/><span class="hl-1">    @</span><span class="hl-0">Type</span><span class="hl-1">(() </span><span class="hl-5">=&gt;</span><span class="hl-1"> </span><span class="hl-4">Date</span><span class="hl-1">)</span><br/><span class="hl-1">    </span><span class="hl-4">date</span><span class="hl-1">: </span><span class="hl-7">Date</span><span class="hl-1">;</span><br/><br/><span class="hl-1">    @</span><span class="hl-0">Index</span><span class="hl-1">({ </span><span class="hl-4">expireAfterSeconds:</span><span class="hl-1"> </span><span class="hl-10">3600</span><span class="hl-1"> }) </span><span class="hl-3">// TTL index</span><br/><span class="hl-1">    @</span><span class="hl-0">IsDate</span><span class="hl-1">()</span><br/><span class="hl-1">    @</span><span class="hl-0">Type</span><span class="hl-1">(() </span><span class="hl-5">=&gt;</span><span class="hl-1"> </span><span class="hl-4">Date</span><span class="hl-1">)</span><br/><span class="hl-1">    </span><span class="hl-4">expiresAt</span><span class="hl-1">: </span><span class="hl-7">Date</span><span class="hl-1">;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>The options are the ones of the driver <a href="https://mongodb.github.io/node-mongodb-native/7.0/interfaces/IndexDescription.html"><code>IndexDescription</code></a> (<code>key</code>, <code>name</code>, <code>unique</code>, <code>sparse</code>, <code>partialFilterExpression</code>, <code>expireAfterSeconds</code>, <code>collation</code>...).</p>
+<p>Indexes are created when the model is registered (at startup), for the model and the classes it extends. <code>@Relationship</code> also creates an index on its property.
+Creating an index that conflicts with an existing one (same key, different options) logs an error and does not stop the application: drop the old index to change it.</p>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#validation-and-indexes"><span>Validation and indexes</span></a>
+<ul>
+<li><a href="#validation-on-save"><span>Validation on save</span></a></li>
+<li><a href="#_"><span></span></a></li>
+<li><a href="#_-1"><span></span></a></li></ul></div></details></div>
+<div class="site-menu">
+<nav id="tsd-sidebar-links" class="tsd-navigation"><a href="https://github.com/Pop-Code/nestjs-mongo" class="tsd-nav-link">GitHub</a><a href="https://www.npmjs.com/package/nestjs-mongo" class="tsd-nav-link">npm</a></nav>
+<nav class="tsd-navigation"><a href="../modules.html">NestJS Mongo - v0.15.0</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer></footer>
+<div class="overlay"></div></body></html>

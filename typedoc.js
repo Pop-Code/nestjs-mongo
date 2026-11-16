@@ -6,7 +6,7 @@ module.exports = {
     readme: 'README.md',
     excludePrivate: true,
     hideGenerator: true,
-    entryPoints: ['src/index.ts'],
+    entryPoints: ['src/index.ts', 'src/terminus/index.ts'],
     navigationLinks: {
         GitHub: 'https://github.com/Pop-Code/nestjs-mongo',
         npm: 'https://www.npmjs.com/package/nestjs-mongo'

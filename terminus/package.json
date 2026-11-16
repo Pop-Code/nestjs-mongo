@@ -1,0 +1,4 @@
+{
+    "main": "../dist/terminus/index.js",
+    "types": "../dist/terminus/index.d.ts"
+}

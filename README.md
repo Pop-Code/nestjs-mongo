@@ -17,6 +17,7 @@ A small ORM-like module for [NestJS](https://nestjs.com), built with TypeScript 
 - `@Index` (property and compound indexes, index synchronization), `@IsUnique`, and a `$jsonSchema` validator generated from the validation decorators
 - Migrations (`MigrationRunner`)
 - NestJS exceptions: `EntityNotFoundException`, `DuplicateKeyException`, `OptimisticLockException`, `EntityValidationException`
+- A `@nestjs/terminus` health indicator (`nestjs-mongo/terminus`)
 - Change streams, route parameter pipes, serialization helpers
 
 It does not hide the driver: queries are plain mongodb filters, and cursors are native cursors.

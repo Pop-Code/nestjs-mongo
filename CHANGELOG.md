@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.15.0] - 2026-11-15
+## [0.16.0] - 2026-11-15
 
 ### BREAKING CHANGE
 
@@ -43,3 +43,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `runInSessionContext()`, `hasSessionContext()` and `SessionLoaderService.run()`
 - `startSessionWithTransaction(fn, { useContext: true })` runs in its own session context: it no longer needs `SessionLoaderMiddleware`, and does not change the session of an outer context
 - Tests for named connections, transactions, session contexts (including an express end-to-end test) and pipes
+
+## [0.15.0] - 2025-06-30
+
+### Changed
+
+- Support NestJS v11
+- Support the mongodb driver v6

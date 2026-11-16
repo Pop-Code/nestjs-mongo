@@ -11,6 +11,9 @@
     ],
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
+    "bin": {
+        "nestjs-mongo": "./dist/cli/bin.js"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Pop-Code/nestjs-mongo.git"
@@ -70,7 +73,7 @@
         "test:watch": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --watch",
         "test:cov": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --runInBand --coverage",
         "test:debug": "node --inspect-brk --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --runInBand",
-        "test:smoke": "node -e \"const m = require('./dist'); const t = require('./terminus'); if (typeof m.MongoModule !== 'function' || typeof t.MongoHealthIndicator !== 'function') process.exit(1)\"",
+        "test:smoke": "node -e \"const m = require('./dist'); const t = require('./terminus'); if (typeof m.MongoModule !== 'function' || typeof t.MongoHealthIndicator !== 'function') process.exit(1)\" && node dist/cli/bin.js --help > /dev/null",
         "prepublishOnly": "npm run build"
     },
     "jest": {

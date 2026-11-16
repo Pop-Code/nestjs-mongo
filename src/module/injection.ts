@@ -59,3 +59,8 @@ export function InjectEntityRepository(
 ) {
     return Inject(getEntityRepositoryToken(entity.name, connectionName));
 }
+
+/**
+ * Alias of {@link InjectEntityRepository}: injects the repository of a model.
+ */
+export const InjectRepository = InjectEntityRepository;

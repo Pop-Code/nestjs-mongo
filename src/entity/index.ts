@@ -6,3 +6,5 @@ export * from './filter';
 export * from './paginated';
 export * from './decorators';
 export * from './manager';
+export * from './hooks';
+export * from './options';

@@ -8,6 +8,7 @@ import {
     Collection,
     Entity,
     EntityManager,
+    EntityValidationException,
     getEntityManagerToken,
     IsUnique,
     IsValidRelationship,
@@ -54,20 +55,20 @@ beforeAll(async () => {
     namedEm = mod.get<EntityManager>(getEntityManagerToken(NAME));
 });
 
-// The default exceptionFactory throws the ValidationError[]: a duplicate key error from the
+// The default exceptionFactory throws an EntityValidationException: a DuplicateKeyException from the
 // unique index would mean the validator queried the wrong connection.
 describe('validation with multiple connections', () => {
     it('should check uniqueness on the default connection', async () => {
         await defaultEm.save(Object.assign(new EntityUniqueTest(), { foo: 'same' }));
         await expect(defaultEm.save(Object.assign(new EntityUniqueTest(), { foo: 'same' }))).rejects.toBeInstanceOf(
-            Array
+            EntityValidationException
         );
     });
     it('should check uniqueness on a named connection', async () => {
         await namedEm.save(Object.assign(new UniqueOnNamedConnection(), { bar: 'same' }));
         await expect(
             namedEm.save(Object.assign(new UniqueOnNamedConnection(), { bar: 'same' }))
-        ).rejects.toBeInstanceOf(Array);
+        ).rejects.toBeInstanceOf(EntityValidationException);
     });
     it('should validate relationships on a named connection', async () => {
         const parent = await namedEm.save(Object.assign(new UniqueOnNamedConnection(), { bar: 'parent' }));

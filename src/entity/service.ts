@@ -76,13 +76,15 @@ export abstract class EntityService<
      * @param ResponseType The class to instantiate for the response, usually {@link PaginatedData} or a subclass
      */
     async list(filter: Filter, ResponseType: any, ...rest: any[]): Promise<PaginatedData<Model>> {
-        const cursor = await this.repository.find(filter.toQuery(), ...rest);
-        if (!isEmpty(filter.orderBy)) {
-            cursor.sort(filter.getSort());
-        }
-        const count = await this.repository.getCollection().countDocuments(filter.toQuery());
-        cursor.skip(filter.skip).limit(filter.limit);
-        const data = await cursor.toArray();
+        const { count, data } = await this.repository.paginate(
+            filter.toQuery(),
+            {
+                skip: filter.skip,
+                limit: filter.limit,
+                sort: !isEmpty(filter.orderBy) ? filter.getSort() : undefined
+            },
+            ...rest
+        );
         const res = new ResponseType();
         res.count = count;
         res.data = data;
@@ -90,15 +92,24 @@ export abstract class EntityService<
     }
 
     /**
-     * Merge data into an existing entity, and save it when `save` is true.
+     * Merge data into an existing entity, and save it when `save` is true (only the properties of `data` are written).
      *
      * @throws NotFoundException
      */
-    async update(itemId: ObjectId, data: any, save = false, ...rest: any[]): Promise<WithId<Model> | Model> {
-        const entity = await this.get(itemId);
-        const item = this.repository.merge(entity, data);
+    async update(itemId: ObjectId, data: Partial<Model>, save = false, ...rest: any[]): Promise<WithId<Model> | Model> {
+        // a WithId<Model> is a Model with a required _id
+        const entity = (await this.get(itemId)) as Model;
+        const converted = this.repository.fromPlain(data);
+        const changes: Partial<Model> = {};
+        for (const key of Object.keys(data) as Array<keyof Model>) {
+            if (key !== '_id') changes[key] = converted[key];
+        }
+        const item = this.repository.merge(entity, changes);
         if (save) {
-            return await this.repository.save(item, ...rest);
+            // only the properties of data are written
+            const written: Partial<Model> = {};
+            for (const key of Object.keys(changes) as Array<keyof Model>) written[key] = item[key];
+            return await this.repository.patch(item, written, ...rest);
         }
         return item;
     }
@@ -142,7 +153,7 @@ export abstract class EntityService<
             this.log('Event:%s for %s:%s', eventName, classType.name, change['documentKey']);
             if (change.operationType !== 'drop') {
                 if (change['fullDocument'] !== undefined) {
-                    change['fullDocument'] = em.fromPlain(classType, change['fullDocument']) as WithId<Model>;
+                    change['fullDocument'] = em.hydrate(classType, change['fullDocument']);
                 }
             }
             onData(eventName, change);

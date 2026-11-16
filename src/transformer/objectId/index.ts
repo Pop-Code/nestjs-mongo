@@ -3,6 +3,8 @@ import { Transform, TransformationType, Type } from 'class-transformer';
 import { Allow } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
+import { setFieldMetadata } from '../../mapping/metadata';
+
 export * from './objectid.pipe';
 
 export const transformObjectId = (type: TransformationType, value: string | ObjectId) => {
@@ -38,5 +40,7 @@ export function TypeObjectId(isArray?: boolean) {
         }
     });
     const allowfn = Allow();
-    return applyDecorators(typefn, trfn, allowfn);
+    const fieldfn = (target: object, property: string | symbol) =>
+        setFieldMetadata(target, String(property), { type: () => ObjectId, isArray: isArray === true });
+    return applyDecorators(typefn, trfn, allowfn, fieldfn);
 }

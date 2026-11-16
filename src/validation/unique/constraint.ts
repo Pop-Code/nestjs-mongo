@@ -9,6 +9,7 @@ import {
 import { Entity } from '../../entity/entity';
 import { EntityManager, getModelEntityManager } from '../../entity/manager';
 import { ensureSequentialTransaction } from '../../session/utils';
+import { getValidationMessage, setValidationMessage } from '../messages';
 
 export type IsUniqueOptions = ValidationOptions & {
     keys?: string[];
@@ -19,10 +20,9 @@ export type IsUniqueOptions = ValidationOptions & {
 @ValidatorConstraint({ name: 'IsUnique', async: true })
 export class IsUniqueConstraint implements ValidatorConstraintInterface {
     private em: EntityManager;
-    private message: string;
 
-    defaultMessage?(): string {
-        return this.message;
+    defaultMessage(args?: ValidationArguments): string {
+        return getValidationMessage(args, 'The value is not unique');
     }
 
     async validate(value: any, args: ValidationArguments) {
@@ -50,13 +50,16 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
         const em = getModelEntityManager(type) ?? this.em;
         const count = await ensureSequentialTransaction(
             em.getSessionLoaderService().getSessionContext(),
-            async () => await em.count(type, query)
+            async () => await em.count(type, query, { withDeleted: true })
         );
 
         if (count > 0) {
-            this.message = `An item ${args.object.constructor.name} with similar values already exists (${Object.keys(
-                query
-            ).join(', ')})`;
+            setValidationMessage(
+                args,
+                `An item ${args.object.constructor.name} with similar values already exists (${Object.keys(query).join(
+                    ', '
+                )})`
+            );
             return false;
         }
         return true;

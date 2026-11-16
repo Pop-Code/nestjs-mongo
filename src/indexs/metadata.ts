@@ -3,7 +3,8 @@ import { IndexDescription } from 'mongodb';
 import { INDEX_METADATA_NAME } from '../constants';
 
 export interface IndexMetadata {
-    property: string;
+    /** The property of a property index, `undefined` for an index declared on the class. */
+    property?: string;
     description?: Partial<IndexDescription>;
 }
 

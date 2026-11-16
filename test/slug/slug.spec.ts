@@ -1,10 +1,10 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 import { EntitySlugTest } from './entity.slug';
 
 describe('Slug decorator', () => {
-    test('should handle options.generate and options.keys on plainToClass', () => {
-        const target = plainToClass(EntitySlugTest, {
+    test('should handle options.generate and options.keys on plainToInstance', () => {
+        const target = plainToInstance(EntitySlugTest, {
             firstName: 'John',
             lastName: 'Smith'
         });

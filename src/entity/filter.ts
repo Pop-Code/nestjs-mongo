@@ -5,6 +5,12 @@ import { Serializable, SerializableInterface } from '../serializer';
 
 export interface Filter extends SerializableInterface {}
 
+/**
+ * A pagination and sorting filter, for example to validate query string parameters.
+ *
+ * `orderBy` accepts `property:asc` or `property:desc` items (or a comma separated string).
+ * Extend it and override {@link Filter.toQuery} to add your own query parameters.
+ */
 @Serializable()
 export class Filter {
     @IsInt()
@@ -25,6 +31,9 @@ export class Filter {
     @Matches(/^(.+):(asc|desc)$/, { each: true })
     orderBy?: string[] = ['_id:asc'];
 
+    /**
+     * Get the sort for `cursor.sort()`.
+     */
     getSort(): Array<[string, 1 | -1]> {
         if (this.orderBy === undefined) {
             return [];
@@ -38,6 +47,9 @@ export class Filter {
         }, []);
     }
 
+    /**
+     * Get the sort for a `$sort` aggregation stage.
+     */
     getSortForAggregation(): { [property: string]: 1 | -1 } {
         const sorts = {};
         if (this.orderBy === undefined) {
@@ -53,6 +65,9 @@ export class Filter {
         return sorts;
     }
 
+    /**
+     * Get the mongo query of the filter. Returns `{}`, override it in your filters.
+     */
     toQuery() {
         const query: any = {};
         return query;

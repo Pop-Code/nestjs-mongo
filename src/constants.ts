@@ -3,6 +3,5 @@ export const DEFAULT_CONNECTION_NAME = 'nestjs-mongo:connection:default';
 export const NAMED_CONNECTION_TOKEN = 'nestjs-mongo:connection:name';
 export const RELATIONSHIP_METADATA_NAME = 'nestjs-mongo:relationship';
 export const RELATIONSHIP_LIST_METADATA_NAME = 'nestjs-mongo:relationship_list';
+export const MODEL_ENTITY_MANAGER_METADATA_NAME = 'nestjs-mongo:entity_manager';
 export const INDEX_METADATA_NAME = 'nestjs-mongo:index';
-export const SESSION_LOADER_NAMESPACE = 'nestjs-mongo:ns_sessionloader';
-export const MONGO_SESSION_KEY = 'ns_sessionloader:mongo_client_session';

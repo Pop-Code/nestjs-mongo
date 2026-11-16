@@ -1,38 +1,60 @@
 import { Injectable } from '@nestjs/common';
-import { getNamespace } from 'cls-hooked';
 import Debug from 'debug';
 import { ClientSession } from 'mongodb';
 
-import { DEBUG, MONGO_SESSION_KEY, SESSION_LOADER_NAMESPACE } from '../constants';
+import { DEBUG } from '../constants';
+import { runInSessionContext, sessionStorage } from './context';
 import { TransactionsOrchestrator } from './orchestrator';
 import { ClientSessionContext } from './types';
 
+/**
+ * Store and read the mongo session of the current async context (using `AsyncLocalStorage`).
+ */
 @Injectable()
 export class SessionLoaderService {
     protected log = Debug(`${DEBUG}:SessionLoaderService`);
 
-    getSession() {
-        return getNamespace(SESSION_LOADER_NAMESPACE);
+    /**
+     * Run a function in a new session context, see {@link runInSessionContext}.
+     */
+    run<T>(fn: () => T): T {
+        return runInSessionContext(fn);
     }
 
+    /**
+     * Get the mongo session of the current async context, if one was set.
+     */
     getSessionContext(): ClientSessionContext {
-        return this.getSession()?.get?.(MONGO_SESSION_KEY);
+        return sessionStorage.getStore()?.context;
     }
 
+    /**
+     * Set the mongo session of the current async context.
+     *
+     * @throws Error when the code does not run in a session context
+     */
     setSessionContext(mongoClientSession: ClientSession): void {
-        this.log('Registering mongo session on namespace %s', SESSION_LOADER_NAMESPACE);
-
-        const context = this.getSession();
-        const orchestrator = new TransactionsOrchestrator(this.log);
-
-        context?.set?.(MONGO_SESSION_KEY, {
+        const store = sessionStorage.getStore();
+        if (store === undefined) {
+            throw new Error(
+                'No session context: run this code with runInSessionContext(), or in a request handled by SessionLoaderMiddleware'
+            );
+        }
+        this.log('Registering mongo session on the current context');
+        store.context = {
             session: mongoClientSession,
-            orchestrator
-        });
+            orchestrator: new TransactionsOrchestrator(this.log)
+        };
     }
 
+    /**
+     * Remove the mongo session of the current async context.
+     */
     clearSessionContext(): void {
-        this.log('Clearing mongo session on namespace %s', SESSION_LOADER_NAMESPACE);
-        this.getSession()?.set?.(MONGO_SESSION_KEY, undefined);
+        const store = sessionStorage.getStore();
+        if (store !== undefined) {
+            this.log('Clearing mongo session on the current context');
+            store.context = undefined;
+        }
     }
 }

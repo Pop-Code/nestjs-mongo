@@ -1,18 +1,18 @@
-import { ClassConstructor, classToPlain, ClassTransformOptions, plainToClass } from 'class-transformer';
+import { ClassConstructor, instanceToPlain, ClassTransformOptions, plainToInstance } from 'class-transformer';
 import { mergeWith, unset } from 'lodash';
 
 import { EntityInterface } from '../entity/interfaces';
 
 export const EXCLUDED_PREFIXES = ['__'];
 
-export const toPlain = <T = any>(data: T) => classToPlain<T>(data, { excludePrefixes: EXCLUDED_PREFIXES });
+export const toPlain = <T = any>(data: T) => instanceToPlain<T>(data, { excludePrefixes: EXCLUDED_PREFIXES });
 
 export const fromPlain = <Model extends EntityInterface>(
     classType: ClassConstructor<Model>,
     data: object,
     options?: ClassTransformOptions
 ) =>
-    plainToClass(classType, data, {
+    plainToInstance(classType, data, {
         excludePrefixes: EXCLUDED_PREFIXES,
         ...options
     });
@@ -31,7 +31,6 @@ export const merge = <Model extends EntityInterface>(entity: Model, data: Model,
     for (const prop in entity) {
         if (excludePrefixes?.some((p) => prop.startsWith(p)) === true) {
             unset(entity, prop);
-            // return undefined;
         }
     }
 

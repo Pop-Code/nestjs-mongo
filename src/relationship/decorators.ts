@@ -12,10 +12,8 @@ import { IsValidRelationshipConstraint } from './constraint';
 import { RelationshipMetadataOptions, RelationshipTypeDescriptor } from './interfaces';
 import { setRelationshipMetadata } from './metadata';
 
-export type WithValidRelationship = (object: any, relationship: any, em: EntityManager) => Promise<string | true>;
-
 export interface IsValidRelationshipOptions extends ValidationOptions {
-    with?: WithValidRelationship;
+    with?: WithRelationshipTest;
 }
 export type WithRelationshipTest = (
     object: any,
@@ -28,8 +26,14 @@ export interface IsValidRelationshipValidationArguments extends ValidationArgume
     constraints: [WithRelationshipTest?];
 }
 
+/**
+ * Validate that a {@link Relationship} property references existing entities.
+ *
+ * @param validationOptions class-validator options, plus `with`: an extra async test that receives the
+ * loaded relationship and returns `true` or an error message.
+ */
 export function IsValidRelationship(validationOptions?: IsValidRelationshipOptions) {
-    const constraints: WithValidRelationship[] = [];
+    const constraints: WithRelationshipTest[] = [];
     if (validationOptions !== undefined && typeof validationOptions.with === 'function') {
         constraints.push(validationOptions.with);
     }
@@ -45,6 +49,22 @@ export function IsValidRelationship(validationOptions?: IsValidRelationshipOptio
     };
 }
 
+/**
+ * Declare a property as a reference (an `ObjectId`, or an array of `ObjectId` with `isArray: true`)
+ * to another model.
+ *
+ * It also transforms the value to/from `ObjectId` and creates an index on the property.
+ *
+ * @param options The target model as a function (`() => User`), a model name (`'User'`), or the full
+ * options: `type`, `isArray`, `cascade`, `index`, `possibleTypes`.
+ *
+ * @example
+ * ```ts
+ * @Relationship(() => User)
+ * @IsValidRelationship()
+ * authorId: ObjectId;
+ * ```
+ */
 export function Relationship<R extends EntityInterface = any>(
     options: RelationshipMetadataOptions<R> | RelationshipTypeDescriptor<R> | string
 ) {

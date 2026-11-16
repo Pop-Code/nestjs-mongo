@@ -1,4 +1,5 @@
-import { DynamicModule, Global, Module, OnModuleDestroy } from '@nestjs/common';
+import { DynamicModule, Global, Inject, Module, OnModuleDestroy } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { getFromContainer, isEmpty } from 'class-validator';
 import { MongoClient } from 'mongodb';
 
@@ -8,18 +9,34 @@ import { IsValidRelationshipConstraint } from '../relationship/constraint';
 import { SessionLoaderService } from '../session/service';
 import { IsUniqueConstraint } from '../validation/unique/constraint';
 import { MongoFeatureModule } from './feature';
-import { getConfigToken, getConnectionToken, getEntityManagerToken, InjectEntityManager } from './injection';
+import { getConfigToken, getConnectionToken, getEntityManagerToken } from './injection';
 import { MongoFeatureOptions, MongoModuleAsyncOptions, MongoModuleOptions } from './interfaces';
 
+/**
+ * The root module. Register a connection with {@link MongoModule.forRootAsync} and models with
+ * {@link MongoModule.forFeature}.
+ */
 @Global()
 @Module({})
 export class MongoModule implements OnModuleDestroy {
-    constructor(@InjectEntityManager() private readonly em: EntityManager) {}
+    constructor(
+        @Inject(NAMED_CONNECTION_TOKEN) private readonly connectionToken: string,
+        private readonly moduleRef: ModuleRef
+    ) {}
 
+    /**
+     * Close the mongo client of this connection when the application shuts down.
+     */
     async onModuleDestroy() {
-        await this.em.getClient().close();
+        await this.moduleRef.get<MongoClient>(this.connectionToken, { strict: true }).close();
     }
 
+    /**
+     * Register a mongo connection.
+     *
+     * Call it once per connection, in the root module of the application.
+     * Give a `connectionName` to register more than one connection.
+     */
     static async forRootAsync(options: MongoModuleAsyncOptions): Promise<DynamicModule> {
         // define the connection token name
         const connectionName = !isEmpty(options.connectionName) ? options.connectionName : DEFAULT_CONNECTION_NAME;
@@ -101,6 +118,10 @@ export class MongoModule implements OnModuleDestroy {
         };
     }
 
+    /**
+     * Register models (and their repositories) on a connection.
+     * Use it in the modules that own the models.
+     */
     static forFeature(options: MongoFeatureOptions): DynamicModule {
         return MongoFeatureModule.forFeature(options);
     }

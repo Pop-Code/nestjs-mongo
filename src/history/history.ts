@@ -3,6 +3,9 @@ import { IsArray } from 'class-validator';
 
 import { HistoryAction } from './history.action';
 
+/**
+ * A list of dated actions, see {@link EntityService.addHistory}.
+ */
 export class HistoryActions {
     @IsArray()
     @Type(() => HistoryAction)

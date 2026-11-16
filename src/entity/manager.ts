@@ -22,7 +22,7 @@ import {
     WithId
 } from 'mongodb';
 
-import { DEBUG } from '../constants';
+import { DEBUG, MODEL_ENTITY_MANAGER_METADATA_NAME } from '../constants';
 import { getObjectName } from '../helpers';
 import { getIndexMetadatas } from '../indexs';
 import { getEntityRepositoryToken, InjectMongoClient } from '../module/injection';
@@ -33,11 +33,21 @@ import {
     getRelationshipsCascadesMetadata,
     setRelationshipsCascadesMetadata
 } from '../relationship/metadata';
+import { runInSessionContext } from '../session/context';
 import { SessionLoaderService } from '../session/service';
 import { fromPlain, merge } from '../transformer/utils';
 import { EntityInterface } from './interfaces';
 import { EntityRepository } from './repository';
 
+/**
+ * The entity manager is the core of the library: every read and write goes through it.
+ *
+ * One manager exists per connection. Inject it with {@link InjectEntityManager}, or use a
+ * repository ({@link EntityRepository}) that delegates to it for a single model.
+ *
+ * All operations automatically use the mongo session of the current context, if one was set
+ * (see {@link EntityManager.startSessionWithTransaction} and {@link SessionLoaderMiddleware}).
+ */
 export class EntityManager {
     protected readonly repositories: Map<string, any> = new Map();
     protected readonly models: Map<string, ClassConstructor<any>> = new Map();
@@ -50,12 +60,23 @@ export class EntityManager {
         protected readonly exceptionFactory: ExceptionFactory
     ) {}
 
+    /**
+     * Register a model on the manager.
+     *
+     * Creates the collection if it does not exist yet (collections can not be created inside a
+     * transaction on older servers), registers relationship cascades and creates the indexes declared
+     * with {@link Index}, {@link IsUnique} and {@link Relationship}.
+     *
+     * Called for you by `MongoModule.forFeature()`.
+     */
     async registerModel<Model extends EntityInterface>(
         name: string,
         model: ClassConstructor<Model>
     ): Promise<EntityManager> {
         this.log('Add model %s as %s', model.name, name);
         this.models.set(name, model);
+        // the validators (@IsUnique, @IsValidRelationship) use the manager of the connection of the model
+        Reflect.defineMetadata(MODEL_ENTITY_MANAGER_METADATA_NAME, this, model);
 
         // create collection (this will ensure we can directly use transactions, as mongo@=4.2 can not create collection during tx)
         const collectionName = this.getCollectionName(model);
@@ -71,14 +92,23 @@ export class EntityManager {
         return this;
     }
 
+    /**
+     * Get a registered model by name (the class name).
+     */
     getModel(id: string): ClassConstructor<any> | undefined {
         return this.models.get(id);
     }
 
+    /**
+     * Get all the registered models, by name.
+     */
     getModels(): Map<string, ClassConstructor<any>> {
         return this.models;
     }
 
+    /**
+     * Register a repository instance. Called for you by `MongoModule.forFeature()`.
+     */
     registerRepository<Model extends EntityInterface, R extends EntityRepository<Model> = EntityRepository<Model>>(
         name: string,
         repository: R
@@ -88,36 +118,68 @@ export class EntityManager {
         return this;
     }
 
+    /**
+     * Get the repository of a registered model.
+     */
     getRepository<Model extends EntityInterface, R extends EntityRepository<Model> = EntityRepository<Model>>(
         classType: ClassConstructor<Model>
     ): R {
+        for (const repository of this.repositories.values()) {
+            if (repository.getClassType() === classType) {
+                return repository;
+            }
+        }
         return this.repositories.get(getEntityRepositoryToken(classType.name));
     }
 
+    /**
+     * Get the underlying `MongoClient` of the connection.
+     */
     getClient(): MongoClient {
         return this.client;
     }
 
+    /**
+     * Get a database (the database of the connection uri by default).
+     */
     getDatabase(databaseName?: string) {
         return this.client.db(databaseName);
     }
 
+    /**
+     * Get the service that stores the mongo session of the current context.
+     */
     getSessionLoaderService() {
         return this.sessionLoaderService;
     }
 
+    /**
+     * Get the mongo session context of the current async context, if any.
+     */
     getSessionContext() {
         return this.sessionLoaderService.getSessionContext();
     }
 
+    /**
+     * Set the mongo session to use for all the operations of the current async context.
+     * The call must happen inside a session context (see {@link runInSessionContext} and {@link SessionLoaderMiddleware}).
+     */
     setSessionContext(mongoSession: ClientSession): void {
         this.sessionLoaderService.setSessionContext(mongoSession);
     }
 
+    /**
+     * Remove the mongo session from the current async context.
+     */
     clearSessionContext(): void {
         this.sessionLoaderService.clearSessionContext();
     }
 
+    /**
+     * Get the collection name of a model or of an entity, as set with {@link Collection}.
+     *
+     * @throws Error when the class has no `@Collection` decorator
+     */
     getCollectionName<Model extends EntityInterface>(nameOrInstance: Model | ClassConstructor<Model>): string {
         let name: string | undefined;
         if (typeof nameOrInstance === 'object' || typeof nameOrInstance === 'function') {
@@ -134,6 +196,9 @@ export class EntityManager {
         return name;
     }
 
+    /**
+     * Get the native mongodb collection of a model or of an entity.
+     */
     getCollection<Model extends EntityInterface>(
         nameOrInstance: Model | ClassConstructor<Model>,
         databaseName?: string
@@ -141,6 +206,15 @@ export class EntityManager {
         return this.getDatabase(databaseName).collection(this.getCollectionName(nameOrInstance));
     }
 
+    /**
+     * Validate an entity with class-validator.
+     *
+     * Unknown properties are stripped (`whitelist: true`) unless overridden in `validatorOptions`.
+     *
+     * @param throwError When true, throw the result of the `exceptionFactory` of the module options
+     * instead of returning the errors
+     * @returns The validation errors (empty when the entity is valid)
+     */
     async validate<Model extends EntityInterface = any>(
         obj: Model,
         validatorOptions: ValidatorOptions = {},
@@ -159,6 +233,18 @@ export class EntityManager {
         return errors;
     }
 
+    /**
+     * Insert or update an entity.
+     *
+     * - An entity without `_id` is inserted and receives its new `_id`.
+     * - An entity with an `_id` is updated with `$set` (and `updatedAt` is set). Properties explicitly set to
+     *   `undefined` are removed with `$unset`.
+     *
+     * The entity is validated first (unless `skipValidation` is true) and the validation error is
+     * thrown using the module `exceptionFactory`.
+     *
+     * @returns The same entity instance, with its `_id`
+     */
     async save<Model extends EntityInterface>(
         entity: Model | WithId<Model>,
         options: (InsertOneOptions | UpdateOptions) & {
@@ -228,10 +314,13 @@ export class EntityManager {
         }
     }
 
+    /**
+     * Find entities. Returns a native mongodb cursor that yields model instances.
+     */
     async find<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
-        options: FindOptions<Model> = {}
+        options: FindOptions = {}
     ): Promise<FindCursor<WithId<Model>>> {
         this.log('find %s %o', classType.name, query);
         const ctx = this.getSessionContext();
@@ -242,6 +331,11 @@ export class EntityManager {
         return cursor.map((data) => this.fromPlain(classType, data) as WithId<Model>);
     }
 
+    /**
+     * Find one entity.
+     *
+     * @returns The model instance, or `undefined` when nothing matches
+     */
     async findOne<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
@@ -258,6 +352,9 @@ export class EntityManager {
         }
     }
 
+    /**
+     * Count the documents matching a query (uses `countDocuments`).
+     */
     async count<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
@@ -272,12 +369,18 @@ export class EntityManager {
         });
     }
 
+    /**
+     * Returns true when the query is exactly `{ _id: ObjectId }`.
+     */
     isIdQuery(query: any): boolean {
         return Object.keys(query).length === 1 && query._id instanceof ObjectId;
     }
 
+    /**
+     * Returns true when the query is exactly `{ _id: { $in: [...] } }`.
+     */
     isIdsQuery(query: any): boolean {
-        return this.isIdQuery(query) && Array.isArray(query._id.$in);
+        return Object.keys(query).length === 1 && Array.isArray(query._id?.$in);
     }
 
     protected async deleteCascade<Model extends EntityInterface>(
@@ -305,6 +408,11 @@ export class EntityManager {
         }
     }
 
+    /**
+     * Delete one entity, then run the delete cascades of its relationships.
+     *
+     * @throws NotFoundException when nothing matches the query
+     */
     async deleteOne<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
@@ -331,6 +439,9 @@ export class EntityManager {
         return result;
     }
 
+    /**
+     * Delete all the entities matching a query, then run the delete cascades of their relationships.
+     */
     async deleteMany<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         query: Filter<Model>,
@@ -355,6 +466,9 @@ export class EntityManager {
         return result;
     }
 
+    /**
+     * Open a change stream on the collection of a model (requires a replica set).
+     */
     watch<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         pipes?: Document[],
@@ -368,6 +482,12 @@ export class EntityManager {
         });
     }
 
+    /**
+     * Load the entity referenced by a single {@link Relationship} property.
+     *
+     * @returns The related entity, or `undefined` when the property is not set or the entity does not exist
+     * @throws Error when the property is not a relationship, or is declared with `isArray: true`
+     */
     async getRelationship<R extends EntityInterface = any>(
         obj: any,
         property: string,
@@ -393,13 +513,18 @@ export class EntityManager {
         if (!(id instanceof ObjectId)) {
             return;
         }
-        const filter: Filter<R> = {};
-        filter._id = id;
+        const filter = { _id: id } as Filter<R>;
         const relationship = await this.findOne<R>(relationMetadata.type, filter, options);
 
         return relationship;
     }
 
+    /**
+     * Load the entities referenced by an array {@link Relationship} property (`isArray: true`).
+     *
+     * @returns The related entities (an empty array when the property is not set)
+     * @throws Error when the property is not an array relationship
+     */
     async getRelationships<R extends EntityInterface = any>(
         obj: any,
         property: string,
@@ -440,6 +565,13 @@ export class EntityManager {
     }
 
     /**
+     * Start a session and run `transactionFn` in a transaction (with automatic retries, see
+     * `ClientSession.withTransaction` in the mongodb driver).
+     *
+     * With `useContext: true`, the session is set on a new session context for the duration of `transactionFn`,
+     * so every operation of the manager (and of the validators) made inside it uses the session without passing
+     * it as an option. No middleware is required.
+     *
      * To avoid Transaction Errors, it is important to keep a sequential approach in the way transactions are commited to the session.
      * ie: do not to use Promise.all (parallel execution) in your transaction function as it could cause inconsistencies in the order
      * in which transactions will be committed to the session.
@@ -453,19 +585,28 @@ export class EntityManager {
         } = {}
     ): Promise<ClientSession> {
         const session = this.getClient().startSession(options.sessionOptions ?? {});
-        const useContext = options.useContext === true;
-        useContext && this.setSessionContext(session);
+        const run = async () => {
+            if (options.useContext === true) this.setSessionContext(session);
+            try {
+                await session.withTransaction(
+                    async () => await transactionFn(session),
+                    options.transactionOptions ?? {}
+                );
+            } finally {
+                await session.endSession();
+            }
+        };
 
-        try {
-            await session.withTransaction(async () => await transactionFn(session), options.transactionOptions ?? {});
-        } finally {
-            useContext && this.clearSessionContext();
-            await session.endSession();
-        }
+        // With useContext, the transaction runs in its own (nested) session context: it works without
+        // SessionLoaderMiddleware, and it does not change the session of an outer context.
+        await (options.useContext === true ? runInSessionContext(run) : run());
 
         return session;
     }
 
+    /**
+     * Transform a plain object (for example a mongo document or a request body) to a model instance.
+     */
     fromPlain<Model extends EntityInterface>(
         classType: ClassConstructor<Model>,
         data: object,
@@ -475,11 +616,18 @@ export class EntityManager {
         return fromPlain<Model>(classType, data, options);
     }
 
+    /**
+     * Deep merge `data` into `entity`. `undefined` values in `data` do not override values of `entity`.
+     */
     merge<Model extends EntityInterface>(entity: Model, data: Model, excludePrefixes?: string[]) {
         this.log('%s transform merge', getObjectName(entity));
         return merge(entity, data, excludePrefixes);
     }
 
+    /**
+     * Create the indexes declared on a model. Called for you by {@link EntityManager.registerModel}.
+     * Errors are logged, not thrown.
+     */
     async createIndexs<Model extends EntityInterface>(model: ClassConstructor<Model>) {
         this.log('Creating indexs for model %s', model.name);
         const indexesMetadata = getIndexMetadatas(model);
@@ -509,4 +657,14 @@ export class EntityManager {
             }
         }
     }
+}
+
+/**
+ * Get the entity manager a model was registered on (with `MongoModule.forFeature()`).
+ *
+ * @param model A model class, or an instance of a model
+ */
+export function getModelEntityManager(model: any): EntityManager | undefined {
+    const target = typeof model === 'function' ? model : model?.constructor;
+    return target !== undefined ? Reflect.getMetadata(MODEL_ENTITY_MANAGER_METADATA_NAME, target) : undefined;
 }

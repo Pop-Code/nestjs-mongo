@@ -2,7 +2,6 @@ import 'reflect-metadata';
 
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { createNamespace } from 'cls-hooked';
 import { MongoClient } from 'mongodb';
 
 import {
@@ -11,9 +10,8 @@ import {
     EntityRepository,
     getConnectionToken,
     getEntityManagerToken,
-    MONGO_SESSION_KEY,
     MongoModule,
-    SESSION_LOADER_NAMESPACE,
+    runInSessionContext
 } from '../../src';
 import { DBTEST } from '../constants';
 import { EntityTest } from '../entity/entity';
@@ -77,40 +75,35 @@ describe('forFeature', () => {
 });
 
 describe('Mongo sessions loader', () => {
-    it('should set / clear session object on namespace', (done) => {
+    it('should set / clear the session of the current context', async () => {
         const manager = mod.get<EntityManager>(getEntityManagerToken());
         const sessionLoaderService = manager.getSessionLoaderService();
+        const session = manager.getClient().startSession();
 
-        const ns = createNamespace(SESSION_LOADER_NAMESPACE);
-
-        ns.run(() => {
-            const session = manager.getClient().startSession();
-
+        await runInSessionContext(async () => {
             sessionLoaderService.setSessionContext(session);
-            expect(ns.get(MONGO_SESSION_KEY).session).toEqual(session);
+            expect(sessionLoaderService.getSessionContext()?.session).toBe(session);
 
             sessionLoaderService.clearSessionContext();
-            expect(ns.get(MONGO_SESSION_KEY)?.session).not.toBeDefined();
-
-            session
-                .endSession()
-                .then(() => done())
-                .catch((e) => {
-                    console.error(e);
-                    done();
-                });
+            expect(sessionLoaderService.getSessionContext()).toBeUndefined();
         });
+        await session.endSession();
     });
 
-    it('should throw while attempting to read a relationship created during a session if session is cleared', (done) => {
+    it('should throw when setting a session outside of a session context', async () => {
+        const manager = mod.get<EntityManager>(getEntityManagerToken());
+        const session = manager.getClient().startSession();
+        expect(() => manager.setSessionContext(session)).toThrow('No session context');
+        await session.endSession();
+    });
+
+    it('should throw while attempting to read a relationship created during a session if session is cleared', async () => {
         const manager = mod.get<EntityManager>(getEntityManagerToken());
         const session = manager.getClient().startSession();
 
-        const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
-
-        namespace.run(() => {
-            session
-                .withTransaction(async () => {
+        await runInSessionContext(async () => {
+            await expect(
+                session.withTransaction(async () => {
                     manager.setSessionContext(session);
                     const entity = new EntityTest();
                     entity.foo = 'bar';
@@ -119,58 +112,17 @@ describe('Mongo sessions loader', () => {
 
                     manager.clearSessionContext();
 
+                    // the parent only exists in the transaction: the validation outside of it fails
                     const child = new EntityChildTest();
                     child.foo = 'child';
                     child.parentId = entity._id;
 
                     await manager.save(child);
                 })
-                .catch((e) => {
-                    expect(e).toBeDefined();
-                })
-                .finally(() => {
-                    session
-                        .endSession()
-                        .catch((e) => {
-                            console.error(e);
-                        })
-                        .finally(() => done());
-                });
+            ).rejects.toBeDefined();
         });
+        await session.endSession();
     });
-    // it('should resolve a relationship created during a session', (done) => {
-    //     const manager = mod.get<EntityManager>(getEntityManagerToken());
-    //     const namespace = createNamespace(SESSION_LOADER_NAMESPACE);
-    //     namespace.run(() => {
-    //         const session = manager.getClient().startSession();
-    //         manager.setSessionContext(session);
-    //         session
-    //             .withTransaction(async () => {
-    //                 const entity = new EntityTest();
-    //                 entity.foo = 'bar';
-    //                 entity.bar = 'foo';
-    //                 await manager.save(entity, { session });
-
-    //                 const child = new EntityChildTest();
-    //                 child.foo = 'child';
-    //                 child.parentId = entity._id;
-
-    //                 await manager.save(child, { session });
-    //             })
-    //             .then(async (value) => {
-    //                 expect(value).toBeTruthy();
-    //             })
-    //             .finally(() => {
-    //                 session
-    //                     .endSession()
-    //                     .then(() => done())
-    //                     .catch((e) => {
-    //                         console.error(e);
-    //                         done();
-    //                     });
-    //             });
-    //     });
-    // });
 });
 
 afterAll(async () => {

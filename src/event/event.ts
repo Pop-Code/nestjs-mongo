@@ -2,13 +2,13 @@ import { ChangeStreamDocument } from 'mongodb';
 
 import { EntityInterface } from '../entity/interfaces';
 
-// export type EventType = 'create' | 'update' | 'delete';
-
-// export type SupportedChangeEvent<M = any> = ChangeEventUpdate<M> | ChangeEventDelete<M> | ChangeEventCR<M>;
-
+/**
+ * The callback of {@link EntityService.subscribe}.
+ *
+ * @param eventName The operation and the model name, for example `onInsertUser`
+ * @param change The change stream event, with `fullDocument` transformed to a model instance
+ */
 export type EventCallback<Model extends EntityInterface> = (
     eventName: string,
     change: ChangeStreamDocument<Model>
-    // entity?: Model | ObjectId
-    // originalEvent: SupportedChangeEvent<Model>
 ) => void;

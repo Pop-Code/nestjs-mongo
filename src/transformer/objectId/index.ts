@@ -19,6 +19,11 @@ export const transformObjectId = (type: TransformationType, value: string | Obje
     }
 };
 
+/**
+ * Transform a property to `ObjectId` from plain data, and to a hex string to plain data.
+ *
+ * @param isArray Set to true for an array of ObjectIds
+ */
 export function TypeObjectId(isArray?: boolean) {
     const typefn = Type(() => ObjectId);
     const trfn = Transform((params) => {

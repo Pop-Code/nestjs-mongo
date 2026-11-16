@@ -82,6 +82,6 @@ describe('merge', () => {
         }
         expect(entity2.children[0].equals(id2)).toBe(true);
         expect(entity2.children[1].equals(id3)).toBe(true);
-        expect(entity2).toHaveProperty('__shouldBeExcluded', undefined);
+        expect(entity2).not.toHaveProperty('__shouldBeExcluded');
     });
 });

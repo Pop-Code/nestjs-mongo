@@ -2,7 +2,7 @@ import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from
 import { isMongoId } from 'class-validator';
 import { ObjectId } from 'mongodb';
 
-import { EntityManager } from '../../entity/manager';
+import { EntityManager, getModelEntityManager } from '../../entity/manager';
 import { InjectEntityManager } from '../../module/injection';
 
 /**
@@ -19,7 +19,9 @@ export class RelationshipPipe implements PipeTransform {
         if (!isMongoId(value)) {
             throw new BadRequestException(`The ${metadata.data ?? 'objectId'} is malformed`);
         }
-        return await this.em.findOne(metadata.metatype as any, {
+        // the manager of the connection of the model
+        const em = getModelEntityManager(metadata.metatype) ?? this.em;
+        return await em.findOne(metadata.metatype as any, {
             _id: new ObjectId(value)
         });
     }

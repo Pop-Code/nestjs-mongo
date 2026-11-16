@@ -3,7 +3,13 @@ import 'reflect-metadata';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 
-import { EntityManager, ObjectIdPipe, RelationshipPipe, RequiredRelationshipPipe } from '../../src';
+import {
+    EntityManager,
+    MODEL_ENTITY_MANAGER_METADATA_NAME,
+    ObjectIdPipe,
+    RelationshipPipe,
+    RequiredRelationshipPipe
+} from '../../src';
 import { EntityTest } from '../entity/entity';
 
 const metadata = { type: 'param' as const, metatype: EntityTest, data: 'id' };
@@ -37,6 +43,19 @@ describe('RelationshipPipe', () => {
             metadata
         );
         expect(result).toBeUndefined();
+    });
+});
+
+describe('RelationshipPipe with the connection of the model', () => {
+    it('should use the entity manager of the model', async () => {
+        class OnNamedConnection {}
+        const entity = new OnNamedConnection();
+        Reflect.defineMetadata(MODEL_ENTITY_MANAGER_METADATA_NAME, emReturning(entity), OnNamedConnection);
+        const result = await new RelationshipPipe(emReturning(undefined)).transform(new ObjectId().toHexString(), {
+            ...metadata,
+            metatype: OnNamedConnection
+        });
+        expect(result).toBe(entity);
     });
 });
 

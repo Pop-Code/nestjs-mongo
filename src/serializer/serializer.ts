@@ -1,3 +1,4 @@
+import { isClassTransformerExcluded } from '../mapping/class-transformer';
 import { EXCLUDED_PREFIXES, toPlain } from '../transformer/utils';
 
 export function serialize() {
@@ -18,7 +19,11 @@ export function toJSON() {
         );
 
     return Object.keys(json)
-        .filter((k) => !EXCLUDED_PREFIXES.some((prefix) => k.startsWith(prefix)))
+        .filter(
+            (k) =>
+                !EXCLUDED_PREFIXES.some((prefix) => k.startsWith(prefix)) &&
+                !isClassTransformerExcluded(this.constructor, k, true)
+        )
         .reduce(
             (obj, key) => ({
                 ...obj,

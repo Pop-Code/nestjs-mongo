@@ -1,9 +1,10 @@
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { first, isEmpty } from 'lodash';
 import { ObjectId } from 'mongodb';
 
 import { EntityManager, getModelEntityManager } from '../entity/manager';
 import { ensureSequentialTransaction } from '../session/utils';
+import { getValidationMessage, setValidationMessage } from '../validation/messages';
 import { IsValidRelationshipValidationArguments, WithRelationshipTest } from './decorators';
 import { RelationshipMetadata } from './interfaces';
 import { getRelationshipMetadata } from './metadata';
@@ -11,10 +12,9 @@ import { getRelationshipMetadata } from './metadata';
 @ValidatorConstraint({ name: 'IsValidRelationship', async: true })
 export class IsValidRelationshipConstraint implements ValidatorConstraintInterface {
     private em: EntityManager;
-    private message: string;
 
-    defaultMessage?(): string {
-        return this.message;
+    defaultMessage(args?: ValidationArguments): string {
+        return getValidationMessage(args, 'The property contains an invalid relationship');
     }
 
     async validate(value: ObjectId | ObjectId[], args: IsValidRelationshipValidationArguments) {
@@ -35,31 +35,25 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
                 if (!Array.isArray(value)) {
                     throw new Error(`The ${args.property} must be an array`);
                 }
-                const errors: Error[] = [];
-                relationship = [];
-                for (const [index, _id] of value.entries()) {
-                    const innerR = await ensureSequentialTransaction(
-                        ctx,
-                        async () =>
-                            await em.findOne<any>(relationMetadata.type, {
-                                _id
-                            })
-                    );
-                    if (isEmpty(innerR)) {
+                // one query for all the ids
+                const found = await ensureSequentialTransaction(
+                    ctx,
+                    async () => await em.findByIds(relationMetadata.type, value)
+                );
+                const byId = new Map(found.map((r) => [r._id.toHexString(), r]));
+                const errors: string[] = [];
+                relationship = value.map((_id, index) => {
+                    const related = byId.get(new ObjectId(_id).toHexString());
+                    if (related === undefined) {
                         errors.push(
-                            new Error(
-                                `The property ${
-                                    args.property
-                                } contains an invalid relationship ${_id.toHexString()} at index ${index}`
-                            )
+                            `The property ${args.property} contains an invalid relationship ${String(_id)} at index ${index}`
                         );
-                        relationship.push(null);
-                        continue;
+                        return null;
                     }
-                    relationship.push(innerR);
-                }
+                    return related;
+                });
                 if (errors.length > 0) {
-                    throw new Error(errors.map((e) => e.message).join(', '));
+                    throw new Error(errors.join(', '));
                 }
             } else {
                 if (Array.isArray(value)) {
@@ -85,7 +79,7 @@ export class IsValidRelationshipConstraint implements ValidatorConstraintInterfa
             }
             return true;
         } catch (e) {
-            this.message = e.message;
+            setValidationMessage(args, e.message);
             return false;
         }
     }

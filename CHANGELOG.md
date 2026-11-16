@@ -4,6 +4,51 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### BREAKING CHANGE
+
+- The default `exceptionFactory` throws an `EntityValidationException` (a `BadRequestException` with the `ValidationError[]` in `errors`) instead of the `ValidationError[]` array
+- `deleteOne()` resolves `deletedCount: 0` when no document matches (it threw a `NotFoundException`)
+- `deleteMany()` deletes the documents it found (by `_id`), and runs the cascades and hooks of each of them
+- The index creation errors are thrown when the models are registered (they were logged with `console.error`)
+- `merge()` merges the sub objects (the other properties of a sub object are kept), sets `null` values, and ignores `undefined` values
+- `fromPlain()` loads the entities with the new loading layer (see Added); pass class-transformer options to use `plainToInstance()`
+- `MongoModule.forRootAsync()` returns a `DynamicModule` (no longer a `Promise`)
+- `EntityManager.getRelationship()` / `getRelationships()` and the repository methods check that the property is a key of the entity
+- `EntityRepository.save()` / `deleteMany()` take typed options (no more `...args`)
+
+### Fixed
+
+- `save()` inserts an entity with an `_id` set by the application (the update matched nothing and the entity was not saved)
+- `save()` no longer strips the properties without decorators from the entity (only from the written document)
+- `@IsUnique` and `@IsValidRelationship` messages are kept per validation (concurrent validations could get the message of another one)
+- `@IsUnique` counts the soft deleted documents, like the unique index
+- `@IsValidRelationship` validates an array of ids with one query
+- `EntityService.list()` runs the count in the session of the context, at the same time as the query
+- `EntityService.update(id, data, true)` writes only the properties of `data`
+- `registerModel()` no longer fails when another process creates the collection at the same time
+- `RelationshipPipe` / `RequiredRelationshipPipe` use the connection of the model
+- `toJSON()` removes the `@Exclude()` properties and getters
+- The mongodb driver options of the entity manager no longer receive the options of the module (`skipValidation`, `validatorOptions`)
+
+### Added
+
+- `EntityManager` and `EntityRepository` methods: `findById()`, `findByIds()`, `findOneOrFail()`, `exists()`, `distinct()`, `estimatedCount()`, `aggregate()` (with `as` to load instances of a class), `paginate()`, `paginateByCursor()`, `updateOne()`, `updateMany()`, `findOneAndUpdate()`, `upsert()`, `bulkWrite()`, `findOneAndDelete()`, `restore()`, `insertMany()`, `saveMany()`, `populate()`, `ping()`, `withTransaction()`
+- `patch(entity, changes)`: validates the entity and writes only the changed properties
+- `@Version()`: optimistic locking, `save()` / `patch()` throw an `OptimisticLockException` when the document changed since it was loaded
+- `@DeletedAt()`: soft delete, with the `withDeleted` and `hard` options
+- Lifecycle hooks: `@BeforeInsert()`, `@AfterInsert()`, `@BeforeUpdate()`, `@AfterUpdate()`, `@BeforeSave()`, `@AfterSave()`, `@BeforeDelete()`, `@AfterDelete()`, `@AfterLoad()`
+- `@Transactional()` method decorator; nested calls run in the same transaction
+- `@Field()` and `@Embedded()`: the loading of the entities no longer uses class-transformer's `plainToInstance()`; the `@Type()`, `@Transform()`, `@Exclude()` and `@Expose()` decorators of class-transformer are still supported
+- Errors: `EntityNotFoundException` (404), `DuplicateKeyException` (409, mapped from the duplicate key errors), `OptimisticLockException` (409), `EntityValidationException` (400)
+- `MongoModule.forRoot()`, and the `useClass` / `useExisting` options of `forRootAsync()` (`MongoOptionsFactory`)
+- Module options: `autoIndex`, `syncIndexes` (drop the indexes that are not declared, recreate the changed ones), `schemaValidation` (a `$jsonSchema` validator generated from the validation decorators, see `getJsonSchema()`), `migrations` and `migrationsRun`
+- `@Index()` on a class, for compound indexes
+- `MigrationRunner`: runs and reverts migrations, records them in a collection, with a lock between processes
+- `InjectRepository()`, alias of `InjectEntityRepository()`
+- The change streams opened with `watch()` are closed when the module is destroyed
+
 ## [0.16.0] - 2026-11-15
 
 ### BREAKING CHANGE

@@ -20,9 +20,15 @@
     "peerDependencies": {
         "@nestjs/common": "^10.0.0 || ^11.0.0 || ^12.0.0",
         "@nestjs/core": "^10.0.0 || ^11.0.0 || ^12.0.0",
+        "@nestjs/terminus": "^11.0.0 || ^12.0.0",
         "class-validator": "^0.14.0 || ^0.15.0",
         "mongodb": "^7.0.0",
         "reflect-metadata": "^0.1.13 || ^0.2.0"
+    },
+    "peerDependenciesMeta": {
+        "@nestjs/terminus": {
+            "optional": true
+        }
     },
     "dependencies": {
         "class-transformer": "^0.5.1",
@@ -35,6 +41,7 @@
         "@nestjs/common": "12.5.0",
         "@nestjs/core": "12.5.0",
         "@nestjs/platform-express": "12.5.0",
+        "@nestjs/terminus": "12.1.0",
         "@nestjs/testing": "12.5.0",
         "@types/debug": "4.1.13",
         "@types/jest": "30.0.0",
@@ -63,7 +70,7 @@
         "test:watch": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --watch",
         "test:cov": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --runInBand --coverage",
         "test:debug": "node --inspect-brk --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --runInBand",
-        "test:smoke": "node -e \"const m = require('./dist'); if (typeof m.MongoModule !== 'function') process.exit(1)\"",
+        "test:smoke": "node -e \"const m = require('./dist'); const t = require('./terminus'); if (typeof m.MongoModule !== 'function' || typeof t.MongoHealthIndicator !== 'function') process.exit(1)\"",
         "prepublishOnly": "npm run build"
     },
     "jest": {
@@ -88,6 +95,7 @@
     },
     "files": [
         "dist",
+        "terminus",
         "!dist/**/*.tsbuildinfo",
         "CHANGELOG.md",
         "SECURITY.md"

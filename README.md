@@ -18,6 +18,7 @@ A small ORM-like module for [NestJS](https://nestjs.com), built with TypeScript 
 - Migrations (`MigrationRunner`, and the `nestjs-mongo migrate up|down|status` command line)
 - NestJS exceptions: `EntityNotFoundException`, `DuplicateKeyException`, `OptimisticLockException`, `EntityValidationException`
 - A `@nestjs/terminus` health indicator (`nestjs-mongo/terminus`)
+- Testing helpers: an in-memory replica set, a testing module, fixtures (`nestjs-mongo/testing`)
 - Change streams, route parameter pipes, serialization helpers
 
 It does not hide the driver: queries are plain mongodb filters, and cursors are native cursors.

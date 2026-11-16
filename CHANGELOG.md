@@ -49,6 +49,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `@Index()` on a class, for compound indexes
 - `MigrationRunner`: runs and reverts migrations, records them in a collection, with a lock between processes
 - `nestjs-mongo migrate <up|down|status>` command line (and `runCli()` / `loadMigrations()`)
+- Testing helpers, imported from `nestjs-mongo/testing`: `startMongoMemoryServer()` (an in-memory replica set, with mongodb-memory-server), `createMongoTestingModule()`, `loadFixtures()`, `clearDatabase()`
 - `InjectRepository()`, alias of `InjectEntityRepository()`
 - The change streams opened with `watch()` are closed when the module is destroyed
 

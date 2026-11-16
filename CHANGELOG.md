@@ -36,6 +36,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 - `EntityManager` and `EntityRepository` methods: `findById()`, `findByIds()`, `findOneOrFail()`, `exists()`, `distinct()`, `estimatedCount()`, `aggregate()` (with `as` to load instances of a class), `paginate()`, `paginateByCursor()`, `updateOne()`, `updateMany()`, `findOneAndUpdate()`, `upsert()`, `bulkWrite()`, `findOneAndDelete()`, `restore()`, `insertMany()`, `saveMany()`, `populate()`, `ping()`, `withTransaction()`
 - `patch(entity, changes)`: validates the entity and writes only the changed properties
+- `findWithRelationships()`: finds entities and loads their relationships with one aggregation (`$lookup`)
 - `@Version()`: optimistic locking, `save()` / `patch()` throw an `OptimisticLockException` when the document changed since it was loaded
 - `@DeletedAt()`: soft delete, with the `withDeleted` and `hard` options
 - Lifecycle hooks: `@BeforeInsert()`, `@AfterInsert()`, `@BeforeUpdate()`, `@AfterUpdate()`, `@BeforeSave()`, `@AfterSave()`, `@BeforeDelete()`, `@AfterDelete()`, `@AfterLoad()`

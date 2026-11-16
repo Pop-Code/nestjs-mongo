@@ -23,6 +23,7 @@ import {
     FindEntityOptions,
     FindOneAndDeleteEntityOptions,
     FindOneAndUpdateEntityOptions,
+    FindWithRelationshipsOptions,
     PaginateOptions,
     SaveOptions,
     SoftDeleteOptions,
@@ -181,6 +182,14 @@ export class EntityRepository<Model extends EntityInterface> {
         options: FindEntityOptions = {}
     ): Promise<Array<WithId<E>>> {
         return await this.em.getRelationships<E, Model>(object, property, options);
+    }
+
+    async findWithRelationships<K extends Extract<keyof Model, string>>(
+        query: Filter<Model>,
+        properties: K[],
+        options: FindWithRelationshipsOptions = {}
+    ) {
+        return await this.em.findWithRelationships(this.classType, query, properties, options);
     }
 
     async populate<E extends EntityInterface>(

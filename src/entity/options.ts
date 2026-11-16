@@ -13,8 +13,11 @@ import {
     ObjectId,
     Sort,
     TransactionOptions,
-    UpdateOptions
+    UpdateOptions,
+    WithId
 } from 'mongodb';
+
+import { EntityInterface } from './interfaces';
 
 /** Options of the queries on a model with a `@DeletedAt()` property. */
 export interface SoftDeleteOptions {
@@ -95,6 +98,22 @@ export interface CursorPaginateOptions {
 export interface CursorPaginatedResult<T> {
     data: T[];
     next?: ObjectId;
+}
+
+/** Options of `findWithRelationships()`. */
+export interface FindWithRelationshipsOptions extends SoftDeleteOptions {
+    sort?: Record<string, 1 | -1>;
+    skip?: number;
+    limit?: number;
+}
+
+/**
+ * An entity and its relationships loaded by `findWithRelationships()`: an entity (or `undefined`) for a property,
+ * a list of entities for an array property. The values are instances of the related models (use `instanceof`).
+ */
+export interface EntityWithRelationships<T, K extends string> {
+    entity: T;
+    relationships: Record<K, WithId<EntityInterface> | Array<WithId<EntityInterface>> | undefined>;
 }
 
 /** The keys of the options of the module, removed from the options passed to the driver. */

@@ -62,9 +62,11 @@ import {
     ENTITY_OPTION_KEYS,
     EntityOptionKey,
     EntityTransactionOptions,
+    EntityWithRelationships,
     FindEntityOptions,
     FindOneAndDeleteEntityOptions,
     FindOneAndUpdateEntityOptions,
+    FindWithRelationshipsOptions,
     PaginatedResult,
     PaginateOptions,
     SaveOptions,
@@ -1101,6 +1103,66 @@ export class EntityManager {
         }
         const cursor = await this.find<R>(relationMetadata.type, { _id: { $in: value } } as Filter<R>, options);
         return await cursor.toArray();
+    }
+
+    /**
+     * Finds the entities that match the filter and loads their relationships, with one aggregation (`$lookup`).
+     * The relationships must have a static type (a class or a model name). The soft deleted related documents are
+     * ignored, unless `withDeleted: true`.
+     *
+     * ```ts
+     * const [{ entity, relationships }] = await em.findWithRelationships(Child, { _id }, ['parentId']);
+     * if (relationships.parentId instanceof Parent) { ... }
+     * ```
+     */
+    async findWithRelationships<Model extends EntityInterface, K extends Extract<keyof Model, string>>(
+        classType: ClassConstructor<Model>,
+        query: Filter<Model>,
+        properties: K[],
+        { sort, skip, limit, ...options }: FindWithRelationshipsOptions = {}
+    ): Promise<Array<EntityWithRelationships<WithId<Model>, K>>> {
+        const relations = properties.map((property) => {
+            const metadata = getRelationshipMetadata(classType, property, this);
+            return { property, metadata, as: `__relationship_${property}` };
+        });
+
+        const pipeline: Document[] = [{ $match: this.scopeFilter(classType, query, options) }];
+        if (sort !== undefined) pipeline.push({ $sort: sort });
+        if (skip !== undefined) pipeline.push({ $skip: skip });
+        if (limit !== undefined) pipeline.push({ $limit: limit });
+        for (const { property, metadata, as } of relations) {
+            const ids = metadata.isArray === true ? { $ifNull: ['$$ids', []] } : ['$$ids'];
+            const deletedAt = getDeletedAtProperty(metadata.type);
+            pipeline.push({
+                $lookup: {
+                    from: this.getCollectionName(metadata.type),
+                    let: { ids: `$${property}` },
+                    pipeline: [
+                        { $match: { $expr: { $in: ['$_id', ids] } } },
+                        ...(deletedAt !== undefined && options.withDeleted !== true
+                            ? [{ $match: { [deletedAt]: null } }]
+                            : [])
+                    ],
+                    as
+                }
+            });
+        }
+
+        const documents = await this.collection(classType)
+            .aggregate<WithId<Document>>(pipeline, this.driverOptions({}))
+            .toArray();
+        return documents.map((document) => {
+            const relationships = {} as EntityWithRelationships<WithId<Model>, K>['relationships'];
+            for (const { property, metadata, as } of relations) {
+                const lookedUp: unknown = document[as];
+                const related = (Array.isArray(lookedUp) ? lookedUp : []).map((doc: WithId<Document>) =>
+                    this.hydrate(metadata.type, doc)
+                );
+                relationships[property] = metadata.isArray === true ? related : related[0];
+            }
+            // the looked up documents start with __: they are not copied to the entity
+            return { entity: this.hydrate(classType, document), relationships };
+        });
     }
 
     /**

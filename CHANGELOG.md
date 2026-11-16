@@ -38,7 +38,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 
-- Documentation: guides in `wiki/` (also published in the API reference), TSDoc on the public API, a new README
+- Documentation: TSDoc on the public API, a new README, guides in the [wiki](https://github.com/Pop-Code/nestjs-mongo/wiki)
 - `getModelEntityManager()` helper
 - `runInSessionContext()`, `hasSessionContext()` and `SessionLoaderService.run()`
 - `startSessionWithTransaction(fn, { useContext: true })` runs in its own session context: it no longer needs `SessionLoaderMiddleware`, and does not change the session of an outer context

@@ -78,13 +78,9 @@ export class UserService {
 
 ## Documentation
 
-- Guides: [Getting started](./wiki/Getting-Started.md), [Entities and repositories](./wiki/Entities-And-Repositories.md),
-  [Relationships](./wiki/Relationships.md), [Validation and indexes](./wiki/Validation-And-Indexes.md),
-  [Transactions](./wiki/Transactions.md), [Serialization](./wiki/Serialization.md),
-  [Change streams](./wiki/Change-Streams.md), [Multiple connections](./wiki/Multiple-Connections.md),
-  [Upgrading](./wiki/Upgrading.md)
-- API reference (typedoc): [https://pop-code.github.io/nestjs-mongo][doc-link]
-- [CHANGELOG][changelog]
+- [Wiki](https://github.com/Pop-Code/nestjs-mongo/wiki)
+- [API](https://pop-code.github.io/nestjs-mongo)
+- [Changelog](https://github.com/Pop-Code/nestjs-mongo/blob/master/CHANGELOG.md)
 
 ## Development
 
@@ -100,5 +96,3 @@ The tests use `mongodb://localhost:27017` (see `test/constants.ts`) and need Nod
 See [RELEASING.md](./RELEASING.md) to publish a version.
 
 [npm]: https://www.npmjs.com/package/nestjs-mongo
-[doc-link]: https://pop-code.github.io/nestjs-mongo
-[changelog]: https://github.com/Pop-Code/nestjs-mongo/blob/master/CHANGELOG.md

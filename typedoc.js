@@ -7,7 +7,6 @@ module.exports = {
     excludePrivate: true,
     hideGenerator: true,
     entryPoints: ['src/index.ts'],
-    projectDocuments: ['wiki/Home.md'],
     navigationLinks: {
         GitHub: 'https://github.com/Pop-Code/nestjs-mongo',
         npm: 'https://www.npmjs.com/package/nestjs-mongo'

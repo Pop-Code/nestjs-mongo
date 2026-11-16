@@ -18,8 +18,13 @@ type Converter = (value: unknown, source: object) => unknown;
 const converters = new WeakMap<ClassType, Map<string, Converter>>();
 const exposedProperties = new WeakMap<ClassType, string[]>();
 
+/** The keys that would change the prototype of an object: they are never copied. */
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+export const isUnsafeKey = (key: string): boolean => UNSAFE_KEYS.has(key);
+
 const isExcludedKey = (key: string, prefixes: string[] = EXCLUDED_PREFIXES) =>
-    prefixes.some((prefix) => key.startsWith(prefix));
+    isUnsafeKey(key) || prefixes.some((prefix) => key.startsWith(prefix));
 
 export const isPlainObject = (value: unknown): value is Record<string, unknown> => {
     if (value === null || typeof value !== 'object') return false;
@@ -37,7 +42,9 @@ export function cloneValue(value: unknown): unknown {
     if (value instanceof Date) return new Date(value.getTime());
     if (isPlainObject(value)) {
         const copy: Record<string, unknown> = {};
-        for (const key of Object.keys(value)) copy[key] = cloneValue(value[key]);
+        for (const key of Object.keys(value)) {
+            if (!isUnsafeKey(key)) copy[key] = cloneValue(value[key]);
+        }
         return copy;
     }
     return value;

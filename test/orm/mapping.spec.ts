@@ -212,3 +212,28 @@ describe('merge', () => {
         expect(customer.createdAt).toBe(date);
     });
 });
+
+describe('prototype pollution', () => {
+    const payload = () =>
+        JSON.parse('{"__proto__": {"polluted": true}, "constructor": {"prototype": {"polluted": true}}, "name": "x"}');
+
+    afterEach(() => {
+        expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+    });
+
+    it('should not copy the prototype keys with merge', () => {
+        const customer = merge(new Customer(), payload());
+        expect(customer.name).toBe('x');
+        expect(Object.getPrototypeOf(customer)).toBe(Customer.prototype);
+        expect(Object.prototype.hasOwnProperty.call(customer, 'constructor')).toBe(false);
+    });
+
+    it('should not copy the prototype keys with hydrate, cloneValue and toDocument', () => {
+        const customer = hydrate(Customer, payload(), []);
+        expect(Object.getPrototypeOf(customer)).toBe(Customer.prototype);
+        expect(Object.prototype.hasOwnProperty.call(customer, 'constructor')).toBe(false);
+        const clone = cloneValue(payload()) as Record<string, unknown>;
+        expect(Object.keys(clone)).toEqual(['name']);
+        expect(Object.keys(toDocument(payload() as object))).toEqual(['name']);
+    });
+});

@@ -2,7 +2,7 @@ import { ClassConstructor, ClassTransformOptions, instanceToPlain, plainToInstan
 import { unset } from 'lodash';
 
 import { EntityInterface } from '../entity/interfaces';
-import { EXCLUDED_PREFIXES, hydrate, isBsonValue } from '../mapping/hydrate';
+import { EXCLUDED_PREFIXES, hydrate, isBsonValue, isUnsafeKey } from '../mapping/hydrate';
 
 export { EXCLUDED_PREFIXES };
 
@@ -24,7 +24,7 @@ export const fromPlain = <Model extends EntityInterface>(
               ...options
           });
 
-const isMergeable = (value: any) =>
+const isMergeable = (value: unknown): value is object =>
     value !== null &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
@@ -32,17 +32,21 @@ const isMergeable = (value: any) =>
     !isBsonValue(value) &&
     !ArrayBuffer.isView(value);
 
-function deepMerge(target: any, source: any) {
+function deepMerge(target: object, source: object): void {
     for (const key of Object.keys(source)) {
-        const value = source[key];
+        // the keys that would change the prototype of the target are not copied
+        if (isUnsafeKey(key)) continue;
+        const value: unknown = Reflect.get(source, key);
         if (value === undefined) continue;
-        if (isMergeable(value) && isMergeable(target[key])) {
-            deepMerge(target[key], value);
+        const current: unknown = Object.prototype.hasOwnProperty.call(target, key)
+            ? Reflect.get(target, key)
+            : undefined;
+        if (isMergeable(value) && isMergeable(current)) {
+            deepMerge(current, value);
         } else {
-            target[key] = value;
+            Reflect.set(target, key, value);
         }
     }
-    return target;
 }
 
 /**

@@ -47,7 +47,7 @@
         "@eslint/js": "10.0.1",
         "@nestjs/common": "12.5.0",
         "@nestjs/core": "12.5.0",
-        "@nestjs/platform-express": "12.5.0",
+        "@nestjs/platform-express": "12.5.1",
         "@nestjs/terminus": "12.1.0",
         "@nestjs/testing": "12.5.0",
         "@types/debug": "4.1.13",

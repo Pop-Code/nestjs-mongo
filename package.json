@@ -45,7 +45,7 @@
     },
     "devDependencies": {
         "@eslint/js": "10.0.1",
-        "@nestjs/common": "12.5.0",
+        "@nestjs/common": "12.5.1",
         "@nestjs/core": "12.5.0",
         "@nestjs/platform-express": "12.5.0",
         "@nestjs/terminus": "12.1.0",

@@ -725,10 +725,10 @@
   dependencies:
     sparse-bitfield "^3.0.3"
 
-"@nestjs/common@12.5.0":
-  version "12.5.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-12.5.0.tgz#e020024a97ebfc5887b8c5f875e44a23c84359af"
-  integrity sha512-3pid0u/4ILXS7fvliSZp5lvPxAqGVTgbQQ06qv6zZdyqaofhpTeQbWjZjdpbsBhNm5BhEaMh38JKBE2p0hoCJQ==
+"@nestjs/common@12.5.1":
+  version "12.5.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-12.5.1.tgz#97e880f5404092ca62729ce2fc49ba11f47a5306"
+  integrity sha512-hLs7EN+F6qByf9JjWyu0/hOcB7vWoV0jagpfwt1CeE9Iapr1EAoAHiysW9nIAkWmWfsMMGuzilQE9Ky8E7qrYA==
   dependencies:
     uid "2.0.2"
     "@standard-schema/spec" "1.1.0"

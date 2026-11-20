@@ -764,10 +764,10 @@
   resolved "https://registry.yarnpkg.com/@nestjs/terminus/-/terminus-12.1.0.tgz#ec04ea49d9f3bf40d930d90925391c6efc13b228"
   integrity sha512-bag1KT1Pk2KpDhXh6fhf3F7IpRGs8IMSdPaD1+9hclP3hSAIkCYN/YUhkAY+2G7OuoUmyDuKVb7MgNw+L5ZBbQ==
 
-"@nestjs/testing@12.5.0":
-  version "12.5.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-12.5.0.tgz#d73fbb68df58f99f02819078b33b59e9063a82bc"
-  integrity sha512-4zppUy+q+dmqdQBm/Q9KyTDeq0hsa/we6E0VtSaT1Dnewo/FkbcczCrrtivuIWIuZ7KNJ0U8UGYCgozFZJ2+zQ==
+"@nestjs/testing@12.5.1":
+  version "12.5.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-12.5.1.tgz#11b5d69861ddd5f38de177dda088e7aee9f89a41"
+  integrity sha512-k4cSasrAc1ur/Pgd4NJc7NxDYM0ZPc/XF7P670QddF/yWbX1XHqjnU4q51AK/zviwDXfCiyVzEJ87ZOh6rzboA==
   dependencies:
     tslib "2.9.1"
 
